@@ -1,0 +1,22 @@
+{
+  "name": "electrontest",
+  "version": "1.0.0",
+  "description": "Video chat prototype",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "devStart": "nodemon server.js"
+  },
+  "author": "Bassel Al Mawla",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "electron": "^10.1.5",
+    "express": "^4.17.1",
+    "socket.io": "^3.0.3",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
