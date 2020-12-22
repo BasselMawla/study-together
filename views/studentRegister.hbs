@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <title>AUB Study Platform</title>
+  </head>
+  <body>
+    <nav>
+      <h4>AUB Study Platform</h4>
+      <ul>
+        <li> <a href="/">Home</a> </li>
+        <li> <a href="/profile">Profile</a></li>
+        <li> <a href="/studentRegister">Course Registration</a></li>
+        <li><a href="/messages">Messages</a></li>
+        <li><a href="/searchPeople">Search people</a></li>
+        <li> <a href="/auth/Logout">Logout</a></li>
+      </ul>
+    </nav>
+
+      <div class="container mt-4">
+        <div class="card" id="courseCard" >
+          <div class="card-header">
+            Course Registration Form - {{user.name}}
+          </div>
+          <div class="card-body available-courses">
+
+            <div class="registration-list">
+              <h4 class="list-header">Available Courses:</h4>
+              <ul class="list-group overflow-auto ">
+                {{#each courses as |course|}}
+                <li class="list-group-item">{{course.name}} - {{course.instructor_name}}</li>
+                {{/each}}
+              </ul>
+            </div>
+
+            {{#if message}}
+              <a href="/studentRegister" class="btn btn-primary">Again?</a>
+              <h4 class="alert alert-danger mt-4">{{ message }}</h4>
+            {{else}}
+              <form action="/auth/studentRegister" method="POST">
+
+                  <div class="mb-3">
+                    <label for="name" class="form-label" style="margin-top:8px;">Course Name</label>
+                    <input type="text" class="form-control" id="courseName" name="courseName" placeholder="ex. CMPS 123" pattern="([A-Z]{4}.[0-9]{3})">
+                  </div>
+                  <div class="mb-3" style="display:none">
+                    <label for="name" class="form-label">Student Name</label>
+                    <input type="text" class="form-control" id="StudentName" name="studentName" value="{{user.name}}">
+                  </div>
+                  <div class="mb-3" style="display:none">
+                    <label for="id" class="form-label">Student ID</label>
+                    <input type="number" class="form-control" id="studentId" name="studentId" value="{{user.id}}">
+                  </div>
+
+
+                  <button type="submit" class="btn btn-primary">Register Course</button>
+              </form>
+            {{/if}}
+          </div>
+        </div>
+
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <title>class - AUB Study Platform</title>
+    <!-- <script src="/handlebars-v4.7.6.js"></script> -->
+    <style media="screen">
+      .row{
+        padding:0px 20px;
+      }
+      .card{
+        margin-top:20px;
+      }
+      .card-body{
+        padding: 5px 5px;
+
+      }
+      .card-body ul.announcement, .card-body ul.question {
+        list-style-type: none;
+        padding: 0px;
+        color: rgb(150,0,0);
+        height:250px;
+        overflow-y: scroll;
+      }
+      .card-body ul.question{
+        color: rgb(0,0,0);
+      }
+      .card-body .video{
+        height:600px;
+        overflow-y: scroll;
+      }
+      .card-body ul li{
+
+        border-radius: 5px;
+        min-height:40px;
+        padding: 10px;
+        margin-top: 10px;
+      }
+      .card-body ul li:nth-child(even) {
+        background-color: #f1f1f1;
+
+
+      }
+      .card-footer{
+        padding: 15px 5px;
+      }
+    </style>
+  </head>
+  <body>
+      <nav>
+
+        <h4>AUB Study Platform</h4>
+        <ul>
+          <li> <a href="/">Home</a> </li>
+          <li> <a href="/profile">Profile</a></li>
+          {{#if user.isAdmin}}
+            <li> <a href="/addCourse">Add Course</a></li>
+          {{else}}
+            <li> <a href="/studentRegister">Course Registration</a></li>
+          {{/if}}
+          <li><a href="/messages">Messages</a></li>
+          <li><a href="/searchPeople">Search people</a></li>
+          <li> <a href="/auth/Logout">Logout</a></li>
+        </ul>
+      </nav>
+
+        <div class="row">
+
+          <div class="col-3">
+
+              <div class="card">
+                <h5 class="card-header">Announcements</h5>
+                <div class="card-body">
+                  <ul class="announcement">
+                    {{#each announcements as |announce|}}
+                      <li>{{announce.text}} <span style="font-size:12px;color:grey;"> at {{announce.announceDate}}</span></li>
+                    {{/each}}
+                  </ul>
+
+                </div>
+                {{#if user.isAdmin}}
+                <div class="card-footer">
+                  <form class="form" action="/auth/addAnnouncement" method="post" id="announceForm">
+                    <input type="text" name="announce_author" value="{{user.name}}" style="display:none;">
+                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;">
+                    <input type="text" name="announce_text" value="" placeholder="Add announcement" style="width:74%;height:32px; border:0.5px solid black; border-radius:5px;">
+                    <button type="submit" class="btn btn-primary btn-sm">submit</button>
+                  </form>
+                </div>
+                {{/if}}
+              </div>
+
+              <div class="card">
+                <h5 class="card-header">Questions</h5>
+                <div class="card-body">
+                  <ul class="question">
+                    {{#each questions as |question|}}
+                      <li>{{question.id}} : {{question.text}} <strong> by {{question.author_name}}</strong><span style="font-size:12px;color:grey;"> at {{question.questionDate}}</span></li>
+                    {{/each}}
+                  </ul>
+                </div>
+                <div class="card-footer">
+                  <form class="form" action="/auth/addQuestion" method="post" id="questionForm">
+                    <input type="text" name="question_author" value="{{user.name}}" style="display:none;">
+                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;">
+                    <input type="text" name="question_text" value="" placeholder="Add question" style="width:74%;height:32px; border:0.5px solid black; border-radius:5px;">
+                    <button type="submit" class="btn btn-primary btn-sm">submit</button>
+                  </form>
+                </div>
+              </div>
+
+          </div>
+
+
+
+
+          <div class="col-5">
+
+              <div class="card">
+                <h5 class="card-header">Video - {{class_name}}</h5>
+                <div class="card-body">
+                  <div class="video">
+
+                  </div>
+                </div>
+              </div>
+
+          </div>
+
+
+
+          <div class="col-4">
+
+            <div class="card">
+              <h5 class="card-header">Resourses</h5>
+              <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+
+
+
+              <div class="card">
+                <h5 class="card-header">Chat</h5>
+                <div class="card-body">
+                  <h5 class="card-title">Special title treatment</h5>
+                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+          </div>
+        </div>
+
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <!-- Include Handlebars from a CDN -->
+      <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+      <script type="text/javascript">
+
+      </script>
+      </body>
+</html>
