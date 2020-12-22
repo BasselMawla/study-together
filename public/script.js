@@ -10,7 +10,7 @@ const peers = {}
 
 navigator.mediaDevices.getUserMedia({
     video: true,
-    audio: true
+    audio: true // TODO try catch so video can work without audio
 }).then(stream => {
     addVideoStream(myVideo, stream)
 
