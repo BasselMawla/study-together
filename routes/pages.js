@@ -5,8 +5,6 @@ const presController = require('../controllers/presentation');
 const messController = require('../controllers/messaging');
 const router = express.Router();
 
-var formidable = require('formidable');
-
 router.get('/', authController.isLoggedIn , (req , res) => {
   res.render('index', {
     user: req.user
