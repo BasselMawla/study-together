@@ -14,8 +14,7 @@ app.use(express.static("public"))
 
 io.on("connection", socket => {
   socket.on("join-room", (className, userId) => {
-      console.log("A user connected to " + className);
-      console.log("userId: " + userId);
+      console.log("User " + userId + " joined room " + className)
 
       socket.join(className)
       socket.to(className).broadcast.emit("user-connected", userId)
@@ -64,6 +63,6 @@ db.connect( (error) => {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
-server.listen(3000, function () {
+server.listen(process.env.port || 3000, function () {
   console.log("Server started on port : 3000");
 })
