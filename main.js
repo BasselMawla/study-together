@@ -1,4 +1,8 @@
-const express = require("express");
+const express = require ("express");
+const app = express();
+const server = require("http").Server(app)
+const io = require("socket.io")(server)
+
 const path = require('path');
 const mysql = require("mysql");
 const dotenv = require('dotenv');
@@ -6,15 +10,26 @@ const cookieParser = require('cookie-parser');
 var expressHbs = require("express-handlebars");
 const fileupload = require("express-fileupload");
 
+app.use(express.static("public"))
+
+io.on("connection", socket => {
+  socket.on("join-room", (className, userId) => {
+      console.log("A user connected to " + className);
+      console.log("userId: " + userId);
+
+      socket.join(className)
+      socket.to(className).broadcast.emit("user-connected", userId)
+
+      socket.on("disconnect", () => {
+        socket.to(className).broadcast.emit("user-disconnected", userId)
+      })
+  })
+})
+
 var hbs = require('hbs');
 hbs.registerHelper('equal', function (args1, args2) { if(args1==args2){return true}else{return false} });
 
-
-
-
 dotenv.config({path: './.env'});
-
-const app = express();
 
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -37,9 +52,6 @@ app.use(fileupload());
 app.set('view engine', 'hbs');
 
 
-
-
-
 db.connect( (error) => {
   if(error) {
     console.log(error);
@@ -52,7 +64,6 @@ db.connect( (error) => {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
-
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log("Server started on port : 3000");
 })
