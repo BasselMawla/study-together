@@ -2,7 +2,7 @@ const socket = io("/")
 const videoGrid = document.getElementById("video-grid")
 const myPeer = new Peer(userId, {
     host: "/peerjsaubstudy.herokuapp.com",
-    port: "7886"
+    port: "9000"
 })
 const myVideo = document.createElement("video")
 // Mute own audio so the user doesn't hear himself
