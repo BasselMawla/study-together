@@ -63,6 +63,6 @@ db.connect( (error) => {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
-server.listen(process.env.PORT || 3000, function () {
+server.listen(process.env.PORT || 9000, function () {
   console.log("Server started on port : 3000");
 })
