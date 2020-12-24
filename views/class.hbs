@@ -326,38 +326,6 @@
 
 
 
-          document
-            .getElementById("announceForm")
-            .addEventListener("submit", function (event) {
-              event.preventDefault();
-              let tima = moment().format("MM/DD-hh:mm");
-
-                socket.emit("announcement message", {
-                  value: document.getElementById("announce_text").value,
-                  user: userName,
-                  Room: room,
-                  userID: idd,
-                  time: tima
-                });
-
-
-
-              console.log('Announcement has been sent from the instructor');
-              document.getElementById("announce_text").value = "";
-
-            });
-
-
-            socket.on("announcement message", (data) => {
-              //console.log(data.data.user + ": " + data.id);
-                document.getElementById("announce_text").value = "";
-                displayAnnouncement(data);
-
-            });
-
-
-
-
 
 
           document
@@ -418,10 +386,21 @@
 
 ////////////////////////////////////////////////////////////////////////////////////Displaying message in chat box
 
-  <li>{{announce.text}} <span style="font-size:12px;color:grey;"> at {{announce.announceDate}}</span></li>
+
           function displayMessage(data) {
 
-            const  = document.createElement("div");
+            let authorClass = "";
+            let divClass = ""
+            //verify that the user ID and the message sent ID is similar
+            if (data.userID === idd) {
+              console.log("This person has sent a message")
+              authorClass = "me";
+              divClass = "myDiv";
+            } else {
+              authorClass = "you";
+              divClass = "yourDiv";
+            }
+            const div = document.createElement("div");
             div.className = divClass;
             const li = document.createElement("li");
             li.className = "message-item";
@@ -442,36 +421,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////display announcement in the Announcements box
 
-        function displayAnnouncement(data) {
-            let authorClass = "";
-          let divClass = ""
-          //verify that the user ID and the message sent ID is similar
-          if (data.userID === idd) {
-              console.log("This person has sent a message")
-            authorClass = "me";
-            divClass = "myDiv";
-          } else {
-            authorClass = "you";
-            divClass = "yourDiv";
-          }
-          const div = document.createElement("div");
-          div.className = divClass;
-          const li = document.createElement("li");
-          li.className = "message-item";
-          const p = document.createElement("p");
-          p.className = "time";
-          p.innerText = moment().format("MM/DD-hh:mm");
-          div.innerHTML =
-            '<p class="' + authorClass + '">' + data.user + "</p>" + '<p class="message"> ' +
-            data.value +
-            "</p>";
-          div.appendChild(p);
-          li.appendChild(div);
 
-          document.getElementById("messages").appendChild(li);
-          //scroll to the bottom
-          window.scrollTo(0, document.body.scrollHeight);
-        }
 
 
 
