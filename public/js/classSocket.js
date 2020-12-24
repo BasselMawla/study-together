@@ -1,8 +1,6 @@
-
 //Connecting Socket.io and creating the current room if not created -- Check ../mysocket.js file
 var socket = io.connect();
 socket.emit('create', {Room : room ,username : userName});
-console.log(`user ${userName} has emitted the creation`);
 
 $("#m").focus();
 //when form is submitted, capture the input value and then send it to server
@@ -57,7 +55,8 @@ socket.on('addimage', function (msg, base64image) {
 
 ////////////////////////////////////////display announcement in the Announcements box
 
-document
+if(isAdmin) {
+  document
   .getElementById("announceForm")
   .addEventListener("submit", function (event) {
 
@@ -75,12 +74,12 @@ document
     console.log('Announcement has been sent from the instructor');
     document.getElementById("announce_text").value = "";
   });
+}
 
 
 // listing and desplaying the announcement coming from server
 socket.on("announcement message", (data) => {
   //console.log(data.data.user + ": " + data.id);
-  document.getElementById("announce_text").value = "";
   displayAnnouncement(data);
 });
 
