@@ -53,7 +53,7 @@ socket.on('addimage', function (msg, base64image) {
   document.getElementById("messages").appendChild(li);
 });
 
-////////////////////////////////////////display announcement in the Announcements box
+////////////////////////////////////////Triggering announcement in the Announcements box
 
 if(isAdmin) {
   document
@@ -83,7 +83,7 @@ socket.on("announcement message", (data) => {
   displayAnnouncement(data);
 });
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////// Displaying the announcements
 function displayAnnouncement(data) {
   var temp = "" + data.value;
   const span = document.createElement("SPAN");
@@ -98,4 +98,53 @@ function displayAnnouncement(data) {
   li.appendChild(textNode);
   li.appendChild(span);
   document.getElementById("announcement-ul").appendChild(li);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////// Triggering questions
+
+document
+.getElementById("questionForm")
+.addEventListener("submit", function (event) {
+
+  event.preventDefault();
+  let tima = moment().format("MM/DD-hh:mm");
+  console.log("Question form has been triggered!!!");
+  socket.emit("question message", {
+    value: document.getElementById("question_text").value,
+    user: userName,
+    Room: room,
+    userID: idd,
+    time: tima
+  });
+
+  console.log('Question has been sent from the user:', userName);
+  document.getElementById("question_text").value = "";
+});
+
+
+
+// listing and desplaying the announcement coming from server
+socket.on("question message", (data) => {
+  //console.log(data.data.user + ": " + data.id);
+  displayQuestion(data);
+});
+
+
+///////////////////////////////////////////////////////////////////////////////// Displaying the announcements
+function displayQuestion(data) {
+  var temp = "NOW " + "-" + data.value;
+  const span = document.createElement("SPAN");
+  span.style.fontSize = "12px";
+  span.style.color = "grey";
+  span.innerHTML = " by <strong class=\"color:black;\">" + data.user + "</strong> at " + data.time;
+
+  const textNode = document.createTextNode(temp)
+  const li = document.createElement("li");
+  li.style.color = "rgb(0,0,0)";
+
+  li.appendChild(textNode);
+  li.appendChild(span);
+  document.getElementById("question-ul").appendChild(li);
+
 }

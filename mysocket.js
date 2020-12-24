@@ -75,12 +75,38 @@ module.exports = (io) => {
     });
 
 
-    socket.on('disconnect', () => {
-      console.log('User was disconnected');
+
+    //io.sockets.in(room).emit('event', data);
+    socket.on('question message', (data) => {
+      console.log(data);
+
+      db.query('INSERT INTO question_post SET ?', {
+        course_name: data.Room,
+        author_name: data.user,
+        text: data.value,
+        date: data.time,
+        upvoted: 0
+      }, (error, results) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(results.insertId);
+          // db.query('SELECT MAX(id) AS id FROM question_post', (error, resultss) => {
+            // console.log("Results : ", resultss);
+            //io.sockets.in(room).emit('chat message', data);
+            var number = results.insertId;
+            io.to(data.Room).emit("question message", data);
+          //});
+
+
+        }
+      });
     });
+
 
     socket.on('disconnect', () => {
       console.log('User was disconnected');
     });
+
   });
 };

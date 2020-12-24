@@ -27,9 +27,7 @@ router.post('/sendPrivateMessage' , messController.sendPrivateMessage);
 
 router.post('/class' , authController.getClass);
 
-router.post('/addAnnouncement' , courseController.addAnnouncement);
 
-router.post('/addQuestion' , courseController.addQuestion);
 
 
 
