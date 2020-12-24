@@ -1,5 +1,5 @@
 const express = require("express");
-const app  =  express(); // start the server
+const app = express(); // start the server
 const server = require("http").Server(app)
 server.listen(process.env.port || 3000, function () {
   console.log("Server started on port : 3000");
@@ -18,21 +18,29 @@ app.use(express.static("public"))
 
 io.on("connection", socket => {
   socket.on("join-room", (className, userId) => {
-      console.log("User " + userId + " joined room " + className)
+    console.log("User " + userId + " joined room " + className)
 
-      socket.join(className)
-      socket.to(className).broadcast.emit("user-connected", userId)
+    socket.join(className)
+    socket.to(className).broadcast.emit("user-connected", userId)
 
-      socket.on("disconnect", () => {
-        socket.to(className).broadcast.emit("user-disconnected", userId)
-      })
+    socket.on("disconnect", () => {
+      socket.to(className).broadcast.emit("user-disconnected", userId)
+    })
   })
 })
 
 var hbs = require('hbs');
-hbs.registerHelper('equal', function (args1, args2) { if(args1==args2){return true}else{return false} });
+hbs.registerHelper('equal', function (args1, args2) {
+  if (args1 == args2) {
+    return true
+  } else {
+    return false
+  }
+});
 
-dotenv.config({path: './.env'});
+dotenv.config({
+  path: './.env'
+});
 
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -46,7 +54,9 @@ const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
 //Parse URL-encoded bodies (req.body) (as sent by HTML forms)
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({
+  extended: false
+}));
 //Parse JSON bodies (as send from forms) -> comes with json formats
 app.use(express.json());
 app.use(cookieParser()); //initializinf the cookie inside the browser
@@ -55,10 +65,10 @@ app.use(fileupload());
 app.set('view engine', 'hbs');
 
 
-db.connect( (error) => {
-  if(error) {
+db.connect((error) => {
+  if (error) {
     console.log(error);
-  }else{
+  } else {
     console.log("MySQL Connected");
   }
 })

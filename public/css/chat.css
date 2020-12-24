@@ -1,0 +1,138 @@
+.row {
+  padding: 0px 20px;
+}
+
+.col-5 {
+  padding: 0px;
+}
+
+.card {
+  margin-top: 20px;
+}
+
+.card-body {
+  padding: 5px 5px;
+
+}
+
+.card-body ul.announcement-ul,
+.card-body ul.question {
+  list-style-type: none;
+  padding: 0px;
+  color: rgb(150, 0, 0);
+  height: 250px;
+  overflow-y: scroll;
+}
+
+.card-body ul.question {
+  color: rgb(0, 0, 0);
+}
+
+.card-body .video {
+  height: 47em;
+  overflow-y: scroll;
+}
+
+.card-body ul li {
+  border-radius: 5px;
+  min-height: 40px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.card-body ul li:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+.card-footer {
+  padding: 15px 5px;
+}
+
+.pageMain {
+  grid-area: main;
+
+  overflow-y: scroll;
+  height: 390px;
+  max-height: 390px;
+
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style-type: none;
+}
+
+ul#messages {
+  width: 100%;
+  padding-left: 0px;
+}
+
+li.message-item {
+  padding: 5px;
+}
+
+/*.myDiv,
+.yourDiv {}*/
+
+p.me {
+  margin-bottom: 0;
+}
+
+/* p.me:not(:first-child) {
+ display: none;
+} */
+
+p.you {
+  margin-bottom: 0;
+}
+
+/* p.you:not(:first-child) {
+ display: none;
+} */
+
+
+.myDiv>p {
+  color: #000;
+  text-align: right;
+}
+
+.myDiv>p.message {
+  color: green;
+  text-align: right;
+}
+
+
+.yourDiv>p {
+  color: #000;
+  text-align: left;
+}
+
+.yourDiv>p.message {
+  color: red;
+  text-align: left;
+}
+
+.myDiv>p.message,
+.yourDiv>p.message {
+  width: 95%;
+  padding: 0px 10px;
+  margin: 0;
+}
+
+p.time {
+  margin-top: 0;
+}
+
+/* #shared_image{
+  width:405px;
+  height:270px;
+} */
