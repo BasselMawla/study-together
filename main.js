@@ -1,10 +1,9 @@
 const express = require("express");
 const app  =  express(); // start the server
-const http = require("http").createServer(app);
-const server = app.listen(3000);
-//server.listen(process.env.port || 3000, function () {
-//  console.log("Server started on port : 3000");
-//})
+const server = require("http").Server(app)
+server.listen(process.env.port || 3000, function () {
+  console.log("Server started on port : 3000");
+})
 console.log("listening on port: 3000");
 const io = require("socket.io")(server);
 const path = require('path');
