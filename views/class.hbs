@@ -4,29 +4,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-  <link type="text/css" rel="stylesheet" href="/css/style.css">
-  <link type="text/css" rel="stylesheet" href="/css/chat.css">
-
-  <script>
-    const className = "{{class_name}}";
-    const userId = "{{user.id}}";
-  </script>
-
-  <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js" defer></script>
-  <script src="/socket.io/socket.io.js" defer></script>
-  <script src="/js/videoChat.js" defer></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chat.css">
 
   <title>class - AUB Study Platform</title>
   <!-- <script src="/handlebars-v4.7.6.js"></script> -->
-  <style media="screen">
-
-  </style>
 </head>
 
 <body>
   <nav>
+
     <h4>AUB Study Platform</h4>
     <ul>
       <li> <a href="/">Home</a> </li>
@@ -93,17 +82,28 @@
       </div>
     </div>
 
+
+
+
     <div class="col-5">
 
       <div class="card">
         <h5 class="card-header">Video - {{class_name}}</h5>
         <div class="card-body">
-          <div id="video-grid"></div>
+          <div class="video">
+            <div class="mensajes" style="">
+              <img src="" alt="">
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
 
+
+
     <div class="col-4">
+
       <div class="card">
         <h5 class="card-header">Resourses</h5>
         <div class="card-body">
@@ -112,6 +112,8 @@
           <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
       </div>
+
+
 
       <div class="card">
         <h5 class="card-header">Chat</h5>
@@ -141,132 +143,202 @@
   </script>
   <!-- Include Handlebars from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
 </body>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
 
-<script>
-  let userName = `{{user.name}}`;
-  let room = `{{class_name}}`;
-  let idd = `{{user.id}}`;
+      <script>
+          let userName = `{{user.name}}`;
+          let room = `{{class_name}}`;
+          let idd = `{{user.id}}`;
 
-  var oldData = {
-    value: '',
-    user: '',
-    Room: '',
-    userID: '',
-    time: ''
-  } {
-    {
-      #
-      each chat as | single |
-    }
-  }
-  oldData = {
-    value: `{{single.text}}`,
-    user: `{{single.author_name}}`,
-    Room: `{{single.course_name}}`,
-    userID: `{{single.author_id}}`,
-    time: `{{single.date}}`
-  }
-  displayMessage(oldData);
-  console.log("Old data"); {
-    {
-      /each}}
+          var oldData = {
+            value: '',
+            user: '',
+            Room: '',
+            userID: '',
+            time: ''
+          }
+          {{#each chat as |single|}}
+            oldData = {
+              value: `{{single.text}}`,
+              user: `{{single.author_name}}`,
+              Room: `{{single.course_name}}`,
+              userID: `{{single.author_id}}`,
+              time: `{{single.date}}`
+            }
+            displayMessage(oldData);
+            console.log("Old data");
+          {{/each}}
 
-      var socket = io.connect();
-      socket.emit('create', {
-        Room: room,
-        username: userName
-      });
-      console.log(`user ${userName} has emitted the creation`);
+          var socket = io.connect();
+          socket.emit('create', {Room : room ,username : userName});
+          console.log(`user ${userName} has emitted the creation`);
 
-      $("#m").focus();
-      //when form is submitted, capture the input value and then send it to server
+          $("#m").focus();
+          //when form is submitted, capture the input value and then send it to server
 
-      document
-        .getElementById("form_chat")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          let tima = moment().format("MM/DD-hh:mm");
 
-          socket.emit("chat message", {
-            value: document.getElementById("m").value,
-            user: userName,
-            Room: room,
-            userID: idd,
-            time: tima
-          });
-          console.log('A message has been sent from the client');
-          document.getElementById("m").value = "";
-        });
 
-      socket.on("chat message", (data) => {
-        //console.log(data.data.user + ": " + data.id);
-        document.getElementById("m").value = "";
-        displayMessage(data);
-      });
+          document
+            .getElementById("announceForm")
+            .addEventListener("submit", function (event) {
+              event.preventDefault();
+              let tima = moment().format("MM/DD-hh:mm");
 
-      //////////////////////////////////////////Sending image in chat messages
+                socket.emit("announcement message", {
+                  value: document.getElementById("announce_text").value,
+                  user: userName,
+                  Room: room,
+                  userID: idd,
+                  time: tima
+                });
 
-      socket.on('addimage', function (msg, base64image) {
-        const li = document.createElement("li");
-        const div = document.createElement("div");
-        div.innerHTML = '<a target="_blank" href="' + base64image + '"><img src="' + base64image +
-          '" id="shared_image" class="img-fluid"/></a>';
-        li.appendChild(div);
-        document.getElementById("messages").appendChild(li);
-      });
 
-      $(function () {
-        $("#chat_file").on('change', (e) => {
-          var file = e.originalEvent.target.files[0];
-          var reader = new FileReader();
-          reader.onload = (evt) => {
-            //socket.emit('user image', evt.target.result, room);
-            socket.emit('user image', evt.target.result);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
 
-      ////////////////////////Displaying message in chat box
+              console.log('Announcement has been sent from the instructor');
+              document.getElementById("announce_text").value = "";
 
-      function displayMessage(data) {
-        let authorClass = "";
-        let divClass = ""
-        //verify that the user ID and the message sent ID is similar
-        if (data.userID === idd) {
-          console.log("This person has sent a message")
-          authorClass = "me";
-          divClass = "myDiv";
-        } else {
-          authorClass = "you";
-          divClass = "yourDiv";
+            });
+
+
+            socket.on("announcement message", (data) => {
+              //console.log(data.data.user + ": " + data.id);
+                document.getElementById("announce_text").value = "";
+                displayAnnouncement(data);
+
+            });
+
+
+
+
+
+
+          document
+            .getElementById("form_chat")
+            .addEventListener("submit", function (event) {
+              event.preventDefault();
+              let tima = moment().format("MM/DD-hh:mm");
+
+                socket.emit("chat message", {
+                  value: document.getElementById("m").value,
+                  user: userName,
+                  Room: room,
+                  userID: idd,
+                  time: tima
+                });
+
+
+
+              console.log('A message has been sent from the client');
+              document.getElementById("m").value = "";
+
+            });
+
+
+
+            socket.on("chat message", (data) => {
+              //console.log(data.data.user + ": " + data.id);
+                document.getElementById("m").value = "";
+                displayMessage(data);
+
+            });
+
+            /////////////////////////////////////////////////////////////Sending image in chat messages
+
+            socket.on('addimage', function(msg, base64image) {
+
+                const li = document.createElement("li");
+                const div = document.createElement("div");
+                div.innerHTML = '<a target="_blank" href="'+base64image+'"><img src="'+ base64image +'" id="shared_image" class="img-fluid"/></a>';
+                li.appendChild(div);
+                document.getElementById("messages").appendChild(li);
+
+
+
+            });
+            $(function(){
+              $("#chat_file").on('change', (e) => {
+                var file = e.originalEvent.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (evt) => {
+                  //socket.emit('user image', evt.target.result, room);
+                  socket.emit('user image', evt.target.result);
+                };
+                reader.readAsDataURL(file);
+              });
+            });
+
+
+////////////////////////////////////////////////////////////////////////////////////Displaying message in chat box
+
+  <li>{{announce.text}} <span style="font-size:12px;color:grey;"> at {{announce.announceDate}}</span></li>
+          function displayMessage(data) {
+
+            const  = document.createElement("div");
+            div.className = divClass;
+            const li = document.createElement("li");
+            li.className = "message-item";
+            const p = document.createElement("p");
+            p.className = "time";
+            p.innerText = moment().format("MM/DD-hh:mm");
+            div.innerHTML =
+              '<p class="' + authorClass + '">' + data.user + "</p>" + '<p class="message"> ' +
+              data.value +
+              "</p>";
+            div.appendChild(p);
+            li.appendChild(div);
+
+            document.getElementById("messages").appendChild(li);
+            //scroll to the bottom
+            window.scrollTo(0, document.body.scrollHeight);
+          }
+
+/////////////////////////////////////////////////////////////////////////////////display announcement in the Announcements box
+
+        function displayAnnouncement(data) {
+          let authorClass = ""
+          let divClass = ""
+          //verify that the user ID and the message sent ID is similar
+          if (data.userID === idd) {
+              console.log("This person has sent a message")
+            authorClass = "me";
+            divClass = "myDiv";
+          } else {
+            authorClass = "you";
+            divClass = "yourDiv";
+          }
+          const div = document.createElement("div");
+          div.className = divClass;
+          const li = document.createElement("li");
+          li.className = "message-item";
+          const p = document.createElement("p");
+          p.className = "time";
+          p.innerText = moment().format("MM/DD-hh:mm");
+          div.innerHTML =
+            '<p class="' + authorClass + '">' + data.user + "</p>" + '<p class="message"> ' +
+            data.value +
+            "</p>";
+          div.appendChild(p);
+          li.appendChild(div);
+
+          document.getElementById("messages").appendChild(li);
+          //scroll to the bottom
+          window.scrollTo(0, document.body.scrollHeight);
         }
-        const div = document.createElement("div");
-        div.className = divClass;
-        const li = document.createElement("li");
-        li.className = "message-item";
-        const p = document.createElement("p");
-        p.className = "time";
-        p.innerText = moment().format("MM/DD-hh:mm");
-        div.innerHTML =
-          '<p class="' + authorClass + '">' + data.user + "</p>" + '<p class="message"> ' +
-          data.value +
-          "</p>";
-        div.appendChild(p);
-        li.appendChild(div);
 
-        document.getElementById("messages").appendChild(li);
-        //scroll to the bottom
-        window.scrollTo(0, document.body.scrollHeight);
-      }
 
-      //////////////////////////////////display announcement in the Announcements box
-</script>
+
+
+
+
+
+
+
+  </script>
 
 
 
