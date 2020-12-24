@@ -250,7 +250,7 @@ exports.authStudent = async (req, res, next) => {
 
 // This one for a user who is already registered in
 exports.getClass = async (req, res) => {
-  console.log("class name: ", req.body);
+  //console.log("class name: ", req.body);
 
 
 
