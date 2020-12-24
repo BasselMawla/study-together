@@ -1,4 +1,4 @@
-//const socket = io("/")
+//var socket = io.connect();
 const videoGrid = document.getElementById("video-grid")
 const myPeer = new Peer(userId, {
   host: "/",
@@ -40,7 +40,6 @@ myPeer.on("open", function () {
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
   console.log("Connected to user " + userId)
-  console.log(stream)
   const video = document.createElement("video")
   call.on("stream", userVideoStream => {
     addVideoStream(video, userVideoStream)
