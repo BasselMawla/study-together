@@ -21,6 +21,9 @@
       .row{
         padding:0px 20px;
       }
+      .col-5{
+        padding:0px;
+      }
       .card{
         margin-top:20px;
       }
@@ -38,6 +41,10 @@
       .card-body ul.question{
         color: rgb(0,0,0);
       }
+      .card-body .video{
+        height:47em;
+        overflow-y: scroll;
+      }
       .card-body ul li{
 
         border-radius: 5px;
@@ -53,6 +60,107 @@
       .card-footer{
         padding: 15px 5px;
       }
+
+
+
+
+
+
+
+
+
+
+
+      .pageMain { grid-area: main;
+
+        overflow-y:scroll;
+        height:390px;
+        max-height:390px;
+
+       }
+
+      input[type=text]{
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      ul{
+        list-style-type:none;
+
+      }
+      ul#messages{
+        width:100%;
+        padding-left: 0px;
+      }
+      li.message-item{
+
+       padding:5px;
+      }
+      .myDiv, .yourDiv{
+
+      }
+      p.me {
+       margin-bottom: 0;
+
+      }
+      /* p.me:not(:first-child) {
+       display: none;
+      } */
+
+      p.you {
+       margin-bottom: 0;
+
+
+      }
+      /* p.you:not(:first-child) {
+       display: none;
+      } */
+
+
+      .myDiv > p{
+        color: #000;
+        text-align: right;
+      }
+
+      .myDiv > p.message {
+        color: green;
+
+        text-align: right;
+
+      }
+
+
+      .yourDiv > p{
+        color: #000;
+        text-align: left;
+
+      }
+      .yourDiv > p.message {
+        color: red;
+
+        text-align: left;
+
+      }
+
+      .myDiv > p.message, .yourDiv > p.message{
+        width:95%;
+        padding:0px 10px;
+        margin:0;
+      }
+
+      p.time{
+        margin-top:0 ;
+      }
+
+      /* #shared_image{
+        width:405px;
+        height:270px;
+      } */
     </style>
   </head>
   <body>
@@ -90,12 +198,16 @@
                 {{#if user.isAdmin}}
                 <div class="card-footer">
                   <form class="form" action="/auth/addAnnouncement" method="post" id="announceForm">
-                    <input type="text" name="announce_author" value="{{user.name}}" style="display:none;">
-                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;">
+                    <!-- <input type="text" name="announce_author" value="{{user.name}}" style="display:none;">
+                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;"> -->
                     <input type="text" name="announce_text" value="" placeholder="Add announcement" style="width:74%;height:32px; border:0.5px solid black; border-radius:5px;">
                     <button type="submit" class="btn btn-primary btn-sm">submit</button>
                   </form>
                 </div>
+                {{else}}
+                  <div class="card-footer" style="text-align:center;">
+                    <h7>Always check up the announced tabs!</h7>
+                  </div>
                 {{/if}}
               </div>
 
@@ -152,20 +264,181 @@
               <div class="card">
                 <h5 class="card-header">Chat</h5>
                 <div class="card-body">
-                  <h5 class="card-title">Special title treatment</h5>
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <div id="pageMain" class="pageMain" >
+                    <ul id="messages">
+
+                    </ul>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div id="pageFooter" class="pageFooter">
+                    <form style=" width: 100%; padding-left:2%;" id="form_chat">
+                      <input type="file" class="form-control-file" id="chat_file" name="chat_file" accept="">
+                      <input type="text" id="m"  style="width:77%;height:32px; border:0.5px solid black; border-radius:5px;">
+                      <input type="submit" class="btn btn-primary" id="submitButton" value="send" />
+                    </form>
+                  </div>
                 </div>
               </div>
           </div>
         </div>
 
-
+      <script src="/socket.io/socket.io.js"></script>
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <!-- Include Handlebars from a CDN -->
       <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-      <script type="text/javascript">
 
-      </script>
       </body>
+
+
+
+
+      <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+
+
+      <script>
+          let userName = `{{user.name}}`;
+          let room = `{{class_name}}`;
+          let idd = `{{user.id}}`;
+
+          var oldData = {
+            value: '',
+            user: '',
+            Room: '',
+            userID: '',
+            time: ''
+          }
+          {{#each chat as |single|}}
+            oldData = {
+              value: `{{single.text}}`,
+              user: `{{single.author_name}}`,
+              Room: `{{single.course_name}}`,
+              userID: `{{single.author_id}}`,
+              time: `{{single.date}}`
+            }
+            displayMessage(oldData);
+            console.log("Old data");
+          {{/each}}
+
+          var socket = io.connect();
+          socket.emit('create', {Room : room ,username : userName});
+          console.log(`user ${userName} has emitted the creation`);
+
+          $("#m").focus();
+          //when form is submitted, capture the input value and then send it to server
+
+
+
+
+
+
+
+          document
+            .getElementById("form_chat")
+            .addEventListener("submit", function (event) {
+              event.preventDefault();
+              let tima = moment().format("MM/DD-hh:mm");
+
+                socket.emit("chat message", {
+                  value: document.getElementById("m").value,
+                  user: userName,
+                  Room: room,
+                  userID: idd,
+                  time: tima
+                });
+
+
+
+              console.log('A message has been sent from the client');
+              document.getElementById("m").value = "";
+
+            });
+
+
+
+            socket.on("chat message", (data) => {
+              //console.log(data.data.user + ": " + data.id);
+                document.getElementById("m").value = "";
+                displayMessage(data);
+
+            });
+
+            /////////////////////////////////////////////////////////////Sending image in chat messages
+
+            socket.on('addimage', function(msg, base64image) {
+
+                const li = document.createElement("li");
+                const div = document.createElement("div");
+                div.innerHTML = '<a target="_blank" href="'+base64image+'"><img src="'+ base64image +'" id="shared_image" class="img-fluid"/></a>';
+                li.appendChild(div);
+                document.getElementById("messages").appendChild(li);
+
+
+
+            });
+            $(function(){
+              $("#chat_file").on('change', (e) => {
+                var file = e.originalEvent.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (evt) => {
+                  //socket.emit('user image', evt.target.result, room);
+                  socket.emit('user image', evt.target.result);
+                };
+                reader.readAsDataURL(file);
+              });
+            });
+
+
+////////////////////////////////////////////////////////////////////////////////////Displaying message in chat box
+
+
+          function displayMessage(data) {
+
+            let authorClass = "";
+            let divClass = ""
+            //verify that the user ID and the message sent ID is similar
+            if (data.userID === idd) {
+              console.log("This person has sent a message")
+              authorClass = "me";
+              divClass = "myDiv";
+            } else {
+              authorClass = "you";
+              divClass = "yourDiv";
+            }
+            const div = document.createElement("div");
+            div.className = divClass;
+            const li = document.createElement("li");
+            li.className = "message-item";
+            const p = document.createElement("p");
+            p.className = "time";
+            p.innerText = moment().format("MM/DD-hh:mm");
+            div.innerHTML =
+              '<p class="' + authorClass + '">' + data.user + "</p>" + '<p class="message"> ' +
+              data.value +
+              "</p>";
+            div.appendChild(p);
+            li.appendChild(div);
+
+            document.getElementById("messages").appendChild(li);
+            //scroll to the bottom
+            window.scrollTo(0, document.body.scrollHeight);
+          }
+
+/////////////////////////////////////////////////////////////////////////////////display announcement in the Announcements box
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+
+
+
 </html>

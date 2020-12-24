@@ -1,11 +1,15 @@
-const express = require ("express");
-const app = express();
+const express = require("express");
+const app  =  express(); // start the server
 const server = require("http").Server(app)
-const io = require("socket.io")(server)
-
+server.listen(process.env.port || 3000, function () {
+  console.log("Server started on port : 3000");
+})
+console.log("listening on port: 3000");
+const io = require("socket.io")(server);
 const path = require('path');
 const mysql = require("mysql");
 const dotenv = require('dotenv');
+const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 var expressHbs = require("express-handlebars");
 const fileupload = require("express-fileupload");
@@ -63,6 +67,4 @@ db.connect( (error) => {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
-server.listen(process.env.port || 3000, function () {
-  console.log("Server started on port : 3000");
-})
+require('./mysocket.js')(io);
