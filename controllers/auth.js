@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 const { promisify } = require('util');
 
 
+
+
+
+
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   port: process.env.DATABASE_PORT,
@@ -27,7 +31,7 @@ exports.login = async (req, res) => {
 
     db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
       console.log('results: ' ,results);
-      if(!results || !(await bcrypt.compare(password, results[0].password) ) ) { //no user in the db or wait for comparsion of password
+      if(!results[0] || !(await bcrypt.compare(password, results[0].password) ) ) { //no user in the db or wait for comparsion of password
           res.status(401).render('login' , {
             message: 'Email or Password is incorrect'
           })
@@ -249,6 +253,7 @@ exports.getClass = async (req, res) => {
   console.log("class name: ", req.body);
 
 
+
   const { courseName } = req.body;
   //Step 1 is verify the token
   if( req.cookies.jwt ){ //grabbing the cookie who is named jwt
@@ -280,24 +285,19 @@ exports.getClass = async (req, res) => {
               db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, resultss) => {
 
                 db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, resultsss) => {
-                  if(error){
-                    console.log(error);
-                  }
-                  if(results.length == 0){ //if the course does not exist!
-                    // return res.render('class', {
-                    //   user: result[0],
-                    //   class_name: courseName,
-                    //   announcements: resultss
-                    // })
-                  }
-                  else{
+                  db.query('SELECT * FROM course_chat WHERE course_name = ?', [courseName], (error, resultssss) => {
+                    if(error){
+                      console.log(error);
+                    }
+                    
                     return res.render('class', {
                       user: result[0],
                       class_name: courseName,
                       announcements: resultss,
-                      questions: resultsss
+                      questions: resultsss,
+                      chat: resultssss
                     })
-                  }
+                  });
                 });
               });
             }
