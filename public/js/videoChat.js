@@ -7,7 +7,7 @@ const myPeer = new Peer(userId, {
 })
 const myVideo = document.createElement("video")
 // Mute own audio so the user doesn't hear himself
-//myVideo.muted = true
+myVideo.muted = true
 const peers = {}
 
 const video = document.createElement("video")
