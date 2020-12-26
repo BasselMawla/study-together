@@ -283,12 +283,13 @@ exports.getClass = async (req, res) => {
             else{
               //req.class_name = courseName;
               db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, resultss) => {
+
                 db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, resultsss) => {
                   db.query('SELECT * FROM course_chat WHERE course_name = ?', [courseName], (error, resultssss) => {
                     if(error){
                       console.log(error);
                     }
-
+                    
                     return res.render('class', {
                       user: result[0],
                       class_name: courseName,

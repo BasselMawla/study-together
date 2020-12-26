@@ -14,8 +14,6 @@ const cookieParser = require('cookie-parser');
 var expressHbs = require("express-handlebars");
 const fileupload = require("express-fileupload");
 
-
-
 app.use(express.static("public"))
 
 io.on("connection", socket => {
