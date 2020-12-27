@@ -108,12 +108,8 @@ document
 .addEventListener("submit", function (event) {
 
   event.preventDefault();
-<<<<<<< Updated upstream
   let tima = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
-=======
-  let tima = new Date(Date.now());
->>>>>>> Stashed changes
   console.log("Question form has been triggered!!!");
   socket.emit("question message", {
     value: document.getElementById("question_text").value,
