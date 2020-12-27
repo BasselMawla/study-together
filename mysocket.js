@@ -104,6 +104,30 @@ module.exports = (io) => {
     });
 
 
+
+
+        //io.sockets.in(room).emit('event', data);
+        socket.on('comment message', (data) => {
+          console.log(data);
+
+          db.query('INSERT INTO comment_post SET ?', {
+            post_id: data.postID,
+            course_name: data.Room,
+            commenter_name: data.user,
+            text: data.value,
+            date: data.time,
+            upvoted: 0
+          }, (error, results) => {
+            if (error) {
+              console.log(error);
+            } else {
+                io.to(data.Room).emit("comment message", data);
+
+            }
+          });
+        });
+
+
     socket.on('disconnect', () => {
       console.log('User was disconnected');
     });

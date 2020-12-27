@@ -31,4 +31,5 @@ router.post('/class' , authController.getClass);
 
 
 
+
 module.exports = router;
