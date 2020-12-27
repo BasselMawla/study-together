@@ -244,7 +244,7 @@
 
             comments.push(postComments);
           {{/each}}
-          console.log(comments);
+          // console.log(comments);
 
 
 
@@ -282,16 +282,16 @@
               }
             }
           }
-          console.log("NOW UNIQUE");
-          console.log(uniquePosts);
+          // console.log("NOW UNIQUE");
+          // console.log(uniquePosts);
 
           for(let i = 0 ; i < uniquePosts.length ; i++){
-              console.log("i : ", i);
-              console.log(uniquePosts[i]);
+              // console.log("i : ", i);
+              // console.log(uniquePosts[i]);
 
               var ulId = "comment-ul" + uniquePosts[i].id;
               if(document.getElementById(ulId)){
-                console.log("Detected");
+                // console.log("Detected");
 
                 let ul = document.getElementById(ulId);
 
