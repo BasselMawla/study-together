@@ -138,6 +138,7 @@ function displayQuestion(data) {
   const span = document.createElement("SPAN");
   span.style.fontSize = "12px";
   span.style.color = "grey";
+  console.log("Date formatting : ");
   span.innerHTML = " by <strong class=\"color:black;\">" + data.user + "</strong> at " + data.time;
 
   const textNode = document.createTextNode(temp)
