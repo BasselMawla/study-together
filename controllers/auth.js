@@ -92,26 +92,32 @@ exports.isLoggedIn = async (req, res, next) => {
               req.users = results;
               //If instructor
               if(result[0].isAdmin){
-                db.query('SELECT * FROM courses WHERE instructor_id = ?', [result[0].id], (errorss, resultss) => {
-                  if(!resultss){
-                    return next();
-                  }
-                  else{
-                    req.courses = resultss;
-                    return next();
-                  }
+                db.query('SELECT * FROM courses WHERE instructor_id = ? ORDER BY name', [result[0].id], (errorss, resultss) => {
+                  db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS messageDate FROM users_messaging WHERE receiver_email = ?', [result[0].email], (errorsss, resultsss) => {
+                    if(errorss || errorsss){
+                      return next();
+                    }
+                    else{
+                      req.courses = resultss;
+                      req.privateMessages = resultsss;
+                      return next();
+                    }
+                  });
                 });
               }
               //If student
               else{
-                db.query('SELECT * FROM course_registrar WHERE student_id = ?', [result[0].id], (errorss, resultss) => {
-                  if(!resultss){
-                    return next();
-                  }
-                  else{
-                    req.registered = resultss;
-                    return next();
-                  }
+                db.query('SELECT * FROM course_registrar WHERE student_id = ? ORDER BY course_name', [result[0].id], (errorss, resultss) => {
+                  db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS messageDate FROM users_messaging WHERE receiver_email = ?', [result[0].email], (errorsss, resultsss) => {
+                    if(!resultss){
+                      return next();
+                    }
+                    else{
+                      req.registered = resultss;
+                      req.privateMessages = resultsss;
+                      return next();
+                    }
+                  });
                 });
               }
             }
@@ -285,18 +291,24 @@ exports.getClass = async (req, res) => {
               db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, resultss) => {
 
                 db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, resultsss) => {
+
                   db.query('SELECT * FROM course_chat WHERE course_name = ?', [courseName], (error, resultssss) => {
-                    if(error){
-                      console.log(error);
-                    }
-                    
-                    return res.render('class', {
-                      user: result[0],
-                      class_name: courseName,
-                      announcements: resultss,
-                      questions: resultsss,
-                      chat: resultssss
-                    })
+
+                    db.query('SELECT * FROM comment_post WHERE course_name = ? ORDER BY post_id ASC', [courseName], (error, resulti) => {
+
+                      if(error){
+                        console.log(error);
+                      }
+
+                      return res.render('class', {
+                        user: result[0],
+                        class_name: courseName,
+                        announcements: resultss,
+                        questions: resultsss,
+                        chat: resultssss,
+                        allComments: resulti
+                      });
+                    });
                   });
                 });
               });

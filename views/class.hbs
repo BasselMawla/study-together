@@ -8,6 +8,15 @@
     <link type="text/css" rel="stylesheet" href="/css/style.css">
     <link type="text/css" rel="stylesheet" href="/css/chat.css">
 
+    <style media="screen">
+    [class^="comment-ul"]{
+      padding-left: 0;
+    }
+    [class^="comment-ul"] li {
+      background: #f0f0f0;
+    }
+    </style>
+
     <script>
         const className = "{{class_name}}";
         const userId = "{{user.id}}";
@@ -59,13 +68,13 @@
                   <form class="form" id="announceForm">
                     <!-- <input type="text" name="announce_author" value="{{user.name}}" style="display:none;">
                     <input type="text" name="courseName" value="{{class_name}}" style="display:none;"> -->
-                    <input type="text" id="announce_text"  style="width:77%;height:32px; border:0.5px solid black; border-radius:5px;">
+                    <input type="text" id="announce_text"  style="width:77%;height:32px; border:0.5px solid black; border-radius:5px;" placeholder="Add announcement">
                     <button type="submit" class="btn btn-primary btn-sm">submit</button>
                   </form>
                 </div>
                 {{else}}
                   <div class="card-footer" style="text-align:center;">
-                    <h7>Always check up the announced tabs!</h7>
+                    <p style="font-style: italic;">Always check up the announced tab!</p>
                   </div>
                 {{/if}}
               </div>
@@ -73,17 +82,56 @@
               <div class="card">
                 <h5 class="card-header">Questions</h5>
                 <div class="card-body">
-                  <ul class="question">
+                  <ul class="question" id="question-ul">
                     {{#each questions as |question|}}
-                      <li>{{question.id}} : {{question.text}} <strong> by {{question.author_name}}</strong><span style="font-size:12px;color:grey;"> at {{question.questionDate}}</span></li>
+                    <li style="transform: rotate(0);">
+                      <div>
+                        {{question.id}} : {{question.text}} <strong> by {{question.author_name}}</strong><span style="font-size:12px;color:grey;"> at {{question.questionDate}}</span>
+                        <!-- <a href="#" class="stretched-link" data-toggle="modal" data-target="#exampleModalCenter"></a> -->
+                        <button type="button" class="btn btn-primary stretched-link" data-toggle="modal" data-target="#exampleModalCenter{{question.id}}"></button>
+                      </div>
+                    </li>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter{{question.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+
+                            <div><h3 class="modal-title" id="exampleModalCenterTitle">{{question.text}}</h3><br><small class="text-muted"><strong> Author:</strong> {{question.author_name}} - <strong>Date:</strong> {{question.questionDate}}</small></div>
+                            <div class="p-2 bd-highlight">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+
+                          </div>
+                          <div class="modal-body">
+
+                            <ul id="comment-ul{{question.id}}" class="comment-ul{{question.id}}">
+
+                            </ul>
+                            <form class="form" id="commentForm{{question.id}}">
+                              <input type="text" id="post_comment_id{{question.id}}" value="{{question.id}}" style="display:none;">  <!-- style="display:none;" -->
+                              <input type="text"  id="comment_text{{question.id}}"  style="width:77%;height:32px; border:0.5px solid black; border-radius:5px;" placeholder="comment here">
+                              <button type="submit" class="btn btn-primary btn-sm">submit</button>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     {{/each}}
                   </ul>
                 </div>
                 <div class="card-footer">
-                  <form class="form" action="/auth/addQuestion" method="post" id="questionForm">
-                    <input type="text" name="question_author" value="{{user.name}}" style="display:none;">
-                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;">
-                    <input type="text" name="question_text" value="" placeholder="Add question" style="width:74%;height:32px; border:0.5px solid black; border-radius:5px;">
+                  <form class="form" id="questionForm">
+                    <!-- <input type="text" name="question_author" value="{{user.name}}" style="display:none;">
+                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;"> -->
+                    <input type="text"  id="question_text"  style="width:77%;height:32px; border:0.5px solid black; border-radius:5px;" placeholder="Add question">
                     <button type="submit" class="btn btn-primary btn-sm">submit</button>
                   </form>
                 </div>
@@ -140,7 +188,7 @@
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <!-- Include Handlebars from a CDN -->
       <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
       </body>
 
       <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
@@ -169,6 +217,104 @@
             }
             displayMessage(oldData);
           {{/each}}
+
+
+
+
+
+
+
+
+
+
+
+          var postComment = {
+            post_id : '',
+            commenterName : '',
+            txt: '',
+            date : '',
+            upVot: ''
+          };
+          const comments = [];
+          {{#each allComments as |comment|}}
+
+            postComments = {
+              post_id : '{{comment.post_id}}',
+              commenterName : '{{comment.commenter_name}}',
+              txt : '{{comment.text}}',
+              date : '{{comment.date}}',
+              upVot : '{{comment.upvoted}}'
+            }
+
+            comments.push(postComments);
+          {{/each}}
+          // console.log(comments);
+
+
+
+          var uniquePosts = [];
+          let numberOfNewPosts = 0;
+
+          for(let i = 0 ; i < comments.length; i++){
+
+            if(comments[i].post_id){
+              var postComment = {
+                id : '',
+                names : [],
+                texts : []
+              };
+
+              var nms = comments[i].commenterName;
+              var txts = comments[i].txt;
+
+              if(i == 0){
+                postComment.id = comments[i].post_id;
+                postComment.names.push(nms);
+                postComment.texts.push(txts);
+                uniquePosts.push(postComment);
+              }else{
+                if(comments[i-1].post_id == comments[i].post_id){
+                  uniquePosts[numberOfNewPosts].names.push(nms);
+                  uniquePosts[numberOfNewPosts].texts.push(txts);
+                }else{
+                  numberOfNewPosts++;
+                  postComment.id = comments[i].post_id;
+                  postComment.names.push(nms);
+                  postComment.texts.push(txts);
+                  uniquePosts.push(postComment);
+                }
+              }
+            }
+          }
+          // console.log("NOW UNIQUE");
+          // console.log(uniquePosts);
+
+          for(let i = 0 ; i < uniquePosts.length ; i++){
+              // console.log("i : ", i);
+              // console.log(uniquePosts[i]);
+
+              var ulId = "comment-ul" + uniquePosts[i].id;
+              if(document.getElementById(ulId)){
+                // console.log("Detected");
+
+                let ul = document.getElementById(ulId);
+
+
+                for(let j = 0 ; j < uniquePosts[i].texts.length ; j++){
+                  let li = document.createElement("LI");
+                  li.innerHTML +=  "<p> <strong>" + uniquePosts[i].names[j] + " : </strong> " + uniquePosts[i].texts[j] + "</p>";
+                  ul.appendChild(li);
+                }
+              }
+
+            }
+
+
+
+
+
+
+        </script>
       </script>
       <script src="/js/classSocket.js"></script>
       <script src="/js/videoChat.js" defer></script>
