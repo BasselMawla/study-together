@@ -7,12 +7,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>AUB Study Platform</title>
     <style>
-          /***
-      *  Simple Pure CSS Star Rating Widget Bootstrap 4
-      *
-      *  www.TheMastercut.co
-      *
-      ***/
+
 
       @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
@@ -76,6 +71,9 @@
         color:black;
       }
 
+      a:hover{
+        text-decoration: none;
+      }
       button > a:before {
       margin: 2px;
       font-size: 2em;
@@ -85,9 +83,19 @@
       button > a.search:before {
       content: "\f002"; /* Star */
       }
-      button > a.showstudent:before {
+      button > a.mystudents:before {
+      content: "\f007"; /* Star */
+      }
+      button > a.newcourse:before {
       content: "\f040"; /* Star */
       }
+      button > a.mymessages:before {
+      content: "\f003"; /* Star */
+      }
+      button > a.courseRegistration:before {
+      content: "\f040"; /* Star */
+      }
+
     </style>
     <!-- <script src="/handlebars-v4.7.6.js"></script> -->
   </head>
@@ -236,12 +244,18 @@
                     <h5>Tools</h5>
                   </div>
                   <div class="card-body tools overflow-auto">
-                    <button type="button" class="btn btn-primary tool"><a href="/editMyStudents" style="color:orange;" class="showstudent">Show Students</a></button>
-                    <button type="button" class="btn btn-primary tool"><a href="/searchPeople" style="color:orange;" class="search">Search people</a></button>
-                    <button type="button" class="btn btn-primary tool">My students</button>
-                    <button type="button" class="btn btn-primary tool">My students</button>
-                    <button type="button" class="btn btn-primary tool">My students</button>
-                    <button type="button" class="btn btn-primary tool">My students</button>
+                    {{#if user.isAdmin}}
+                    <button type="button" class="btn btn-primary tool"><a href="/editMyStudents" style="color:orange;" class="mystudents">My Students</a></button>
+                    <button type="button" class="btn btn-primary tool"><a href="/addCourse" style="color:orange;" class="newcourse">New Course</a></button>
+                    {{else}}
+
+
+                    <button type="button" class="btn btn-primary tool"><a href="/studentRegister" style="color:orange;" class="courseRegistration">Register Course</a></button>
+                    {{/if}}
+                    <button type="button" class="btn btn-primary tool"><a href="/messages" style="color:orange;" class="mymessages">My Messages</a></button>
+                    <button type="button" class="btn btn-primary tool"><a href="/searchPeople" style="color:orange;" class="search">Search People</a></button>
+                    
+
                   </div>
                 </div>
               </div>
