@@ -166,7 +166,7 @@ for(var i = 0; i< 100; i++){
 
       event.preventDefault();
 
-      let childs = document.getElementById("commentForm49").children;
+      //let childs = document.getElementById("commentForm49").children;
       let tima = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
       console.log("Comment form has been triggered!!!");
