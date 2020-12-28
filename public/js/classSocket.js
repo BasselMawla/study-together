@@ -214,10 +214,3 @@ $(function () {
     reader.readAsDataURL(file);
   });
 });
-socket.on('addFile', function (msg, base64image) {
-  const li = document.createElement("li");
-  const div = document.createElement("div");
-  div.innerHTML = '<a target="_blank" href="' + base64image + '"><img src="' + base64image + '" id="shared_image" class="img-fluid"/></a>';
-  li.appendChild(div);
-  document.getElementById("resources-ul").appendChild(li);
-});

@@ -2,7 +2,7 @@ const mysql = require( 'mysql');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { promisify } = require('util');
-
+const fs = require('fs');
 
 
 
@@ -202,10 +202,6 @@ exports.authAdmin = async (req, res, next) => {
 
 
 
-
-
-
-
 exports.authStudent = async (req, res, next) => {
   //Step 1 is verify the token
   if( req.cookies.jwt ){ //grabbing the cookie who is named jwt
@@ -249,18 +245,45 @@ exports.authStudent = async (req, res, next) => {
   }
 }
 
-
-
-
-
-
 // This one for a user who is already registered in
 exports.getClass = async (req, res) => {
-  //console.log("class name: ", req.body);
-
-
-
   const { courseName } = req.body;
+
+  if(req.files) {
+    var file;
+    var file_name = '';
+    file = req.files.resource_file;
+    file_name = file.name;
+    console.log('File name = ', file_name);
+
+    var dir = 'public/files/course/' + courseName + '/';
+    console.log(dir);
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    file.mv(dir + file_name, (err) => {
+      if(err) {
+        return res.render('class', {
+          message: err
+        });
+      } else {
+        console.log("File sent as resource");
+      }
+    });
+
+    var date = new Date(Date.now());
+
+    db.query('INSERT INTO course_resource SET ?', {course_name: courseName, file_name: file_name, date: date}, (error, result) => {
+      if(error) {
+        console.log(error);
+      } else {
+        console.log("successfully uploaded file");
+      }
+    });
+  }
+
   //Step 1 is verify the token
   if( req.cookies.jwt ){ //grabbing the cookie who is named jwt
     try {
