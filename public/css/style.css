@@ -118,3 +118,7 @@ video {
 #toggleVideo {
   margin-right: 5px;
 }
+
+.btn-question {
+  display: none;
+}

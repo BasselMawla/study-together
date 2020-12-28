@@ -85,10 +85,10 @@
                   <ul class="question" id="question-ul">
                     {{#each questions as |question|}}
                     <li style="transform: rotate(0);">
-                      <div>
+                      <div class="div-question">
                         {{question.id}} : {{question.text}} <strong> by {{question.author_name}}</strong><span style="font-size:12px;color:grey;"> at {{question.questionDate}}</span>
                         <!-- <a href="#" class="stretched-link" data-toggle="modal" data-target="#exampleModalCenter"></a> -->
-                        <button type="button" class="btn btn-primary stretched-link" data-toggle="modal" data-target="#exampleModalCenter{{question.id}}"></button>
+                        <button type="button" class="btn btn-primary btn-question" data-toggle="modal" data-target="#exampleModalCenter{{question.id}}"></button>
                       </div>
                     </li>
                     <!-- Modal -->
@@ -194,6 +194,7 @@
       <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
       <script src="/js/displayMessage.js"></script>
+      <script src="/js/course.js"></script>
       <script>
           let userName = `{{user.name}}`;
           let room = `{{class_name}}`;
