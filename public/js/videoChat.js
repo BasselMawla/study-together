@@ -2,7 +2,7 @@
 var muted = false;
 const videoGrid = document.getElementById("video-grid")
 const myPeer = new Peer(userId, {
-    host: "https://peerjsaubstudy.herokuapp.com/",
+    host: "https://peerjsaubstudy.herokuapp.com",
     port: "9000"
 })
 const myVideo = document.createElement("video")
