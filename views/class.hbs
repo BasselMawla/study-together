@@ -173,14 +173,31 @@
               </div>
             </div>
 
-            <div class="card">
-              <h5 class="card-header">Resourses</h5>
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+              <div class="card">
+                <h5 class="card-header">Resources</h5>
+                <div class="card-body">
+                  <ul class="resources-ul" id="resources-ul">
+                    {{#each resources as |resource|}}
+                      <li>{{resource.text}} <span style="font-size:12px;color:grey;"> at {{resource.resourceDate}}</span></li>
+                    {{/each}}
+                  </ul>
+
+                </div>
+                {{#if user.isAdmin}}
+                <div class="card-footer">
+                  <form class="form" id="announceForm">
+                    <!-- <input type="text" name="announce_author" value="{{user.name}}" style="display:none;">
+                    <input type="text" name="courseName" value="{{class_name}}" style="display:none;"> -->
+                    <input type="text" id="announce_text"  style="width:77%;height:32px; border:0.5px solid black; border-radius:5px;" placeholder="Add announcement">
+                    <button type="submit" class="btn btn-primary btn-sm">submit</button>
+                  </form>
+                </div>
+                {{else}}
+                  <div class="card-footer" style="text-align:center;">
+                    <p style="font-style: italic;">Always check up the announced tab!</p>
+                  </div>
+                {{/if}}
               </div>
-            </div>
 
           </div>
         </div>

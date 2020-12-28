@@ -16,7 +16,8 @@
 }
 
 .card-body ul.announcement-ul,
-.card-body ul.question {
+.card-body ul.question
+.card-body ul.resources-ul {
   list-style-type: none;
   padding: 0px;
   color: rgb(150, 0, 0);
