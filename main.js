@@ -13,8 +13,16 @@ const cookieParser = require('cookie-parser');
 var expressHbs = require("express-handlebars");
 const fileupload = require("express-fileupload");
 
+const { Server } = require('ws');
+const wss = new Server({ server });
+
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+  ws.on('close', () => console.log('Client disconnected'));
+});
+
 app.use(express.static("public"));
-app.use(express.static("public/files/course/CMPS 230"));
+//app.use(express.static("public/files/course/CMPS 230"));
 
 io.on("connection", socket => {
   socket.on("join-room", (className, userId) => {
