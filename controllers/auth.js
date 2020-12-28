@@ -92,26 +92,32 @@ exports.isLoggedIn = async (req, res, next) => {
               req.users = results;
               //If instructor
               if(result[0].isAdmin){
-                db.query('SELECT * FROM courses WHERE instructor_id = ?', [result[0].id], (errorss, resultss) => {
-                  if(!resultss){
-                    return next();
-                  }
-                  else{
-                    req.courses = resultss;
-                    return next();
-                  }
+                db.query('SELECT * FROM courses WHERE instructor_id = ? ORDER BY name', [result[0].id], (errorss, resultss) => {
+                  db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS messageDate FROM users_messaging WHERE receiver_email = ?', [result[0].email], (errorsss, resultsss) => {
+                    if(errorss || errorsss){
+                      return next();
+                    }
+                    else{
+                      req.courses = resultss;
+                      req.privateMessages = resultsss;
+                      return next();
+                    }
+                  });
                 });
               }
               //If student
               else{
-                db.query('SELECT * FROM course_registrar WHERE student_id = ?', [result[0].id], (errorss, resultss) => {
-                  if(!resultss){
-                    return next();
-                  }
-                  else{
-                    req.registered = resultss;
-                    return next();
-                  }
+                db.query('SELECT * FROM course_registrar WHERE student_id = ? ORDER BY course_name', [result[0].id], (errorss, resultss) => {
+                  db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS messageDate FROM users_messaging WHERE receiver_email = ?', [result[0].email], (errorsss, resultsss) => {
+                    if(!resultss){
+                      return next();
+                    }
+                    else{
+                      req.registered = resultss;
+                      req.privateMessages = resultsss;
+                      return next();
+                    }
+                  });
                 });
               }
             }
