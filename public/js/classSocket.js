@@ -126,7 +126,6 @@ document
 });
 
 
-
 // listing and desplaying the announcement coming from server
 socket.on("question message", (data) => {
   //console.log(data.data.user + ": " + data.id);
@@ -203,3 +202,22 @@ function displayComment(data) {
     document.getElementById(ul).appendChild(li);
 
 }
+
+///////////////////////////////////////////////////// Sending resource file
+$(function () {
+  $("#resource_file").on('change', (e) => {
+    var file = e.originalEvent.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (evt) => {
+      socket.emit('user resource', evt.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+socket.on('addFile', function (msg, base64image) {
+  const li = document.createElement("li");
+  const div = document.createElement("div");
+  div.innerHTML = '<a target="_blank" href="' + base64image + '"><img src="' + base64image + '" id="shared_image" class="img-fluid"/></a>';
+  li.appendChild(div);
+  document.getElementById("resources-ul").appendChild(li);
+});
