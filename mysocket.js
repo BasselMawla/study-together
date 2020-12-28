@@ -74,10 +74,6 @@ module.exports = (io) => {
       });
     });*/
 
-    socket.on('user resource', (image) => {
-      io.sockets.emit('addFile', 'Image Received : ', image);
-    });
-
     //io.sockets.in(room).emit('event', data);
     socket.on('announcement message', (data) => {
       console.log(data);

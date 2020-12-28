@@ -6,8 +6,6 @@ const messController = require('../controllers/messaging');
 const courseController = require('../controllers/course_details');
 const router = express.Router();
 
-
-
           //same as : /auth/register
 router.post('/register', regController.register);
 
@@ -24,8 +22,6 @@ router.post('/editMyStudents' , regController.editRegistrar);
 router.post('/visitProfile' , presController.showVisitProfile);
 
 router.post('/sendPrivateMessage' , messController.sendPrivateMessage);
-
-router.post('/uploadResource' , messController.uploadResource);
 
 router.post('/class' , authController.getClass);
 
