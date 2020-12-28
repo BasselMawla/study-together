@@ -1,14 +1,6 @@
 const express = require("express");
-const { ExpressPeerServer } = require('peer');
 const app = express(); // start the server
 const server = require("http").Server(app)
-
-const peerServer = ExpressPeerServer(server, {
-  debug: true,
-  path: '/studysawa'
-}); 
-app.use('/peerjs', peerServer);
-
 server.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port : 3000");
 })
@@ -21,7 +13,8 @@ const cookieParser = require('cookie-parser');
 var expressHbs = require("express-handlebars");
 const fileupload = require("express-fileupload");
 
-
+const { PeerServer } = require('peer');
+const peerServer = PeerServer({ port: 9000, path: '/peerjs' });
 
 app.use(express.static("public"));
 app.use(express.static("public/files/course/CMPS 230"));
