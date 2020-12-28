@@ -3,8 +3,7 @@ var muted = false;
 const videoGrid = document.getElementById("video-grid")
 const myPeer = new Peer(userId, {
     host: "/",
-    port: 9000,
-    path: "/peerjs"
+    port: 9000
 })
 const myVideo = document.createElement("video")
 // Mute own audio so the user doesn't hear himself
