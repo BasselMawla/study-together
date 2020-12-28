@@ -173,14 +173,34 @@
               </div>
             </div>
 
-            <div class="card">
-              <h5 class="card-header">Resourses</h5>
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+              <div class="card">
+                <h5 class="card-header">Resources</h5>
+                <div class="card-body">
+                  <ul class="resources-ul" id="resources-ul">
+                    {{#each resultResources as |resource|}}
+                      <a href="/files/course/{{resource.course_name}}/{{resource.file_name}}">
+                      <li>{{resource.file_name}}
+                          <span style="font-size:12px;color:grey;"> at {{resource.resource_date}}</span>
+                        </li>
+                      </a>
+                    {{/each}}
+                  </ul>
+
+                </div>
+                {{#if user.isAdmin}}
+                <div class="card-footer">
+                  <form action="/auth/uploadResource" method="POST" class="form" id="resourcesForm" enctype="multipart/form-data">
+                    <input type="file" class="form-control-file" id="resource_file" name="resource_file" accept="">
+                    <input type="hidden" name="class_name" value="{{class_name}}" />
+                    <input type="submit" class="btn btn-primary" id="submitButton" value="Submit" />
+                  </form>
+                </div>
+                {{else}}
+                  <div class="card-footer" style="text-align:center;">
+                    <p style="font-style: italic;">Always check up the announced tab!</p>
+                  </div>
+                {{/if}}
               </div>
-            </div>
 
           </div>
         </div>

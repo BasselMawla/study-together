@@ -288,25 +288,29 @@ exports.getClass = async (req, res) => {
             }
             else{
               //req.class_name = courseName;
-              db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, resultss) => {
+              db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, result_announcements) => {
 
-                db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, resultsss) => {
+                db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, result_questions) => {
 
-                  db.query('SELECT * FROM course_chat WHERE course_name = ?', [courseName], (error, resultssss) => {
+                  db.query('SELECT * FROM course_chat WHERE course_name = ?', [courseName], (error, result_chat) => {
 
-                    db.query('SELECT * FROM comment_post WHERE course_name = ? ORDER BY post_id ASC', [courseName], (error, resulti) => {
+                    db.query('SELECT * FROM comment_post WHERE course_name = ? ORDER BY post_id ASC', [courseName], (error, result_comments) => {
 
-                      if(error){
-                        console.log(error);
-                      }
+                      db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS resource_date FROM course_resource WHERE course_name = ? ORDER BY id ASC', [courseName], (error, result_resources) => {
 
-                      return res.render('class', {
-                        user: result[0],
-                        class_name: courseName,
-                        announcements: resultss,
-                        questions: resultsss,
-                        chat: resultssss,
-                        allComments: resulti
+                        if(error){
+                          console.log(error);
+                        }
+
+                        return res.render('class', {
+                          user: result[0],
+                          class_name: courseName,
+                          announcements: result_announcements,
+                          questions: result_questions,
+                          chat: result_chat,
+                          allComments: result_comments,
+                          resultResources: result_resources
+                        });
                       });
                     });
                   });
