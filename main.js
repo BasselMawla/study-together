@@ -15,7 +15,7 @@ const fileupload = require("express-fileupload");
 
 const { Server } = require('ws');
 const wss = new Server({ server });
-
+wss.listen(9000);
 wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
