@@ -6,6 +6,8 @@ const messController = require('../controllers/messaging');
 const courseController = require('../controllers/course_details');
 const router = express.Router();
 
+
+
           //same as : /auth/register
 router.post('/register', regController.register);
 
@@ -25,9 +27,8 @@ router.post('/sendPrivateMessage' , messController.sendPrivateMessage);
 
 router.post('/class' , authController.getClass);
 
-router.post('/addAnnouncement' , courseController.addAnnouncement);
 
-router.post('/addQuestion' , courseController.addQuestion);
+
 
 
 

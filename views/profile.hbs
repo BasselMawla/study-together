@@ -4,8 +4,99 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>AUB Study Platform</title>
+    <style>
+
+
+      @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+
+
+      .starrating > input {display: none;}  /* Remove radio buttons */
+
+      .starrating > label:before {
+      content: "\f005"; /* Star */
+      margin: 2px;
+      font-size: 2em;
+      font-family: FontAwesome;
+      display: inline-block;
+      }
+
+      .starrating > label
+      {
+      color: #222222; /* Start color when not clicked */
+      }
+
+      .starrating > input:checked ~ label
+      { color: #ffca08 ; } /* Set yellow color when star checked */
+
+      .starrating > input:hover ~ label
+      { color: #ffca08 ;  } /* Set yellow color when star hover */
+
+
+
+      ul{
+        text-decoration: none;
+      }
+      #msgPrivate{
+        height: 250px;
+        max-height: 250px;
+        padding:5px;
+      }
+      #msgPrivate ul{
+        max-height: 235px;
+      }
+      #msgPrivate ul li{
+        background-color: #563d7c;
+        color:white;
+      }
+
+      .tools{
+        height:150px;
+        padding:0px;
+      }
+      .tool{
+        width:110px;
+        height:115px;
+        color:orange;
+        background-color: #563d7c;
+        font-weight:bold;
+        margin-top:6px;
+      }
+
+      .btn-course{
+        width:100%;
+        background-color: white;
+        color:black;
+      }
+
+      a:hover{
+        text-decoration: none;
+      }
+      button > a:before {
+      margin: 2px;
+      font-size: 2em;
+      font-family: FontAwesome;
+      display: block;
+      }
+      button > a.search:before {
+      content: "\f002"; /* Star */
+      }
+      button > a.mystudents:before {
+      content: "\f007"; /* Star */
+      }
+      button > a.newcourse:before {
+      content: "\f040"; /* Star */
+      }
+      button > a.mymessages:before {
+      content: "\f003"; /* Star */
+      }
+      button > a.courseRegistration:before {
+      content: "\f040"; /* Star */
+      }
+
+    </style>
     <!-- <script src="/handlebars-v4.7.6.js"></script> -->
   </head>
   <body>
@@ -62,43 +153,112 @@
           </div>
           <div class="col-8">
             <div class="card text-center">
-              <div class="card-header">
+              <!-- <div class="card-header">
                 Profile Page
-              </div>
+              </div> -->
               <div class="card-body">
                 <h5 class="card-title">Hey {{user.name}}, welcome back</h5>
-                <p class="card-text">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                <a href="#" class="btn btn-primary">Go somewhere!</a>
+                <div class="container">
+
+                  <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+                      <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
+                      <input type="radio" id="star4" name="rating" value="4" checked /><label for="star4" title="4 star"></label>
+                      <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 star"></label>
+                      <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
+                      <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"></label>
+                  </div>
+
+                </div>
               </div>
             </div>
 
             <div class="form-row">
 
               <div class="col-6">
-                  <div class="card text-center">
-                    <div class="card-header">
-                      <h5>Inbox</h5>
-                    </div>
-                    <div class="card-body">
-                      <h5 class="card-title">Hey {{user.name}}, welcome back</h5>
-                      <p class="card-text">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere!</a>
-                    </div>
+
+                <div class="card text-center">
+                  <div class="card-header">
+                    <h5>My courses</h5>
                   </div>
+
+                  {{#if user.isAdmin}}
+                  <div class="card-body overflow-auto " id="courses-div">
+                    <ul class="list-group overflow-auto ">
+                      {{#each courses as |course|}}
+                          <li class="list-group-item">
+                            <form class="" action="/auth/class" method="post">
+                                <input type="text" name="courseName" value="{{course.name}}" style="display:none;">
+
+                                <button type="submit" class="btn btn-primary btn-course">{{course.name}}</button>
+                            </form>
+                          </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+
+
+                  {{else}}
+                  <div class="card-body overflow-auto " id="courses-div">
+                    <ul class="list-group overflow-auto ">
+                      {{#each registered as |course|}}
+                        {{#if course.status}}
+                          <li class="list-group-item" style="background-color:green;">
+                            <form class="" action="/auth/class" method="post">
+                                <input type="text" name="courseName" value="{{course.course_name}}" style="display:none;">
+
+                                <button type="submit" class="btn btn-primary">{{course.course_id}} - {{course.course_name}}  - Approved!</button>
+                            </form>
+                          </li>
+                        {{else}}
+                          <li class="list-group-item" style="background-color:red;">{{course.course_id}} - {{course.course_name}} - Pending</li>
+                        {{/if}}
+                      {{/each}}
+                    </ul>
+                  </div>
+                  {{/if}}
+
+                </div>
+
               </div>
               <div class="col-6">
-                  <div class="card text-center">
-                    <div class="card-header">
-                      <h5>Tools</h5>
-                    </div>
-                    <div class="card-body">
-                      <h5 class="card-title">Hey {{user.name}}, welcome back</h5>
-                      <p class="card-text">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere!</a>
-                    </div>
+                <div class="card">
+                  <div class="card-header text-center">
+                    <h5>Inbox</h5>
                   </div>
+                  <div class="card-body" id="msgPrivate">
+                    <ul class="list-group overflow-auto ">
+                      {{#each privateMessages as |pMsg|}}
+                        <li class="list-group-item"> <p> <strong style="color:orange;">{{pMsg.sender_name}}</strong> {{pMsg.text}} <small style="color:grey;">at {{pMsg.messageDate}}</small> </p> </li>
+                      {{/each}}
+                    </ul>
+
+                  </div>
+                </div>
               </div>
 
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="card text-center">
+                  <div class="card-header">
+                    <h5>Tools</h5>
+                  </div>
+                  <div class="card-body tools overflow-auto">
+                    {{#if user.isAdmin}}
+                    <button type="button" class="btn btn-primary tool"><a href="/editMyStudents" style="color:orange;" class="mystudents">My Students</a></button>
+                    <button type="button" class="btn btn-primary tool"><a href="/addCourse" style="color:orange;" class="newcourse">New Course</a></button>
+                    {{else}}
+
+
+                    <button type="button" class="btn btn-primary tool"><a href="/studentRegister" style="color:orange;" class="courseRegistration">Register Course</a></button>
+                    {{/if}}
+                    <button type="button" class="btn btn-primary tool"><a href="/messages" style="color:orange;" class="mymessages">My Messages</a></button>
+                    <button type="button" class="btn btn-primary tool"><a href="/searchPeople" style="color:orange;" class="search">Search People</a></button>
+                    
+
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -109,11 +269,11 @@
 
 
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    <h3>Announcements</h3>
+                     <h3>Announcements</h3>
                 </div>
                 <div class="card-body">
                   <h5 class="card-title">{{user.name}}</h5>
@@ -125,48 +285,19 @@
           <div class="col-8">
             <div class="card text-center">
               <div class="card-header">
-                <h3>My Courses</h3>
+                <h3>Tools</h3>
               </div>
-              {{#if user.isAdmin}}
-              <div class="card-body overflow-auto " id="courses-div">
-                <ul class="list-group overflow-auto ">
-                  {{#each courses as |course|}}
-                      <li class="list-group-item">
-                        <form class="" action="/auth/class" method="post">
-                            <input type="text" name="courseName" value="{{course.name}}" style="display:none;">
-
-                            <button type="submit" class="btn btn-primary">{{course.id}} - {{course.name}}</button>
-                        </form>
-                      </li>
-                  {{/each}}
-                </ul>
+              <div class="card-body tools overflow-auto">
+                <button type="button" class="btn btn-primary tool"><a href="/editMyStudents" style="color:orange;" class="showstudent">Show Students</a></button>
+                <button type="button" class="btn btn-primary tool"><a href="/searchPeople" style="color:orange;" class="search">Search people</a></button>
+                <button type="button" class="btn btn-primary tool">My students</button>
+                <button type="button" class="btn btn-primary tool">My students</button>
+                <button type="button" class="btn btn-primary tool">My students</button>
+                <button type="button" class="btn btn-primary tool">My students</button>
               </div>
-
-              <div class="card-footer">
-                <a href="/editMyStudents" class="btn btn-primary">Show Students</a>
-              </div>
-              {{else}}
-              <div class="card-body overflow-auto " id="courses-div">
-                <ul class="list-group overflow-auto ">
-                  {{#each registered as |course|}}
-                    {{#if course.status}}
-                      <li class="list-group-item" style="background-color:green;">
-                        <form class="" action="/auth/class" method="post">
-                            <input type="text" name="courseName" value="{{course.course_name}}" style="display:none;">
-
-                            <button type="submit" class="btn btn-primary">{{course.course_id}} - {{course.course_name}}  - Approved!</button>
-                        </form>
-                      </li>
-                    {{else}}
-                      <li class="list-group-item" style="background-color:red;">{{course.course_id}} - {{course.course_name}} - Pending</li>
-                    {{/if}}
-                  {{/each}}
-                </ul>
-              </div>
-              {{/if}}
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

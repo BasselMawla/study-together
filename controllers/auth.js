@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 const { promisify } = require('util');
 
 
+
+
+
+
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   port: process.env.DATABASE_PORT,
@@ -27,7 +31,7 @@ exports.login = async (req, res) => {
 
     db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
       console.log('results: ' ,results);
-      if(!results || !(await bcrypt.compare(password, results[0].password) ) ) { //no user in the db or wait for comparsion of password
+      if(!results[0] || !(await bcrypt.compare(password, results[0].password) ) ) { //no user in the db or wait for comparsion of password
           res.status(401).render('login' , {
             message: 'Email or Password is incorrect'
           })
@@ -88,26 +92,32 @@ exports.isLoggedIn = async (req, res, next) => {
               req.users = results;
               //If instructor
               if(result[0].isAdmin){
-                db.query('SELECT * FROM courses WHERE instructor_id = ?', [result[0].id], (errorss, resultss) => {
-                  if(!resultss){
-                    return next();
-                  }
-                  else{
-                    req.courses = resultss;
-                    return next();
-                  }
+                db.query('SELECT * FROM courses WHERE instructor_id = ? ORDER BY name', [result[0].id], (errorss, resultss) => {
+                  db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS messageDate FROM users_messaging WHERE receiver_email = ?', [result[0].email], (errorsss, resultsss) => {
+                    if(errorss || errorsss){
+                      return next();
+                    }
+                    else{
+                      req.courses = resultss;
+                      req.privateMessages = resultsss;
+                      return next();
+                    }
+                  });
                 });
               }
               //If student
               else{
-                db.query('SELECT * FROM course_registrar WHERE student_id = ?', [result[0].id], (errorss, resultss) => {
-                  if(!resultss){
-                    return next();
-                  }
-                  else{
-                    req.registered = resultss;
-                    return next();
-                  }
+                db.query('SELECT * FROM course_registrar WHERE student_id = ? ORDER BY course_name', [result[0].id], (errorss, resultss) => {
+                  db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS messageDate FROM users_messaging WHERE receiver_email = ?', [result[0].email], (errorsss, resultsss) => {
+                    if(!resultss){
+                      return next();
+                    }
+                    else{
+                      req.registered = resultss;
+                      req.privateMessages = resultsss;
+                      return next();
+                    }
+                  });
                 });
               }
             }
@@ -249,6 +259,7 @@ exports.getClass = async (req, res) => {
   //console.log("class name: ", req.body);
 
 
+
   const { courseName } = req.body;
   //Step 1 is verify the token
   if( req.cookies.jwt ){ //grabbing the cookie who is named jwt
@@ -280,24 +291,25 @@ exports.getClass = async (req, res) => {
               db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, resultss) => {
 
                 db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, resultsss) => {
-                  if(error){
-                    console.log(error);
-                  }
-                  if(results.length == 0){ //if the course does not exist!
-                    // return res.render('class', {
-                    //   user: result[0],
-                    //   class_name: courseName,
-                    //   announcements: resultss
-                    // })
-                  }
-                  else{
-                    return res.render('class', {
-                      user: result[0],
-                      class_name: courseName,
-                      announcements: resultss,
-                      questions: resultsss
-                    })
-                  }
+
+                  db.query('SELECT * FROM course_chat WHERE course_name = ?', [courseName], (error, resultssss) => {
+
+                    db.query('SELECT * FROM comment_post WHERE course_name = ? ORDER BY post_id ASC', [courseName], (error, resulti) => {
+
+                      if(error){
+                        console.log(error);
+                      }
+
+                      return res.render('class', {
+                        user: result[0],
+                        class_name: courseName,
+                        announcements: resultss,
+                        questions: resultsss,
+                        chat: resultssss,
+                        allComments: resulti
+                      });
+                    });
+                  });
                 });
               });
             }
