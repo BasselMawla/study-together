@@ -25,6 +25,8 @@ router.post('/visitProfile' , presController.showVisitProfile);
 
 router.post('/sendPrivateMessage' , messController.sendPrivateMessage);
 
+router.post('/uploadResource' , messController.uploadResource);
+
 router.post('/class' , authController.getClass);
 
 

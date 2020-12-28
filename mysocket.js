@@ -55,6 +55,30 @@ module.exports = (io) => {
     });
 
     //io.sockets.in(room).emit('event', data);
+    /*socket.on('user resource', (data) => {
+      console.log(data);
+
+      db.query('INSERT INTO course_chat SET ?', {
+        course_name: data.Room,
+        author_name: data.user,
+        author_id: data.userID,
+        date: data.time,
+        text: data.value
+      }, (error, resultsss) => {
+        if (error) {
+          console.log(error);
+        } else {
+          //io.sockets.in(room).emit('chat message', data);
+          io.to(data.Room).emit("chat message", data);
+        }
+      });
+    });*/
+
+    socket.on('user resource', (image) => {
+      io.sockets.emit('addFile', 'Image Received : ', image);
+    });
+
+    //io.sockets.in(room).emit('event', data);
     socket.on('announcement message', (data) => {
       console.log(data);
 

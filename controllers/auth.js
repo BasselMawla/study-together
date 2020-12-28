@@ -288,7 +288,7 @@ exports.getClass = async (req, res) => {
             }
             else{
               //req.class_name = courseName;
-              db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, results_announcements) => {
+              db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS announceDate FROM announcement WHERE class_name = ?', [courseName], (error, result_announcements) => {
 
                 db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS questionDate FROM question_post WHERE course_name = ?', [courseName], (error, result_questions) => {
 
@@ -296,7 +296,7 @@ exports.getClass = async (req, res) => {
 
                     db.query('SELECT * FROM comment_post WHERE course_name = ? ORDER BY post_id ASC', [courseName], (error, result_comments) => {
 
-                      db.query('SELECT * FROM course_resource WHERE course_name = ? ORDER BY id ASC', [courseName], (error, result_resources) => {
+                      db.query('SELECT *, DATE_FORMAT(date,\'%d/%m (%h:%i)\') AS resource_date FROM course_resource WHERE course_name = ? ORDER BY id ASC', [courseName], (error, result_resources) => {
 
                         if(error){
                           console.log(error);
@@ -309,7 +309,7 @@ exports.getClass = async (req, res) => {
                           questions: result_questions,
                           chat: result_chat,
                           allComments: result_comments,
-                          resources: result_resouces
+                          resultResources: result_resources
                         });
                       });
                     });

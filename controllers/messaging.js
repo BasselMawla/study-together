@@ -91,18 +91,6 @@ exports.sendPrivateMessage = (req, res) => {
   });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 exports.getAllMessages = async (req, res, next) => {
   //Step 1 is verify the token
   if( req.cookies.jwt ){ //grabbing the cookie who is named jwt
@@ -141,4 +129,62 @@ exports.getAllMessages = async (req, res, next) => {
   } else{
     next();
   }
+}
+
+exports.uploadResource = (req, res) => {
+  console.log(req.body);
+
+  const { class_name } = req.body;
+
+  /*
+  //Making sure that the sender email does  exists!
+  db.query('SELECT email FROM users WHERE email = ?', [sender_email], (error, results) => {
+    if(error){
+      console.log(error);
+    }
+    if(results.length == 0){ //if the email does not exist!
+      return res.render('visitProfile', {
+        message: 'That email does not exist'
+      })
+
+    }
+
+*/
+  var file;
+  var file_name = '';
+  if(!req.files){
+      console.log("No file sent!");
+  }
+  else {
+    file = req.files.resource_file;
+    file_name = file.name;
+    console.log('File name = ', file_name);
+
+    var dir = 'public/files/course/' + class_name + '/';
+    console.log(dir);
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    file.mv(dir + file_name, (err) => {
+      if(err) {
+        return res.render('class', {
+          message: err
+        });
+      } else {
+        console.log("File sent as resource");
+      }
+    });
+  }
+
+  var date = new Date(Date.now());
+
+  db.query('INSERT INTO course_resource SET ?', {course_name: class_name, file_name: file_name, date: date}, (error, result) => {
+    if(error) {
+      console.log(error);
+    } else {
+      console.log("successfully uploaded file");
+    }
+  });
 }
