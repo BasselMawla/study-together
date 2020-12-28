@@ -29,6 +29,8 @@ socket.on("chat message", (data) => {
   //console.log(data.data.user + ": " + data.id);
   document.getElementById("m").value = "";
   displayMessage(data);
+  var objDiv = document.getElementById("pageMain");
+  objDiv.scrollTop = objDiv.scrollHeight;
 });
 
 /////////////////////////////////////////////////////////////Sending image through chat form

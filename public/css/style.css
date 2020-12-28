@@ -110,3 +110,11 @@ video {
   -moz-transform: rotateY(180deg);
   /* Firefox */
 }
+
+.vidBtn {
+  float: right;
+}
+
+#toggleVideo {
+  margin-right: 5px;
+}
