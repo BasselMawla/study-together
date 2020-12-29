@@ -13,8 +13,8 @@ const cookieParser = require('cookie-parser');
 var expressHbs = require("express-handlebars");
 const fileupload = require("express-fileupload");
 
-const { PeerServer } = require('peer');
-const peerServer = PeerServer({ port: 9000, path: '/peerjs' });
+//const { PeerServer } = require('peer');
+//const peerServer = PeerServer({ port: 9000, path: '/peerjs' });
 
 app.use(express.static("public"));
 app.use(express.static("public/files/course/CMPS 230"));
