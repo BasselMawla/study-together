@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { promisify } = require('util');
 const fs = require('fs');
+const { getClass } = require('./auth');
 
 
 
@@ -90,18 +91,6 @@ exports.sendPrivateMessage = (req, res) => {
 
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 exports.getAllMessages = async (req, res, next) => {
   //Step 1 is verify the token

@@ -28,6 +28,7 @@ router.get('/profile', authController.isLoggedIn,  (req , res) => {
     res.render('profile' ,{
       user: req.user,
       courses: req.courses,
+      privateMessages: req.privateMessages,
       registered: req.registered
     });
   }

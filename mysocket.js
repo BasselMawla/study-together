@@ -55,6 +55,26 @@ module.exports = (io) => {
     });
 
     //io.sockets.in(room).emit('event', data);
+    /*socket.on('user resource', (data) => {
+      console.log(data);
+
+      db.query('INSERT INTO course_chat SET ?', {
+        course_name: data.Room,
+        author_name: data.user,
+        author_id: data.userID,
+        date: data.time,
+        text: data.value
+      }, (error, resultsss) => {
+        if (error) {
+          console.log(error);
+        } else {
+          //io.sockets.in(room).emit('chat message', data);
+          io.to(data.Room).emit("chat message", data);
+        }
+      });
+    });*/
+
+    //io.sockets.in(room).emit('event', data);
     socket.on('announcement message', (data) => {
       console.log(data);
 
@@ -75,12 +95,56 @@ module.exports = (io) => {
     });
 
 
-    socket.on('disconnect', () => {
-      console.log('User was disconnected');
+
+    //io.sockets.in(room).emit('event', data);
+    socket.on('question message', (data) => {
+      console.log(data);
+      db.query('INSERT INTO question_post SET ?', {
+        course_name: data.Room,
+        author_name: data.user,
+        text: data.value,
+        date: data.time,
+        upvoted: 0
+      }, (error, results) => {
+        if (error) {
+          console.log(error);
+        } else {
+            io.to(data.Room).emit("question message", data);
+          //});
+
+
+        }
+      });
     });
+
+
+
+
+        //io.sockets.in(room).emit('event', data);
+        socket.on('comment message', (data) => {
+          console.log(data);
+
+          db.query('INSERT INTO comment_post SET ?', {
+            post_id: data.postID,
+            course_name: data.Room,
+            commenter_name: data.user,
+            text: data.value,
+            date: data.time,
+            upvoted: 0
+          }, (error, results) => {
+            if (error) {
+              console.log(error);
+            } else {
+                io.to(data.Room).emit("comment message", data);
+
+            }
+          });
+        });
+
 
     socket.on('disconnect', () => {
       console.log('User was disconnected');
     });
+
   });
 };

@@ -77,7 +77,8 @@ Profile and visitProfile
 */
 
 #courses-div {
-  max-height: 231px;
+  height: 250px;
+  max-height: 250px;
   padding: 0;
 }
 
@@ -116,4 +117,8 @@ video {
 
 #toggleVideo {
   margin-right: 5px;
+}
+
+.btn-question {
+  display: none;
 }

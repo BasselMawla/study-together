@@ -55,7 +55,7 @@ socket.on('addimage', function (msg, base64image) {
   document.getElementById("messages").appendChild(li);
 });
 
-////////////////////////////////////////display announcement in the Announcements box
+////////////////////////////////////////Triggering announcement in the Announcements box
 
 if(isAdmin) {
   document
@@ -63,7 +63,7 @@ if(isAdmin) {
   .addEventListener("submit", function (event) {
 
     event.preventDefault();
-    let tima = moment().format("MM/DD-hh:mm");
+    let tima = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     console.log("Announcement form has been triggered!!!");
     socket.emit("announcement message", {
       value: document.getElementById("announce_text").value,
@@ -85,7 +85,7 @@ socket.on("announcement message", (data) => {
   displayAnnouncement(data);
 });
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////// Displaying the announcements
 function displayAnnouncement(data) {
   var temp = "" + data.value;
   const span = document.createElement("SPAN");
@@ -101,3 +101,116 @@ function displayAnnouncement(data) {
   li.appendChild(span);
   document.getElementById("announcement-ul").appendChild(li);
 }
+
+
+///////////////////////////////////////////////////////////////////////////////// Triggering questions
+
+document
+.getElementById("questionForm")
+.addEventListener("submit", function (event) {
+
+  event.preventDefault();
+  let tima = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+  console.log("Question form has been triggered!!!");
+  socket.emit("question message", {
+    value: document.getElementById("question_text").value,
+    user: userName,
+    Room: room,
+    userID: idd,
+    time: tima
+  });
+
+  console.log('Question has been sent from the user:', userName);
+  document.getElementById("question_text").value = "";
+});
+
+
+// listing and desplaying the announcement coming from server
+socket.on("question message", (data) => {
+  //console.log(data.data.user + ": " + data.id);
+  displayQuestion(data);
+});
+
+
+///////////////////////////////////////////////////////////////////////////////// Displaying the announcements
+function displayQuestion(data) {
+  var temp = "NOW " + "-" + data.value;
+  const span = document.createElement("SPAN");
+  span.style.fontSize = "12px";
+  span.style.color = "grey";
+  console.log("Date formatting : ");
+  span.innerHTML = " by <strong class=\"color:black;\">" + data.user + "</strong> at " + data.time;
+
+  const textNode = document.createTextNode(temp)
+  const li = document.createElement("li");
+  li.style.color = "rgb(0,0,0)";
+  li.appendChild(textNode);
+  li.appendChild(span);
+  document.getElementById("question-ul").appendChild(li);
+
+
+
+}
+
+///////////////////////////////////////////////////////////////////////////////// Triggering comments
+for(var i = 0; i< 100; i++){
+  let form_id = "commentForm" + i;
+  let text_id = "comment_text" + i;
+  let post_ids = "post_comment_id" + i;
+  if(document.getElementById(form_id)){
+    document
+    .getElementById(form_id)
+    .addEventListener("submit", function (event) {
+
+      event.preventDefault();
+
+      //let childs = document.getElementById("commentForm49").children;
+      let tima = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+      console.log("Comment form has been triggered!!!");
+
+      socket.emit("comment message", {
+        value: document.getElementById(text_id).value,
+        user: userName,
+        Room: room,
+        userID: idd,
+        time: tima,
+        postID: document.getElementById(post_ids).value
+      });
+
+      console.log('Comment has been sent from the user:', userName);
+      document.getElementById(text_id).value = "";
+    });
+  }
+}
+
+// listing and desplaying the announcement coming from server
+socket.on("comment message", (data) => {
+  //console.log(data.data.user + ": " + data.id);
+   displayComment(data);
+});
+
+
+///////////////////////////////////////////////////////////////////////////////// Displaying the announcements
+function displayComment(data) {
+    let ul = "comment-ul" + data.postID;
+    const li = document.createElement("li");
+    li.style.color = "rgb(5,5,5)";
+    li.innerHTML +=  "<p> <strong>" + data.user + " : </strong> " + data.value + "</p>"
+
+    document.getElementById(ul).appendChild(li);
+
+}
+
+///////////////////////////////////////////////////// Sending resource file
+$(function () {
+  $("#resource_file").on('change', (e) => {
+    var file = e.originalEvent.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (evt) => {
+      socket.emit('user resource', evt.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+});
