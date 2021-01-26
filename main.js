@@ -1,20 +1,19 @@
 const express = require("express");
 const app = express(); // start the server
 const server = require("http").Server(app)
-server.listen(process.env.PORT || 3000, function () {
-  console.log("Server started on port : 3000");
+const port = process.env.SERVER_PORT;
+server.listen(port || 3000, function () {
+  console.log("Server started on port : " + port);
 })
+
 const io = require("socket.io")(server);
-const path = require('path');
+const path = require("path");
 const mysql = require("mysql");
-const dotenv = require('dotenv');
-const bcrypt = require('bcryptjs');
-const cookieParser = require('cookie-parser');
-var expressHbs = require("express-handlebars");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 const fileupload = require("express-fileupload");
 
 app.use(express.static("public"));
-//app.use(express.static("public/files/course/CMPS 230"));
 
 io.on("connection", socket => {
   socket.on("join-room", (className, userId) => {
