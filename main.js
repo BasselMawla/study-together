@@ -22,7 +22,7 @@ dotenv.config({
   path: ".env"
 });
 
-const database = require("./public/database").connectToDatabase();
+//const database = require("./public/database").connectToDatabase();
 
 // Parse URL-encoded bodies (req.body) (as sent by HTML forms)
 app.use(express.urlencoded({
@@ -34,7 +34,7 @@ app.use(express.json());
 app.set("view engine", "ejs");
 
 // Define Routes
-app.use("/", require("./routes/pages"));
-//app.use("/auth", require("./routes/auth"));
+app.use("/", require("./routes/pagesRoute"));
+app.use("/auth", require("./routes/authRoute"));
 
 //require("./mysocket.js")(io);

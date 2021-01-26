@@ -14,7 +14,7 @@ module.exports = {
       if (error) {
         console.log(error);
       } else {
-        console.log("MySQL Connected");
+        console.log("MySQL connected succefully");
       }
     })
 
