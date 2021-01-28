@@ -3,7 +3,7 @@ const express = require("express");
 const app = express(); // Start the server
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-const database = require("../public/database").connectToDatabase();
+const database = require("../js/modules/database");
 
 exports.login = async (req, res) => {
   try {

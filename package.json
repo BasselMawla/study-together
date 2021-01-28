@@ -31,6 +31,7 @@
     "socket.io": "^3.0.4"
   },
   "devDependencies": {
-    "@types/socket.io": "^2.1.12"
+    "@types/socket.io": "^2.1.12",
+    "prettier": "2.2.1"
   }
 }
