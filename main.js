@@ -1,22 +1,20 @@
 const express = require("express");
-const app = express(); // Start the server
+const app = express();
 const server = require("http").Server(app);
+const path = require("path");
+const dotenv = require("dotenv");
+const ejs = require("ejs");
+const io = require("socket.io")(server);
 
 server.listen(process.env.SERVER_PORT || 3000, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 })
 
-const io = require("socket.io")(server);
-const path = require("path");
-const dotenv = require("dotenv");
-
 const fileupload = require("express-fileupload");
 app.use(fileupload());
 
-const publicDirectory = path.join(__dirname, './public');
+const publicDirectory = path.join(__dirname, "./public");
 app.use(express.static(publicDirectory));
-
-let ejs = require("ejs");
 
 dotenv.config({
   path: ".env"
