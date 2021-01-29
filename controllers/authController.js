@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const url = require('url');
 const bcrypt = require("bcryptjs");
 const database = require("../js/modules/database");
@@ -46,12 +47,8 @@ exports.register = (req, res) => {
 };
 
 function failWithMessage(res, message) { 
-  res.redirect(url.format({
-    pathname:"../register",
-    query: {
-      messageFail: message
-    }
-  }));
+  session.messageFail = message;
+  res.redirect("/register");
 }
 
 function isInDomain(email, results) {

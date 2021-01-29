@@ -6,9 +6,9 @@
             Register
           </div>
           <div class="card-body">
-            <% if(locals.queryData.messageFail) { %>
+            <% if(locals.messageFail) { %>
               <h4 class="alert alert-danger mt-4">
-                <%= queryData.messageFail %>
+                <%= locals.messageFail %>
               </h4>
             <% } %>
             <form action="/auth/register" method="POST">
