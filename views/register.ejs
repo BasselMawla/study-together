@@ -6,12 +6,17 @@
             Register
           </div>
           <div class="card-body">
+            <% if(locals.queryData.messageFail) { %>
+              <h4 class="alert alert-danger mt-4">
+                <%= queryData.messageFail %>
+              </h4>
+            <% } %>
             <form action="/auth/register" method="POST">
                 <div class="mb-3">
                   <label for="institution" class="form-label">Please pick your educational institution:</label>
                   <br>
                   <select class="custom-select" name="institution" id="institution">
-                  <% if(institutions) {
+                  <% if(locals.institutions) {
                     for(var i=0; i<institutions.length; i++) { %>
                       <option value="<%= institutions[i].short_name %>">
                        <%= institutions[i].name + " (" + institutions[i].short_name + ")"%>
@@ -44,11 +49,6 @@
             </form>
           </div>
       </div>
-      <% if(locals.messageFail) { %>
-        <h4 class="alert alert-danger mt-4">
-          <%= messageFail %>
-        </h4>
-      <% } %>
     </div>
 
 <%- include("footer"); %>

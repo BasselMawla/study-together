@@ -11,7 +11,7 @@ exports.getInstitutions = (req, res, next) => {
       } else if (!results) {
         res.status(500).redirect("/");
       } else {
-        req.institutions = results;
+        res.locals.institutions = results;
         next();
       }
     });

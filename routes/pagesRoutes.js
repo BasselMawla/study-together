@@ -7,9 +7,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/register", databaseController.getInstitutions, (req, res) => {
-  if(req.institutions) {
+  console.log(req.query);
+  if(res.locals.institutions) {
     res.render("register", {
-      institutions: req.institutions
+      institutions: res.locals.institutions,
+      queryData: req.query
     });
   } else {
     res.status(500).redirect("/");
