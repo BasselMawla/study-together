@@ -1,0 +1,54 @@
+<%- include("header"); %>
+
+    <div class="container mt-4">
+      <div class="card">
+          <div class="card-header">
+            Register
+          </div>
+          <div class="card-body">
+            <form action="/auth/register" method="POST">
+                <div class="mb-3">
+                  <label for="institution" class="form-label">Please pick your educational institution:</label>
+                  <br>
+                  <select class="custom-select" name="institution" id="institution">
+                  <% if(institutions) {
+                    for(var i=0; i<institutions.length; i++) { %>
+                      <option value="<%= institutions[i].short_name %>">
+                       <%= institutions[i].name + " (" + institutions[i].short_name + ")"%>
+                      </option> <%
+                    }
+                  } %>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="first_name" class="form-label">First name</label>
+                  <input type="text" name="first_name" class="form-control" id="first_name">
+                </div>
+                <div class="mb-3">
+                  <label for="last_name" class="form-label">Last name</label>
+                  <input type="text" name="last_name" class="form-control" id="last_name">
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input type="email" name="email" class="form-control" id="email">
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <div class="mb-3">
+                  <label for="password_confirmation" class="form-label">Confirm password</label>
+                  <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+          </div>
+      </div>
+      <% if(locals.messageFail) { %>
+        <h4 class="alert alert-danger mt-4">
+          <%= messageFail %>
+        </h4>
+      <% } %>
+    </div>
+
+<%- include("footer"); %>
