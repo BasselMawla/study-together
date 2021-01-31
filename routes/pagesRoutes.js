@@ -9,11 +9,19 @@ router.get("/", (req, res) => {
 
 router.get("/register", databaseController.getInstitutions, (req, res) => {
   if(res.locals.institutions) {
-    res.render("register", {
-      institutions: res.locals.institutions,
-      messageFail: session.messageFail
-      //queryData: req.query
-    });
+    if(!req.session.isRefreshed) {
+      req.session.isRefreshed = true;
+      res.render("register", {
+        institutions: res.locals.institutions,
+        messageFail: req.session.messageFail
+        //queryData: req.query
+      });
+    } else {
+      res.render("register", {
+        institutions: res.locals.institutions
+        //queryData: req.query
+      });
+    }
   } else {
     res.status(500).redirect("/");
   }
