@@ -130,8 +130,7 @@ async function registerUser(req, res, first_name, last_name, email, password, in
       [first_name, last_name, email, hashedPassword, institution_id]);
 
     if (insertResult) {
-        // TODO: Login the user first
-        res.redirect("../");
+        res.redirect("../login");
       }
     }
 }
