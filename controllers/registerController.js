@@ -41,16 +41,6 @@ exports.register = async (req, res) => {
   }
 }
 
-function queryPromise(queryString, params) { 
-  return new Promise((resolve, reject) => {
-    db.query(queryString, params, (error, result, fields) => {
-      if (error) {
-        reject(error);
-      } 
-      resolve(result);
-    })
-  })
-}
 
 function isTextInputsValid(req, first_name, last_name, email, password, password_confirmation) {
   if (!first_name || !last_name) {
@@ -73,7 +63,8 @@ function isTextInputsValid(req, first_name, last_name, email, password, password
 }
 
 async function isEmailWithinDomain(req, email, institution) {
-  let result = await queryPromise(
+  let result = await database.queryPromise(
+    db,
     "SELECT short_name, email_domain " +
     "FROM institution, institution_email_domain " +
     "WHERE short_name = ? AND institution.id = institution_email_domain.institution_id",
@@ -93,7 +84,8 @@ async function isEmailWithinDomain(req, email, institution) {
 }
 
 async function isEmailDuplicate(req, email) {
-  let result = await queryPromise(
+  let result = await database.queryPromise(
+    db,
     "SELECT email FROM user WHERE email = ?", 
     [email]);
 
@@ -120,7 +112,8 @@ function isInDomain(email, result) {
 async function registerUser(req, res, first_name, last_name, email, password, institution) {
   let hashedPassword = await bcrypt.hash(password, 8);
 
-  let result = await queryPromise(
+  let result = await database.queryPromise(
+    db,
     "SELECT id FROM institution WHERE short_name = ?",
     [institution]);
 
@@ -130,7 +123,8 @@ async function registerUser(req, res, first_name, last_name, email, password, in
     return;
   } else {
     const institution_id = result[0].id;
-    let insertResult = await queryPromise(
+    let insertResult = await database.queryPromise(
+      db,
       "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
       "VALUES (?, ?, ?, ?, ?)",
       [first_name, last_name, email, hashedPassword, institution_id]);
@@ -144,7 +138,7 @@ async function registerUser(req, res, first_name, last_name, email, password, in
 
 function failWithMessage(req, res) {
   req.session.isRefreshed = false;
-  res.redirect("/register");
+  res.status(401).redirect("/register");
   return;
 }
 

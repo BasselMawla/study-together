@@ -3,8 +3,13 @@
     <div class="container mt-4">
       <div class="card">
           <div class="card-header">
-            Login Form
+            Login
           </div>
+          <% if(locals.messageFail) { %>
+            <h4 class="alert alert-danger mb-4">
+              <%= locals.messageFail %>
+            </h4>
+          <% } %>
           <div class="card-body">
             <form action="/auth/login" method="POST">
                 <div class="mb-3">
@@ -19,11 +24,6 @@
             </form>
           </div>
       </div>
-      <% if(locals.message) { %>
-        <h4 class="alert alert-danger mt-4">
-          <%= message %>
-        </h4>
-      <% } %>
     </div>
 
 <%- include("footer"); %>

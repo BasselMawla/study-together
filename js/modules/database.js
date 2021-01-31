@@ -19,3 +19,14 @@ exports.connectToDatabase = function() {
 
   return database;
 }
+
+exports.queryPromise = function(db, queryString, params) { 
+  return new Promise((resolve, reject) => {
+    db.query(queryString, params, (error, result, fields) => {
+      if (error) {
+        reject(error);
+      } 
+      resolve(result);
+    })
+  })
+}

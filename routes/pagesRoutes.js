@@ -28,7 +28,12 @@ router.get("/register", databaseController.getInstitutions, (req, res) => {
 })
 
 router.get("/login", (req, res) => {
-  res.render("login");
+  if(!req.session.isRefreshed) {
+    req.session.isRefreshed = true;
+    res.render("login", {
+      messageFail: req.session.messageFail
+    });
+  }
 });
 
 module.exports = router;
