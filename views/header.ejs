@@ -10,24 +10,22 @@
   <body>
     <nav>
       <h4>Study Together</h4>
+
       <ul>
-        <li>
-          <a href="/">Home</a>
-          
-        </li>
-        <%= //if user %>
-          <li> <a href="/profile">Profile</a></li>
-          <%= //{{#if user.isAdmin}} %>
-            <li> <a href="/addCourse">Add Course</a></li>
-            <%= // {{else}} %>
-            <li> <a href="/register">Course Registration</a></li>
-            <%= // {{/if}}%>
-          <li><a href="/messages">Messages</a></li>
-          <li><a href="/searchPeople">Search people</a></li>
-          <li> <a href="/auth/Logout">Logout</a></li>
-          <%= //{{else}}%>
-          <li> <a href="/login">Login</a></li>
-          <li> <a href="/register">Register</a></li>
-          <%= // {{/if}}%>
+        <li><a href="/">Home</a></li>
+        <% if (locals.user) { %>
+        <li> <a href="/profile">Profile</a></li>
+        <!--<% //{{#if user.isAdmin}} %>
+          <li> <a href="/addCourse">Add Course</a></li>
+          <% // {{else}} %>
+          <li> <a href="/register">Course Registration</a></li>
+          <% // {{/if}}%> -->
+        <li><a href="/messages">Messages</a></li>
+        <li><a href="/searchPeople">Search people</a></li>
+        <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        <% } %>
       </ul>
     </nav>

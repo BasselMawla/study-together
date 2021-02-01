@@ -3,9 +3,10 @@ const session = require("express-session");
 const bcrypt = require('bcryptjs');
 const { promisify } = require("util");
 const database = require("../js/modules/database");
-const db = database.connectToDatabase();
 
 exports.register = async (req, res) => {
+  const db = database.connectToDatabase();
+
   const {
     institution,
     first_name,
@@ -25,20 +26,28 @@ exports.register = async (req, res) => {
 
   if(!textInputsIsValid) {
     failWithMessage(req, res);
-  } else if (!(await isEmailWithinDomain(req, email, institution))) {
+  } else if (!(await isEmailWithinDomain(req, db, email, institution))) {
     failWithMessage(req, res);
-  } else if (!(await isEmailDuplicate(req, email))) {
+  } else if (!(await isEmailDuplicate(req, db, email))) {
     failWithMessage(req, res);
   } else { // Success
     registerUser(
       req,
       res,
+      db,
       first_name,
       last_name,
       email,
       password,
       institution);
   }
+
+  db.end((err) => {
+    if (err) {
+      throw err;
+    }
+    console.log('Database connection closed.');
+  });
 }
 
 
@@ -62,7 +71,7 @@ function isTextInputsValid(req, first_name, last_name, email, password, password
   return true;
 }
 
-async function isEmailWithinDomain(req, email, institution) {
+async function isEmailWithinDomain(req, db, email, institution) {
   let result = await database.queryPromise(
     db,
     "SELECT short_name, email_domain " +
@@ -83,7 +92,7 @@ async function isEmailWithinDomain(req, email, institution) {
   }
 }
 
-async function isEmailDuplicate(req, email) {
+async function isEmailDuplicate(req, db, email) {
   let result = await database.queryPromise(
     db,
     "SELECT email FROM user WHERE email = ?", 
@@ -109,7 +118,7 @@ function isInDomain(email, result) {
   return false;
 }
 
-async function registerUser(req, res, first_name, last_name, email, password, institution) {
+async function registerUser(req, res, db, first_name, last_name, email, password, institution) {
   let hashedPassword = await bcrypt.hash(password, 8);
 
   let result = await database.queryPromise(
@@ -141,62 +150,21 @@ function failWithMessage(req, res) {
   return;
 }
 
-/*exports.login = async (req, res) => {
-  try {
-    const {email, password} = req.body;
+/* creating a new unique token that will be stored in cookie
+const token = jwt.sign({id: id}, process.env.JWT_SECRET , {
+  expiresIn: process.env.JWT_EXPIRES_IN
+});
 
-    // Missing info
-    if(!email || !password){
-      return res.status(400).render("login", { // 400 = forbidden
-          message: "Please provide an email and password"
-      });
-    }
+console.log("The token is: " + token);
 
-    database.query("SELECT * FROM user WHERE email = ?", [email], async (error, result) => {
-      console.log("Query result: ", result);
-      if(!result[0] || password != result[0].password) {//(await bcrypt.compare(password, result[0].password))) {
-          res.status(401).render("login" , {
-            message: "Email and password don't match!"
-          })
-      }
-      else { // Success: email and password match
-        const userId = result[0].id;
+const cookieOptions = {
+  expires: new Date(
+    Date.now() + process.env.JWT_COOKIE_EXPIRES + 24 * 60 * 60 * 1000
+  ),
+  httpOnly: true
+}
+res.cookie('jwt', token, cookieOptions); //setting up the cookie inside the browser
+//Remeber we need to start the cookie thru the cookie parser in main.js
 
-        app.use(cookieParser());
-        app.use(session({secret: "Shh, its a secret!"}));
-        
-        app.get("/", function(req, res) {
-           if(req.session.page_views){
-              req.session.page_views++;
-              res.send("You visited this page " + req.session.page_views + " times");
-           } else {
-              req.session.page_views = 1;
-              res.send("Welcome to this page for the first time!");
-           }
-        });
-
-        /* creating a new unique token that will be stored in cookie
-        const token = jwt.sign({id: id}, process.env.JWT_SECRET , {
-          expiresIn: process.env.JWT_EXPIRES_IN
-        });
-
-        console.log("The token is: " + token);
-
-        const cookieOptions = {
-          expires: new Date(
-            Date.now() + process.env.JWT_COOKIE_EXPIRES + 24 * 60 * 60 * 1000
-          ),
-          httpOnly: true
-        }
-        res.cookie('jwt', token, cookieOptions); //setting up the cookie inside the browser
-        //Remeber we need to start the cookie thru the cookie parser in main.js
-        
-        res.status(200).redirect("/");
-      }
-
-    })
-
-  } catch (e) {
-    console.log(e);
-  }
-}*/
+res.status(200).redirect("/");
+} */

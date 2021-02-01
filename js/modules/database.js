@@ -9,9 +9,9 @@ exports.connectToDatabase = function() {
     database: process.env.DATABASE
   });
 
-  database.connect((error) => {
-    if (error) {
-      console.log(error);
+  database.connect((err) => {
+    if (err) {
+      throw err;
     } else {
       console.log("MySQL connected succefully");
     }
@@ -22,9 +22,9 @@ exports.connectToDatabase = function() {
 
 exports.queryPromise = function(db, queryString, params) { 
   return new Promise((resolve, reject) => {
-    db.query(queryString, params, (error, result, fields) => {
-      if (error) {
-        reject(error);
+    db.query(queryString, params, (err, result) => {
+      if (err) {
+        reject(err);
       } 
       resolve(result);
     })

@@ -4,11 +4,19 @@ const session = require("express-session");
 const databaseController = require("../controllers/databaseController");
 
 router.get("/", (req, res) => {
-  res.render("index");
+  if(req.session.user) {
+    res.render("index", {
+      user: req.session.user
+    });
+  } else {
+    res.render("index");
+  }
 });
 
 router.get("/register", databaseController.getInstitutions, (req, res) => {
-  if(res.locals.institutions) {
+  if(req.session.user) {
+    res.redirect("/");
+  } else if(res.locals.institutions) {
     if(!req.session.isRefreshed) {
       req.session.isRefreshed = true;
       res.render("register", {
@@ -28,12 +36,23 @@ router.get("/register", databaseController.getInstitutions, (req, res) => {
 })
 
 router.get("/login", (req, res) => {
-  if(!req.session.isRefreshed) {
+  if(req.session.user) {
+    res.redirect("/");
+  } else if(!req.session.isRefreshed) {
     req.session.isRefreshed = true;
     res.render("login", {
       messageFail: req.session.messageFail
     });
+  } else {
+    res.render("login");
   }
 });
+
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.status(200).redirect("/");
+})
+
+//router.get("/profile/:id", )
 
 module.exports = router;
