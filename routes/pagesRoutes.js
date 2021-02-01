@@ -22,12 +22,10 @@ router.get("/register", databaseController.getInstitutions, (req, res) => {
       res.render("register", {
         institutions: res.locals.institutions,
         messageFail: req.session.messageFail
-        //queryData: req.query
       });
     } else {
       res.render("register", {
         institutions: res.locals.institutions
-        //queryData: req.query
       });
     }
   } else {
