@@ -3,9 +3,11 @@ const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
 const database = require("../js/modules/database");
-const db = database.connectToDatabase();
+
 
 exports.login = async (req, res) => {
+  const db = database.connectToDatabase();
+
   const {
     email,
     password
@@ -13,14 +15,22 @@ exports.login = async (req, res) => {
 
   if(!isTextInputsValid(req, email, password)) {
     failWithMessage(req, res);
-  } else if(!isValidCredentials(req, email, password)) {
+  } else if(!(await isValidCredentials(req, db, email, password))) {
     failWithMessage(req, res);
   } else { // Success
-    console.log("Logged in successfully");
+    // TODO: Implement remember me function
+    res.status(200).redirect("/");
   }
+
+  db.end((err) => {
+    if (err) {
+      throw err;
+    }
+    console.log('Database connection closed.');
+  });
 }
 
-async function isValidCredentials(req, email, password) {
+async function isValidCredentials(req, db, email, password) {
   let result = await database.queryPromise(
     db,
     "SELECT * FROM user WHERE email = ?",
@@ -30,7 +40,14 @@ async function isValidCredentials(req, email, password) {
     req.session.messageFail = "Incorrect email or password";
     return false;
   } else { // Success
-    // TODO: Cookie or session for login
+    // Add user info to session
+    req.session.user = [
+      result[0].id,
+      result[0].first_name,
+      result[0].last_name,
+      result[0].email,
+      result[0].institution_id];
+
     return true;
   }
 }
