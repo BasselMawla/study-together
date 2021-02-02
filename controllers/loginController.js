@@ -4,10 +4,7 @@ const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
 const database = require("../js/modules/database");
 
-
 exports.login = async (req, res) => {
-  const db = database.connectToDatabase();
-
   const {
     email,
     password
@@ -15,25 +12,17 @@ exports.login = async (req, res) => {
 
   if(!isTextInputsValid(req, email, password)) {
     failWithMessage(req, res);
-  } else if(!(await isValidCredentials(req, db, email, password))) {
+  } else if(!(await isValidCredentials(req, email, password))) {
     failWithMessage(req, res);
   } else { // Success
     // TODO: Implement remember me function
     res.status(200).redirect("/");
   }
-
-  db.end((err) => {
-    if (err) {
-      throw err;
-    }
-    console.log("DB Login closed ID: " + db.threadId + "\n");
-  });
 }
 
-async function isValidCredentials(req, db, email, password) {
+async function isValidCredentials(req, email, password) {
   try {
     let result = await database.queryPromise(
-      db,
       "SELECT * FROM user WHERE email = ?",
       [email]);
 

@@ -5,8 +5,6 @@ const { promisify } = require("util");
 const database = require("../js/modules/database");
 
 exports.register = async (req, res) => {
-  const db = database.connectToDatabase();
-
   const {
     institution,
     first_name,
@@ -26,30 +24,21 @@ exports.register = async (req, res) => {
 
   if(!textInputsIsValid) {
     failWithMessage(req, res);
-  } else if (!(await isEmailWithinDomain(req, db, email, institution))) {
+  } else if (!(await isEmailWithinDomain(req, email, institution))) {
     failWithMessage(req, res);
-  } else if (!(await isEmailDuplicate(req, db, email))) {
+  } else if (!(await isEmailDuplicate(req, email))) {
     failWithMessage(req, res);
   } else { // Success
     registerUser(
       req,
       res,
-      db,
       first_name,
       last_name,
       email,
       password,
       institution);
   }
-
-  db.end((err) => {
-    if (err) {
-      throw err;
-    }
-    console.log("DB Register closed ID: " + db.threadId + "\n");
-  });
 }
-
 
 function isTextInputsValid(req, first_name, last_name, email, password, password_confirmation) {
   if (!first_name || !last_name) {
@@ -71,10 +60,9 @@ function isTextInputsValid(req, first_name, last_name, email, password, password
   return true;
 }
 
-async function isEmailWithinDomain(req, db, email, institution) {
+async function isEmailWithinDomain(req, email, institution) {
   try {
     let result = await database.queryPromise(
-      db,
       "SELECT short_name, email_domain " +
       "FROM institution, institution_email_domain " +
       "WHERE short_name = ? AND institution.id = institution_email_domain.institution_id",
@@ -96,10 +84,9 @@ async function isEmailWithinDomain(req, db, email, institution) {
   }
 }
 
-async function isEmailDuplicate(req, db, email) {
+async function isEmailDuplicate(req, email) {
   try {
     let result = await database.queryPromise(
-      db,
       "SELECT email FROM user WHERE email = ?", 
       [email]);
 
@@ -126,12 +113,11 @@ function isInDomain(email, result) {
   return false;
 }
 
-async function registerUser(req, res, db, first_name, last_name, email, password, institution) {
+async function registerUser(req, res, first_name, last_name, email, password, institution) {
   let hashedPassword = await bcrypt.hash(password, 8);
 
   try {
     let result = await database.queryPromise(
-      db,
       "SELECT id FROM institution WHERE short_name = ?",
       [institution]);
 
@@ -142,7 +128,6 @@ async function registerUser(req, res, db, first_name, last_name, email, password
     } else {
       const institution_id = result[0].id;
       let insertResult = await database.queryPromise(
-        db,
         "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
         "VALUES (?, ?, ?, ?, ?)",
         [first_name, last_name, email, hashedPassword, institution_id]);
