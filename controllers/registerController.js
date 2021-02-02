@@ -88,13 +88,15 @@ async function isEmailDuplicate(req, email) {
   try {
     let result = await database.queryPromise(
       "SELECT email FROM user WHERE email = ?", 
-      [email]);
+      email);
 
     if (result[0]) {
       req.session.messageFail = "Email already exists!";
       return false;
     }
-    return true;
+    else {
+      return true;
+    }
   } catch (err) {
     throw err;
   }
@@ -119,22 +121,21 @@ async function registerUser(req, res, first_name, last_name, email, password, in
   try {
     let result = await database.queryPromise(
       "SELECT id FROM institution WHERE short_name = ?",
-      [institution]);
+      institution);
 
     if (!result) {
       req.session.messageFail = "Institution not found!";
       failWithMessage(req, res);
       return;
-    } else {
-      const institution_id = result[0].id;
-      let insertResult = await database.queryPromise(
-        "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
-        "VALUES (?, ?, ?, ?, ?)",
-        [first_name, last_name, email, hashedPassword, institution_id]);
+    }
+    const institution_id = result[0].id;
+    let insertResult = await database.queryPromise(
+      "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
+      "VALUES (?, ?, ?, ?, ?)",
+      [first_name, last_name, email, hashedPassword, institution_id]);
 
-      if (insertResult) {
-        res.redirect("../login");
-      }
+    if (insertResult) {
+      res.redirect("../login");
     }
   } catch (err) {
     throw err;
@@ -147,20 +148,8 @@ function failWithMessage(req, res) {
   return;
 }
 
-/* creating a new unique token that will be stored in cookie
-const token = jwt.sign({id: id}, process.env.JWT_SECRET , {
-  expiresIn: process.env.JWT_EXPIRES_IN
-});
-
-console.log("The token is: " + token);
-
-const cookieOptions = {
-  expires: new Date(
-    Date.now() + process.env.JWT_COOKIE_EXPIRES + 24 * 60 * 60 * 1000
-  ),
-  httpOnly: true
-}
-res.cookie('jwt', token, cookieOptions); //setting up the cookie inside the browser
+/* 
+c
 //Remeber we need to start the cookie thru the cookie parser in main.js
 
 res.status(200).redirect("/");

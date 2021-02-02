@@ -22,8 +22,8 @@ app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
-  //cookie: { secure: true }
+  saveUninitialized: false,
+  cookie: { maxAge: Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000 }
 }));
 
 app.set("view engine", "ejs");
