@@ -18,4 +18,11 @@ exports.getInstitutions = (req, res, next) => {
   } catch(error) {
     console.log(error);
   }
+
+  db.end((err) => {
+    if (err) {
+      throw err;
+    }
+    console.log("DB controller closed ID: " + db.threadId + "\n");
+  });
 }

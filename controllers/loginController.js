@@ -26,29 +26,33 @@ exports.login = async (req, res) => {
     if (err) {
       throw err;
     }
-    console.log('Database connection closed.');
+    console.log("DB Login closed ID: " + db.threadId + "\n");
   });
 }
 
 async function isValidCredentials(req, db, email, password) {
-  let result = await database.queryPromise(
-    db,
-    "SELECT * FROM user WHERE email = ?",
-    [email]);
+  try {
+    let result = await database.queryPromise(
+      db,
+      "SELECT * FROM user WHERE email = ?",
+      [email]);
 
-  if(!result[0] || !(await bcrypt.compare(password, result[0].password))) {
-    req.session.messageFail = "Incorrect email or password";
-    return false;
-  } else { // Success
-    // Add user info to session
-    req.session.user = [
-      result[0].id,
-      result[0].first_name,
-      result[0].last_name,
-      result[0].email,
-      result[0].institution_id];
+    if(!result[0] || !(await bcrypt.compare(password, result[0].password))) {
+      req.session.messageFail = "Incorrect email or password";
+      return false;
+    } else { // Success
+      // Add user info to session
+      req.session.user = [
+        result[0].id,
+        result[0].first_name,
+        result[0].last_name,
+        result[0].email,
+        result[0].institution_id];
 
-    return true;
+      return true;
+    }
+  } catch (err) {
+    throw err;
   }
 }
 

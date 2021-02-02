@@ -11,16 +11,16 @@ exports.connectToDatabase = function() {
 
   database.connect((err) => {
     if (err) {
-      throw err;
-    } else {
-      console.log("MySQL connected succefully");
+      console.error("Error connecting to DB: " + err.stack);
+      return;
     }
+    console.log("Connected to DB with ID: " + database.threadId);
   });
 
   return database;
 }
 
-exports.queryPromise = function(db, queryString, params) { 
+exports.queryPromise = (db, queryString, params) => { 
   return new Promise((resolve, reject) => {
     db.query(queryString, params, (err, result) => {
       if (err) {
