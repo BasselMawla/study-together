@@ -1,0 +1,51 @@
+<%- include("header"); %>
+
+
+<div class="container mt-4">
+
+  <div class="row">
+
+    <div class="col-4">
+      <div class="card">
+        <div class="avatar-ctn" id="avatar-ctn">
+          <% if (locals.user) { %>
+            <img src="./<%= locals.user.profile_picture %>" alt="Profile Picture">
+          <% } else { %>
+            <img src="./images/default_profile_picture.png" alt="Profile Picture">
+          <% } %>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">
+            <%= locals.user.first_name + " " + locals.user.last_name %>
+          </h5>
+
+          <p class="card-text">
+            <a href="mailto:<%= locals.user.email %>">
+              <%= locals.user.email %>
+            </a>
+          </p>
+          <p class="card-text">
+            <a href="/<%= locals.user.institution_id %>">
+              <%= locals.user.institution_id %>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-8">
+      <h1>Welcome home!</h1>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+
+
+
+
+<%- include("footer"); %>
