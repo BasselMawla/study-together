@@ -23,7 +23,9 @@ exports.login = async (req, res) => {
 async function isValidCredentials(req, email, password) {
   try {
     let result = await database.queryPromise(
-      "SELECT * FROM user WHERE email = ?",
+      "SELECT user.*, institution.short_name " +
+      "FROM user, institution " +
+      "WHERE user.email = ? AND institution.id = user.institution_id",
       email);
 
     if(!result[0] || !(await bcrypt.compare(password, result[0].password))) {
@@ -36,7 +38,9 @@ async function isValidCredentials(req, email, password) {
         first_name: result[0].first_name,
         last_name: result[0].last_name,
         email: result[0].email,
-        institution_id: result[0].institution_id };
+        institution_id: result[0].short_name
+      };
+      console.log(result[0].short_name)
 
       return true;
     }
