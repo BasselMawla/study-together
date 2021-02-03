@@ -3,7 +3,7 @@ const router = express.Router();
 const session = require("express-session");
 const databaseController = require("../controllers/databaseController");
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   if(req.session.user) {
     res.render("index", {
       user: req.session.user
@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 });
 
-router.get("/register", databaseController.getInstitutions, (req, res) => {
+router.get("/register", databaseController.getInstitutions, async (req, res) => {
   if(req.session.user) {
     res.redirect("/");
   } else if(res.locals.institutions) {
@@ -33,8 +33,8 @@ router.get("/register", databaseController.getInstitutions, (req, res) => {
   }
 })
 
-router.get("/login", (req, res) => {
-  if(req.session.user) {
+router.get("/login", async(req, res) => {
+  if(req.session.usern) {
     res.redirect("/");
   } else if(!req.session.isRefreshed) {
     req.session.isRefreshed = true;
@@ -47,7 +47,12 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.session.destroy();
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+
   res.status(200).redirect("/");
 })
 

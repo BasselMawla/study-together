@@ -1,28 +1,24 @@
 const mysql = require("mysql");
+let dbPool = mysql.createPool({
+  connectionLimit: process.env.DATABASE_CONNECTION_LIMIT,
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE
+});
 
-exports.connectToDatabase = function() {
-  const database = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
-  });
+dbPool.on('acquire', function (connection) {
+  console.log('Connection %d acquired', connection.threadId);
+});
 
-  database.connect((err) => {
-    if (err) {
-      throw err;
-    } else {
-      console.log("MySQL connected succefully");
-    }
-  });
+dbPool.on('release', function (connection) {
+  console.log('Connection %d released\n', connection.threadId);
+});
 
-  return database;
-}
-
-exports.queryPromise = function(db, queryString, params) { 
+exports.queryPromise = (queryString, queryParams) => { 
   return new Promise((resolve, reject) => {
-    db.query(queryString, params, (err, result) => {
+    dbPool.query(queryString, queryParams, (err, result) => {
       if (err) {
         reject(err);
       } 

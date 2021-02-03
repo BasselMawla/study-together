@@ -5,8 +5,6 @@ const { promisify } = require("util");
 const database = require("../js/modules/database");
 
 exports.register = async (req, res) => {
-  const db = database.connectToDatabase();
-
   const {
     institution,
     first_name,
@@ -26,30 +24,21 @@ exports.register = async (req, res) => {
 
   if(!textInputsIsValid) {
     failWithMessage(req, res);
-  } else if (!(await isEmailWithinDomain(req, db, email, institution))) {
+  } else if (!(await isEmailWithinDomain(req, email, institution))) {
     failWithMessage(req, res);
-  } else if (!(await isEmailDuplicate(req, db, email))) {
+  } else if (!(await isEmailDuplicate(req, email))) {
     failWithMessage(req, res);
   } else { // Success
     registerUser(
       req,
       res,
-      db,
       first_name,
       last_name,
       email,
       password,
       institution);
   }
-
-  db.end((err) => {
-    if (err) {
-      throw err;
-    }
-    console.log('Database connection closed.');
-  });
 }
-
 
 function isTextInputsValid(req, first_name, last_name, email, password, password_confirmation) {
   if (!first_name || !last_name) {
@@ -71,38 +60,46 @@ function isTextInputsValid(req, first_name, last_name, email, password, password
   return true;
 }
 
-async function isEmailWithinDomain(req, db, email, institution) {
-  let result = await database.queryPromise(
-    db,
-    "SELECT short_name, email_domain " +
-    "FROM institution, institution_email_domain " +
-    "WHERE short_name = ? AND institution.id = institution_email_domain.institution_id",
-    [institution]);
-    
-  if (!result) {
-    req.session.messageFail = "Institution not found!";
-    return false;
-  }
-  else if (!isInDomain(email, result)) {
-    req.session.messageFail = "You need an email from your selected institution.";
-    return false;
-  }
-  else {
-    return true;
+async function isEmailWithinDomain(req, email, institution) {
+  try {
+    let result = await database.queryPromise(
+      "SELECT short_name, email_domain " +
+      "FROM institution, institution_email_domain " +
+      "WHERE short_name = ? AND institution.id = institution_email_domain.institution_id",
+      [institution]);
+      
+    if (!result) {
+      req.session.messageFail = "Institution not found!";
+      return false;
+    }
+    else if (!isInDomain(email, result)) {
+      req.session.messageFail = "You need an email from your selected institution.";
+      return false;
+    }
+    else {
+      return true;
+    }
+  } catch (err) {
+    throw err;
   }
 }
 
-async function isEmailDuplicate(req, db, email) {
-  let result = await database.queryPromise(
-    db,
-    "SELECT email FROM user WHERE email = ?", 
-    [email]);
+async function isEmailDuplicate(req, email) {
+  try {
+    let result = await database.queryPromise(
+      "SELECT email FROM user WHERE email = ?", 
+      email);
 
-  if (result[0]) {
-    req.session.messageFail = "Email already exists!";
-    return false;
+    if (result[0]) {
+      req.session.messageFail = "Email already exists!";
+      return false;
+    }
+    else {
+      return true;
+    }
+  } catch (err) {
+    throw err;
   }
-  return true;
 }
 
 function isInDomain(email, result) {
@@ -118,30 +115,31 @@ function isInDomain(email, result) {
   return false;
 }
 
-async function registerUser(req, res, db, first_name, last_name, email, password, institution) {
+async function registerUser(req, res, first_name, last_name, email, password, institution) {
   let hashedPassword = await bcrypt.hash(password, 8);
 
-  let result = await database.queryPromise(
-    db,
-    "SELECT id FROM institution WHERE short_name = ?",
-    [institution]);
+  try {
+    let result = await database.queryPromise(
+      "SELECT id FROM institution WHERE short_name = ?",
+      institution);
 
-  if (!result) {
-    req.session.messageFail = "Institution not found!";
-    failWithMessage(req, res);
-    return;
-  } else {
+    if (!result) {
+      req.session.messageFail = "Institution not found!";
+      failWithMessage(req, res);
+      return;
+    }
     const institution_id = result[0].id;
     let insertResult = await database.queryPromise(
-      db,
       "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
       "VALUES (?, ?, ?, ?, ?)",
       [first_name, last_name, email, hashedPassword, institution_id]);
 
     if (insertResult) {
-        res.redirect("../login");
-      }
+      res.redirect("../login");
     }
+  } catch (err) {
+    throw err;
+  }
 }
 
 function failWithMessage(req, res) {
@@ -150,20 +148,8 @@ function failWithMessage(req, res) {
   return;
 }
 
-/* creating a new unique token that will be stored in cookie
-const token = jwt.sign({id: id}, process.env.JWT_SECRET , {
-  expiresIn: process.env.JWT_EXPIRES_IN
-});
-
-console.log("The token is: " + token);
-
-const cookieOptions = {
-  expires: new Date(
-    Date.now() + process.env.JWT_COOKIE_EXPIRES + 24 * 60 * 60 * 1000
-  ),
-  httpOnly: true
-}
-res.cookie('jwt', token, cookieOptions); //setting up the cookie inside the browser
+/* 
+c
 //Remeber we need to start the cookie thru the cookie parser in main.js
 
 res.status(200).redirect("/");
