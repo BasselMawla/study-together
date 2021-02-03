@@ -19,7 +19,7 @@
                   <% if(locals.institutions) {
                     for(var i=0; i<institutions.length; i++) { %>
                       <option value="<%= institutions[i].short_name %>">
-                       <%= institutions[i].name + " (" + institutions[i].short_name + ")"%>
+                        <%= institutions[i].institution_name + " (" + institutions[i].short_name + ")" %>
                       </option> <%
                     }
                   } %>
