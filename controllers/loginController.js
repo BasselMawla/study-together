@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const database = require("../js/modules/database");
+const { localsName } = require("ejs");
 
 exports.login = async (req, res) => {
   const {
@@ -16,6 +17,7 @@ exports.login = async (req, res) => {
   } else if(!(await isValidCredentials(req, email, password))) {
     failWithMessage(req, res);
   } else { // Success
+    await addCoursesToSession(req, req.session.user.id);
     res.status(200).redirect("/");
   }
 }
@@ -45,6 +47,22 @@ async function isValidCredentials(req, email, password) {
 
       return true;
     }
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function addCoursesToSession(req, userID) {
+  try {
+    let result = await database.queryPromise(
+      "SELECT course.course_code, department.department_code " +
+      "FROM course INNER JOIN department, registered_course as RC " +
+      "WHERE RC.user_id = ? " +
+        "AND course.id = RC.course_id " +
+        "AND department.id = course.department_id",
+      userID);
+    
+    req.session.user.courses = result;
   } catch (err) {
     throw err;
   }
