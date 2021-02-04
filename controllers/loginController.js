@@ -24,7 +24,7 @@ exports.login = async (req, res) => {
 async function isValidCredentials(req, email, password) {
   try {
     let result = await database.queryPromise(
-      "SELECT user.*, institution_name, short_name " +
+      "SELECT user.*, institution_name, institution_code " +
       "FROM user, institution " +
       "WHERE user.email = ? AND institution.id = user.institution_id",
       email);
@@ -40,7 +40,7 @@ async function isValidCredentials(req, email, password) {
         last_name: result[0].last_name,
         email: result[0].email,
         institution: result[0].institution_name,
-        institution_short_name: result[0].short_name,
+        institution_code: result[0].institution_code,
         profile_picture: result[0].profile_picture
       };
 

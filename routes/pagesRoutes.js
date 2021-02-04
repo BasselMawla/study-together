@@ -3,6 +3,7 @@ const router = express.Router();
 const session = require("express-session");
 const databaseController = require("../controllers/databaseController");
 const institutionController = require("../controllers/institutionController");
+const departmentController = require("../controllers/departmentController");
 
 router.get("/", async (req, res) => {
   if(req.session.user) {
@@ -71,16 +72,17 @@ router.get("/profile", (req, res) => {
 router.get("/:institution", institutionController.getInstitutionInfo, (req, res) => {
   res.render("institution", {
     institution_name: res.locals.institution_name,
-    instition_short_name: res.locals.institution_short_name,
+    instition_code: res.locals.institution_code,
     departments: res.locals.departments
   });
 })
 
-router.get("/:institution/:department", institutionController.getInstitutionInfo, (req, res) => {
-  res.render("institution", {
-    institution_name: res.locals.institution_name,
-    instition_short_name: res.locals.institution_short_name,
-    departments: res.locals.departments
+router.get("/:institution/:department", departmentController.getCourses, (req, res) => {
+  res.render("department", {
+    institution_code: req.params.institution,
+    department_name: res.locals.department_name,
+    department_code: res.locals.department_code,
+    courses: res.locals.courses
   });
 })
 

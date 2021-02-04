@@ -18,8 +18,8 @@
                   <select class="custom-select" name="institution" id="institution">
                   <% if(locals.institutions) {
                     for(var i=0; i<institutions.length; i++) { %>
-                      <option value="<%= institutions[i].short_name %>">
-                        <%= institutions[i].institution_name + " (" + institutions[i].short_name + ")" %>
+                      <option value="<%= institutions[i].institution_code %>">
+                        <%= institutions[i].institution_name + " (" + institutions[i].institution_code + ")" %>
                       </option> <%
                     }
                   } %>

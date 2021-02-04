@@ -9,15 +9,18 @@
 
         <div class="card-body">
           <h5 class="card-title">
-            <%= locals.institution_name + " ("
-              + locals.institution_short_name.toUpperCase() + ")" %>
+            <%= locals.institution_code.toUpperCase() %>
+          </h5>
+          <h5 class="card-title">
+            <%= locals.department_name + " ("
+              + locals.department_code.toUpperCase() + ")" %>
           </h5>
 
-          <% locals.departments.forEach( (dept) => { %>
+          <% locals.courses.forEach( (course) => { %>
             <h6 class="card-text">
-              <a href="<%= "/" + locals.institution_short_name + "/"
-                  + dept.department_code.toLowerCase() %>">
-                <%= dept.department_name + " (" + dept.department_code + ")" %>
+              <a href="<%= "/" + locals.institution_code + "/"
+                  + locals.department_code + "/" + course.course_code.toLowerCase() %>">
+                <%= course.course_code + ": " + course.course_name %>
               </a>
             </h6>
           <% }); %>

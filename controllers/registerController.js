@@ -63,9 +63,9 @@ function isTextInputsValid(req, first_name, last_name, email, password, password
 async function isEmailWithinDomain(req, email, institution) {
   try {
     let result = await database.queryPromise(
-      "SELECT short_name, email_domain " +
+      "SELECT institution_code, email_domain " +
       "FROM institution, institution_email_domain " +
-      "WHERE short_name = ? AND institution.id = institution_email_domain.institution_id",
+      "WHERE institution_code = ? AND institution.id = institution_email_domain.institution_id",
       [institution]);
       
     if (!result) {
@@ -120,7 +120,7 @@ async function registerUser(req, res, first_name, last_name, email, password, in
 
   try {
     let result = await database.queryPromise(
-      "SELECT id FROM institution WHERE short_name = ?",
+      "SELECT id FROM institution WHERE institution_code = ?",
       institution);
 
     if (!result) {

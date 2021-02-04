@@ -10,12 +10,12 @@
         <div class="card-body">
           <h5 class="card-title">
             <%= locals.institution_name + " ("
-              + locals.institution_short_name.toUpperCase() + ")" %>
+              + locals.institution_code.toUpperCase() + ")" %>
           </h5>
 
           <% locals.departments.forEach( (dept) => { %>
             <h6 class="card-text">
-              <a href="<%= "/" + locals.institution_short_name + "/"
+              <a href="<%= "/" + locals.institution_code + "/"
                   + dept.department_code.toLowerCase() %>">
                 <%= dept.department_name + " (" + dept.department_code + ")" %>
               </a>
