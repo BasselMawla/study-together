@@ -18,7 +18,6 @@ exports.getCourses = async (req, res, next) => {
     if(!result[0]) {
       res.redirect("/" + institution_code);
     } else {
-      console.log(result);
       // Save department info
       res.locals.department_name = result[0].department_name;
       res.locals.department_code = department_code;
