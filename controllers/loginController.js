@@ -2,7 +2,6 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
-const jwt = require("jsonwebtoken");
 const database = require("../js/modules/database");
 const { localsName } = require("ejs");
 

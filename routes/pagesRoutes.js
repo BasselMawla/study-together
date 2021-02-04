@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const session = require("express-session");
 const databaseController = require("../controllers/databaseController");
+const institutionController = require("../controllers/institutionController");
 
 router.get("/", async (req, res) => {
   if(req.session.user) {
@@ -61,10 +62,26 @@ router.get("/profile", (req, res) => {
   if(!req.session.user) {
     res.redirect("/login");
   }  else {
-    res.render("profile",{
+    res.render("profile", {
       user: req.session.user
     });
   }
+})
+
+router.get("/:institution", institutionController.getInstitutionInfo, (req, res) => {
+  res.render("institution", {
+    institution_name: res.locals.institution_name,
+    instition_short_name: res.locals.institution_short_name,
+    departments: res.locals.departments
+  });
+})
+
+router.get("/:institution/:department", institutionController.getInstitutionInfo, (req, res) => {
+  res.render("institution", {
+    institution_name: res.locals.institution_name,
+    instition_short_name: res.locals.institution_short_name,
+    departments: res.locals.departments
+  });
 })
 
 //router.get("/profile/:id", )
