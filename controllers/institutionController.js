@@ -56,7 +56,7 @@ exports.getDepartmentsAndCourses = async (req, res, next) => {
       "WHERE inst.institution_code = ?",
       institution_code
     );
-    
+
     if(!result[0]) {
       console.log("No courses found!");
       res.redirect("/" + institution_code);
@@ -79,12 +79,14 @@ exports.getDepartmentsAndCourses = async (req, res, next) => {
         else {
           departmentsAndCourses[foundIndex].courses.push({
            course_code: row.course_code,
-           coures_name: row.course_name
+           course_name: row.course_name
           });
         }
       });
 
       res.locals.departmentsAndCourses = departmentsAndCourses;
+      console.log("Hiiiiii");
+      console.log(departmentsAndCourses);
       next();
     }
   } catch (err) {
