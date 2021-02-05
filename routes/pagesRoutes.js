@@ -75,6 +75,10 @@ router.get("/:institution", institutionController.getInstitutionInfo, (req, res)
 
 })
 
+router.get("/js", (req, res) => {
+  res.send("/js");
+})
+
 router.get("/:institution/:department", departmentController.getCourses, (req, res) => {
   res.render("department", {
     user: req.session.user,
@@ -84,6 +88,7 @@ router.get("/:institution/:department", departmentController.getCourses, (req, r
     courses: res.locals.courses
   });
 })
+
 
 //router.get("/profile/:id", )
 

@@ -5,42 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/bootsrap/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/bootsrap.bundle.min.js" charset="utf-8"></script>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <title>Study Together</title>
   </head>
   <body>
     <nav>
       <h4><a href="/">Study Together</a></h4>
-
-
-
-      <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          My Course
-        </a>
-
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </div>
-
-
-
-
-
       <ul>
-        <% if (locals.user) {
-          locals.user.courses.forEach(course => { %>
-            <li>
-              <a href="/<%= locals.user.institution_code.toLowerCase() +
-                      "/" + course.department_code.toLowerCase() +
-                      "/" + course.course_code.toLowerCase() %>">
-                <%= course.course_code %>
+        
+        <% if (locals.user) { %>
+          <li>
+            <div class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                My Courses
               </a>
-            </li>
-        <% }); %>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <% locals.user.courses.forEach(course => { %>
+                  <a class="dropdown-item"
+                    href="/<%= locals.user.institution_code.toLowerCase() +
+                    "/" + course.department_code.toLowerCase() +
+                    "/" + course.course_code.toLowerCase() %>">
+
+                      <%= course.course_code %>
+                  </a>
+                <% }); %>
+                <a class="dropdown-item" href="/add-course">
+                  Add a course
+                </a>
+              </div>
+            </div>
+          </li>
         <li><a href="/profile">Profile</a></li>
         <!--<% //{{#if user.isAdmin}} %>
           <li> <a href="/addCourse">Add Course</a></li>
