@@ -15,7 +15,7 @@
         <% if (locals.user) {
           locals.user.courses.forEach(course => { %>
             <li>
-              <a href="/<%= locals.user.institution_code.toLowerCase() + 
+              <a href="/<%= locals.user.institution_code.toLowerCase() +
                       "/" + course.department_code.toLowerCase() +
                       "/" + course.course_code.toLowerCase() %>">
                 <%= course.course_code %>
