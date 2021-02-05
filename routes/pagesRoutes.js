@@ -69,7 +69,8 @@ router.get("/profile", (req, res) => {
 router.get("/add-course", institutionController.getDepartmentsAndCourses, (req, res) => {
   console.log(req.session);
   res.render("add-course", {
-    user: req.session.user
+    user: req.session.user,
+    departmentsAndCourses: res.locals.departmentsAndCourses
   });
 })
 

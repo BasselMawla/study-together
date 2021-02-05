@@ -7,7 +7,11 @@
     <div class="col-4">
 
       <h1>List of dep</h1>
-
+      <% if(locals.departmentsAndCourses) {
+        locals.departmentsAndCourses.forEach(dept => { %>
+          <h4><%= dept.department_name + " (" + dept.department_code + ")"%></h4>
+      <% });
+      } %>
     </div>
 
     <div class="col-8">

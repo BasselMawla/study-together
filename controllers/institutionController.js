@@ -40,39 +40,54 @@ exports.getDepartments = async (req, res, next) => {
 }
 
 exports.getDepartmentsAndCourses = async (req, res, next) => {
-  const institution_code = req.session.institution_code;
+  if(!req.session.user) {
+    console.log("User not logged in.");
+    res.redirect("/login");
+    return;
+  }
+  const institution_code = req.session.user.institution_code;
 
   try {
     let result = await database.queryPromise(
-      "SELECT course.course_name, course.course_code, dept.department_name " +
+      "SELECT dept.department_code, dept.department_name, course.course_code, course.course_name " +
       "FROM (institution as inst INNER JOIN department as dept " +
       "ON inst.institution_id = dept.institution_id) " +
       "INNER JOIN course ON dept.department_id = course.department_id " +
       "WHERE inst.institution_code = ?",
       institution_code
     );
-
+    
     if(!result[0]) {
+      console.log("No courses found!");
       res.redirect("/" + institution_code);
     } else {
-      // Save department info
-      res.locals.department_name = result[0].department_name;
-      res.locals.department_code = department_code;
+      let departmentsAndCourses = [];
 
-      // Save the courses
-      let courses = [];
-      result.forEach((resultCourse, i) => {
-        let course = {
-          course_name: resultCourse.course_name,
-          course_code: resultCourse.course_code
-        };
-        courses[i] = course;
+      result.forEach((row, i) => {
+        const foundIndex = departmentsAndCourses.findIndex(dept => dept.department_code === row.department_code);
+        if(foundIndex === -1) {
+          const coursesArray = [{
+            course_code: row.course_code,
+            course_name: row.course_name
+          }]
+          departmentsAndCourses.push({
+            department_code: row.department_code,
+            department_name: row.department_name,
+            courses: coursesArray
+          });
+        }
+        else {
+          departmentsAndCourses[foundIndex].courses.push({
+           course_code: row.course_code,
+           coures_name: row.course_name
+          });
+        }
       });
-      res.locals.courses = courses;
+
+      res.locals.departmentsAndCourses = departmentsAndCourses;
       next();
     }
   } catch (err) {
     throw err;
   }
-
-});
+}
