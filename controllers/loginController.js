@@ -26,7 +26,7 @@ async function isValidCredentials(req, email, password) {
     let result = await database.queryPromise(
       "SELECT user.*, institution_name, institution_code " +
       "FROM user, institution " +
-      "WHERE user.email = ? AND institution.id = user.institution_id",
+      "WHERE user.email = ? AND institution.institution_id = user.institution_id",
       email);
 
     if(!result[0] || !(await bcrypt.compare(password, result[0].password))) {
@@ -35,7 +35,7 @@ async function isValidCredentials(req, email, password) {
     } else { // Success
       // Add user info to session
       req.session.user = {
-        id: result[0].id,
+        id: result[0].user_id,
         first_name: result[0].first_name,
         last_name: result[0].last_name,
         email: result[0].email,
@@ -57,8 +57,8 @@ async function addCoursesToSession(req, userID) {
       "SELECT course.course_code, department.department_code " +
       "FROM course INNER JOIN department, registered_course as RC " +
       "WHERE RC.user_id = ? " +
-        "AND course.id = RC.course_id " +
-        "AND department.id = course.department_id",
+        "AND course.course_id = RC.course_id " +
+        "AND department.department_id = course.department_id",
       userID);
     
     req.session.user.courses = result;

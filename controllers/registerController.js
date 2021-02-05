@@ -64,8 +64,8 @@ async function isEmailWithinDomain(req, email, institution) {
   try {
     let result = await database.queryPromise(
       "SELECT institution_code, email_domain " +
-      "FROM institution, institution_email_domain " +
-      "WHERE institution_code = ? AND institution.id = institution_email_domain.institution_id",
+      "FROM institution, institution_email_domain as domain " +
+      "WHERE institution_code = ? AND institution.institution_id = domain.institution_id",
       [institution]);
       
     if (!result) {
@@ -120,7 +120,7 @@ async function registerUser(req, res, first_name, last_name, email, password, in
 
   try {
     let result = await database.queryPromise(
-      "SELECT id FROM institution WHERE institution_code = ?",
+      "SELECT institution_id FROM institution WHERE institution_code = ?",
       institution);
 
     if (!result) {
@@ -128,7 +128,7 @@ async function registerUser(req, res, first_name, last_name, email, password, in
       failWithMessage(req, res);
       return;
     }
-    const institution_id = result[0].id;
+    const institution_id = result[0].institution_id;
     let insertResult = await database.queryPromise(
       "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
       "VALUES (?, ?, ?, ?, ?)",
