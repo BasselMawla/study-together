@@ -65,7 +65,15 @@ router.get("/profile", (req, res) => {
   }
 })
 
-router.get("/:institution", institutionController.getInstitutionInfo, (req, res) => {
+
+router.get("/add-course", institutionController.getDepartmentsAndCourses, (req, res) => {
+  console.log(req.session);
+  res.render("add-course", {
+    user: req.session.user
+  });
+})
+
+router.get("/:institution_code", institutionController.getDepartments, (req, res) => {
     res.render("institution", {
       user: req.session.user,
       institution_name: res.locals.institution_name,
@@ -75,19 +83,19 @@ router.get("/:institution", institutionController.getInstitutionInfo, (req, res)
 
 })
 
-router.get("/js", (req, res) => {
-  res.send("/js");
-})
 
-router.get("/:institution/:department", departmentController.getCourses, (req, res) => {
+
+router.get("/:institution_code/:department_code", departmentController.getCourses, (req, res) => {
   res.render("department", {
     user: req.session.user,
-    institution_code: req.params.institution,
+    institution_code: req.params.institution_code,
     department_name: res.locals.department_name,
     department_code: res.locals.department_code,
     courses: res.locals.courses
   });
 })
+
+
 
 
 //router.get("/profile/:id", )

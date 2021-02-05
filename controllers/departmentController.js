@@ -2,8 +2,8 @@ const express = require("express");
 const database = require("../js/modules/database");
 
 exports.getCourses = async (req, res, next) => {
-  const institution_code = req.params.institution;
-  const department_code = req.params.department;
+  const institution_code = req.params.institution_code;
+  const department_code = req.params.department_code;
 
   try {
     let result = await database.queryPromise(
@@ -14,14 +14,14 @@ exports.getCourses = async (req, res, next) => {
       "WHERE inst.institution_code = ? AND dept.department_code = ?",
       [institution_code, department_code]
     );
-    
+
     if(!result[0]) {
       res.redirect("/" + institution_code);
     } else {
       // Save department info
       res.locals.department_name = result[0].department_name;
       res.locals.department_code = department_code;
-      
+
       // Save the courses
       let courses = [];
       result.forEach((resultCourse, i) => {
