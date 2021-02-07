@@ -82,6 +82,33 @@ router.get("/add-course", institutionController.getDepartmentsAndCourses, (req, 
   }
 })
 
+
+
+
+
+router.get("/delete-course", (req, res) => {
+  if(!req.session.user){
+    res.redirect("/login");
+  }
+  else if(!req.session.isRefreshed) {
+    req.session.isRefreshed = true;
+    res.render("delete-course", {
+      user: req.session.user,
+      redirectMessage: req.session.redirectMessage,
+      redirectMessageType: req.session.redirectMessageType
+    });
+  } else {
+    res.render("delete-course", {
+      user: req.session.user
+    });
+  }
+})
+
+
+
+
+
+
 router.get("/:institution_code", institutionController.getDepartments, (req, res) => {
     res.render("institution", {
       user: req.session.user,

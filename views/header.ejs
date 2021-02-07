@@ -29,12 +29,14 @@
                     href="/<%= locals.user.institution_code.toLowerCase() +
                     "/" + course.department_code.toLowerCase() +
                     "/" + course.course_code.toLowerCase() %>">
-
                       <%= course.course_code %>
                   </a>
                 <% }); %>
                 <a class="dropdown-item" href="/add-course">
                   Add a course
+                </a>
+                <a class="dropdown-item" href="/delete-course">
+                  Delete a course
                 </a>
               </div>
             </div>

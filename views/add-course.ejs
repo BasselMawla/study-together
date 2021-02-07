@@ -9,9 +9,9 @@
         console.log(locals.redirectMessage);
         console.log(locals.redirectMessageType);
           let messageClass;
-          if(locals.redirectMessageType === "ERROR") { 
+          if(locals.redirectMessageType === "ERROR") {
             messageClass = "alert alert-danger mb-4";
-          } else { 
+          } else {
             messageClass = "alert alert-success mb-4";
           } %>
           <h4 class="<%= messageClass %>">
@@ -22,11 +22,11 @@
       <h2>List of dep</h2>
 
       <div class="list-group" id="list-tab" role="tablist">
-        <% if (locals.departmentsAndCourses) { 
+        <% if (locals.departmentsAndCourses) {
           locals.departmentsAndCourses.forEach(dept => { %>
-            <a class="list-group-item list-group-item-action" 
+            <a class="list-group-item list-group-item-action"
               id="list-<%= dept.department_code %>-list"
-              href="#list-<%= dept.department_code %>" 
+              href="#list-<%= dept.department_code %>"
               data-toggle="list" role="tab" aria-controls="home">
                 <%= dept.department_name + " (" + dept.department_code + ")"%>
             </a>
@@ -36,11 +36,11 @@
     </div>
     <div class="col-8">
       <h2>Available Courses</h2>
-      
+
       <div class="tab-content" id="nav-tabContent">
         <% if (locals.departmentsAndCourses) {
           locals.departmentsAndCourses.forEach(dept => { %>
-            <div class="tab-pane fade" 
+            <div class="tab-pane fade"
               id="list-<%= dept.department_code%>" role="tabpanel"
               aria-labelledby="list-<%= dept.department_code%>-list">
 

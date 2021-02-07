@@ -25,9 +25,36 @@ exports.addCoursesToSession = async (req, userID) => {
         "AND course.course_id = RC.course_id " +
         "AND department.department_id = course.department_id",
       userID);
-    
     req.session.user.courses = result;
   } catch (err) {
     throw err;
+  }
+}
+
+exports.deleteRegisteredCourse = async (req, res) => {
+  const courseCode = req.body.courseToDelete;
+  if(!req.session.user || !courseCode){ //TODO: Implement redirectWithMessage()
+    res.redirect("/");
+  }
+  else{
+    const userID = req.session.user.id;
+    try {
+      let isDeleted = await database.queryPromise(
+        "DELETE FROM registered_course " +
+        "WHERE user_id = ? AND course_id " +
+        "IN (SELECT course_id FROM course WHERE course_code = ?)",
+        [userID, courseCode]
+      );
+      if (!isDeleted) {
+        console.log("Course not deleted!");
+        res.redirect("/");
+      } else {
+        console.log("Course deleted!");
+        await exports.addCoursesToSession(req, userID);
+        res.status(200).redirect("/delete-course");
+      }
+    } catch (e) {
+      throw e;
+    }
   }
 }
