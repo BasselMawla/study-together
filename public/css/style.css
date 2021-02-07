@@ -123,4 +123,7 @@ video {
   display: none;
 }
 
-/* NEW CODE */
+.modal-footer {
+  border-top: none;
+  margin-top: -1em;
+}

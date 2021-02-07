@@ -4,6 +4,7 @@ const session = require("express-session");
 const databaseController = require("../controllers/databaseController");
 const institutionController = require("../controllers/institutionController");
 const departmentController = require("../controllers/departmentController");
+const courseRoomController = require("../controllers/courseRoomController");
 
 router.get("/", async (req, res) => {
   res.render("index", {
@@ -54,7 +55,6 @@ router.get("/logout", (req, res) => {
   res.status(200).redirect("/");
 })
 
-
 router.get("/profile", (req, res) => {
   if(!req.session.user) {
     res.redirect("/login");
@@ -65,13 +65,21 @@ router.get("/profile", (req, res) => {
   }
 })
 
-
 router.get("/add-course", institutionController.getDepartmentsAndCourses, (req, res) => {
-  console.log(req.session);
-  res.render("add-course", {
-    user: req.session.user,
-    departmentsAndCourses: res.locals.departmentsAndCourses
-  });
+  if(!req.session.isRefreshed) {
+    req.session.isRefreshed = true;
+    res.render("add-course", {
+      user: req.session.user,
+      departmentsAndCourses: res.locals.departmentsAndCourses,
+      redirectMessage: req.session.redirectMessage,
+      redirectMessageType: req.session.redirectMessageType
+    });
+  } else {
+    res.render("add-course", {
+      user: req.session.user,
+      departmentsAndCourses: res.locals.departmentsAndCourses
+    });
+  }
 })
 
 router.get("/:institution_code", institutionController.getDepartments, (req, res) => {
@@ -84,8 +92,6 @@ router.get("/:institution_code", institutionController.getDepartments, (req, res
 
 })
 
-
-
 router.get("/:institution_code/:department_code", departmentController.getCourses, (req, res) => {
   res.render("department", {
     user: req.session.user,
@@ -96,8 +102,16 @@ router.get("/:institution_code/:department_code", departmentController.getCourse
   });
 })
 
-
-
+router.get(
+  "/:institution_code/:department_code/:course_code",
+  courseRoomController.getRoom, (req, res) => {
+    res.render("course-room", {
+      user: req.session.user,
+      institution_code: req.params.institution_code,
+      department_code: res.locals.department_code,
+      course_code: req.params.course_code
+    });
+})
 
 //router.get("/profile/:id", )
 

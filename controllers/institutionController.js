@@ -85,8 +85,6 @@ exports.getDepartmentsAndCourses = async (req, res, next) => {
       });
 
       res.locals.departmentsAndCourses = departmentsAndCourses;
-      console.log("Hiiiiii");
-      console.log(departmentsAndCourses);
       next();
     }
   } catch (err) {
