@@ -82,10 +82,6 @@ router.get("/add-course", institutionController.getDepartmentsAndCourses, (req, 
   }
 })
 
-
-
-
-
 router.get("/delete-course", (req, res) => {
   if(!req.session.user){
     res.redirect("/login");
@@ -104,11 +100,6 @@ router.get("/delete-course", (req, res) => {
   }
 })
 
-
-
-
-
-
 router.get("/:institution_code", institutionController.getDepartments, (req, res) => {
     res.render("institution", {
       user: req.session.user,
@@ -116,7 +107,6 @@ router.get("/:institution_code", institutionController.getDepartments, (req, res
       instition_code: res.locals.institution_code,
       departments: res.locals.departments
     });
-
 })
 
 router.get("/:institution_code/:department_code", departmentController.getCourses, (req, res) => {

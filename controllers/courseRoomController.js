@@ -15,9 +15,6 @@ exports.getRoom = async (req, res, next) => {
     * The user registered in the course
     */
 
-    console.log("userId: " + userId);
-    console.log("courseCode: " + courseCode);
-    console.log("institutionCode: " + institutionCode);
     let result = await database.queryPromise(
       "SELECT RC.*" +
       "FROM registered_course as RC, course, institution as inst " +
