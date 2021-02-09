@@ -13,57 +13,23 @@
   #messages > li { padding: 0.5rem 1rem; }
   #messages > li:nth-child(odd) { background: #efefef; }
 </style>
-<script>
-  let socket = io();
-  let user = {
-    userId: "<%= locals.user.id %>",
-    firstName: "<%= locals.user.first_name %>",
-    roomId: "<%= locals.institution_code + locals.course_code %>"
-  }
-
-  socket.emit("join room", {
-    userId: user.userId,
-    firstName: user.firstName,
-    roomId: user.roomId
-  });
-
-  socket.on("user joined", firstName => {
-    console.log(firstName);
-  });
-
-  $(document).ready(function() {
-    let messages = $("#messages");
-    let form = $("#form");
-    let input = $("#input");
-
-    form.submit(event => {
-      event.preventDefault();
-      let chatItem = $("<li></li>").text(user.firstName + ": " + input.val());
-      messages.append(chatItem);
-      window.scrollTo(0, document.body.scrollHeight);
-
-      if (input.val()) {
-        socket.emit("chat message", {
-          firstName: user.firstName,
-          message: input.val(),
-          roomId: user.roomId
-        });
-        input.val("");
-      }
-    });
-
-    socket.on("chat message", data => {
-      let chatItem = $("<li></li>").text(data.firstName + ": " + data.message);
-      messages.append(chatItem);
-      window.scrollTo(0, document.body.scrollHeight);
-    });
-  });
-</script>
+<% if (locals.user) { %>
+  <script>
+    // Get user info from locals
+    let user = {
+      userId: "<%= locals.user.id %>",
+      firstName: "<%= locals.user.first_name %>",
+      roomId: "<%= locals.institution_code + locals.course_code %>"
+    }
+  </script>
+  <script src="/js/chatSocket.js"></script>
+<% } else {
+  console.log("User not logged in!");
+} %>
 
 <% if (locals.user) { %>
   <%= locals.course_code %>
 <% } %>
-
 
 <ul id="messages"></ul>
 <form id="form" action="">
