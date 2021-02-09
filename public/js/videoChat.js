@@ -1,5 +1,4 @@
-$(document).ready(function(){
-
+$(document).ready(function() {
   const connectedUsersString = $("#connectedUserIds").val();
   const myId = $("#myId").val();
   const connectedUserIds = connectedUsersString.split(",");

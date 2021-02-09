@@ -2,14 +2,19 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const session = require("express-session");
+
 const { PeerServer } = require("peer");
 const peerServer = PeerServer({ port: 9000, path: '/peer' });
-//const server = require("http").Server(app);
+
 const dotEnv = require("dotenv");
 dotEnv.config({ path: "config.env" });
 
 const publicDirectory = path.join(__dirname, "./public");
 app.use(express.static(publicDirectory));
+
+// Socket.io
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 
 // Parse URL-encoded bodies (req.body) (as sent by HTML forms)
 app.use(
@@ -33,6 +38,18 @@ app.set("view engine", "ejs");
 app.use("/", require("./routes/pagesRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 
-app.listen(process.env.SERVER_PORT || 3000, function () {
+// Socket io code
+io.on("connection", socket => {
+  socket.on("join room", data => {
+    socket.join(data.roomId);
+    io.to(data.roomId).emit("user joined", data.firstName);
+  });
+  socket.on("chat message", data => {
+    socket.to(data.roomId).emit("chat message", data);
+  });
+});
+
+// Server start
+http.listen(process.env.SERVER_PORT || 3000, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 });
