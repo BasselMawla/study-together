@@ -1,14 +1,3 @@
-let socket = io();
-socket.emit("join room", {
-  userId: user.userId,
-  firstName: user.firstName,
-  roomId: user.roomId
-});
-
-socket.on("user joined", firstName => {
-  console.log(firstName);
-});
-
 $(document).ready(function() {
   let messages = $("#messages");
   let form = $("#form");

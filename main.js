@@ -47,6 +47,9 @@ io.on("connection", socket => {
   socket.on("chat message", data => {
     socket.to(data.roomId).emit("chat message", data);
   });
+  socket.on("peer connected to server", data => {
+    socket.to(data.roomId).emit("peer connected", {peerId: data.peerId});
+  })
 });
 
 // Server start
