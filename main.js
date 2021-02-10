@@ -5,7 +5,6 @@ const session = require("express-session");
 
 const { PeerServer } = require("peer");
 const peerServer = PeerServer({ port: 9000, path: "/peer" });
-app.use("/peerjs", peerServer);
 
 const dotEnv = require("dotenv");
 dotEnv.config({ path: "config.env" });
@@ -57,3 +56,4 @@ io.on("connection", socket => {
 http.listen(process.env.SERVER_PORT || 3000, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 });
+app.use("/peer", peerServer);
