@@ -34,11 +34,33 @@ $(document).ready(function() {
     var call = peer.call(data.peerId, mediaStream);
     //console.log("Connected to peer ID: " + data.peerId);
     
-    peer.on("call", function(call) {
+    /*peer.on("call", function(call) {
       // Answer the call, providing our mediaStream
       call.answer(mediaStream);
       $("#video").append.mediaStream;
+    });*/
+    const myVideo = document.createElement("video")
+    const video = document.createElement("video")
+    navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    }).then(stream => {
+      addVideoStream(myVideo, stream)
+      peer.on("call", call => {
+        call.answer(stream)
+        call.on("stream", userVideoStream => {
+          addVideoStream(video, userVideoStream)
+        });
+      });
     });
-  })
+  });
+  
+  function addVideoStream(video, stream) {
+    video.srcObject = stream
+    video.addEventListener("loadedmetadata", () => {
+      video.play()
+    })
+    $("#video").append(video)
+  }
 
 });
