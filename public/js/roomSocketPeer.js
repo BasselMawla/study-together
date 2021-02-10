@@ -12,7 +12,7 @@ socket.on("user joined", firstName => {
 $(document).ready(function() {
   // Peer connect to server
   const peer = new Peer({
-    host: "localhost",
+    host: "https://peerjsaubstudy.herokuapp.com/",
     port: 9000,
     path: "/peer"
   });
