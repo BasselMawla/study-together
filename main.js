@@ -53,7 +53,7 @@ io.on("connection", socket => {
 });
 
 // Server start
-http.listen(process.env.SERVER_PORT || 80, function () {
+http.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 });
 app.use("/peerjs", peerServer);
