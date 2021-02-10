@@ -3,8 +3,8 @@ const app = express();
 const path = require("path");
 const session = require("express-session");
 
-const { PeerServer } = require("peer");
-const peerServer = PeerServer({ port: process.env.PORT, path: "/peer" });
+//const { PeerServer } = require("peer");
+//const peerServer = PeerServer({ port: 9000, path: "/peer" });
 
 const dotEnv = require("dotenv");
 dotEnv.config({ path: "config.env" });
