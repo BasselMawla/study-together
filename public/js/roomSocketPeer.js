@@ -25,7 +25,6 @@ $(document).ready(function() {
   });
   
   socket.on("peer connected", async (data) => {
-    let mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
     var conn = peer.connect(data.peerId);
     var call = peer.call(data.peerId, mediaStream);
     //console.log("Connected to peer ID: " + data.peerId);
@@ -39,7 +38,7 @@ $(document).ready(function() {
     const video = document.createElement("video")
     navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: true
+      audio: false
     }).then(stream => {
       addVideoStream(myVideo, stream)
       peer.on("call", call => {
