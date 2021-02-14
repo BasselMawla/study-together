@@ -32,6 +32,19 @@ $(document).ready(function() {
     });
   });
 
+  const myVideoElement = document.createElement("video");
+  const remoteVideoElement = document.createElement("video");
+  let myStream;
+  try {
+    myStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true
+    });
+    addVideoStream(myVideoElement, myStream);
+  } catch (err) {
+    console.log("Failed to get local stream", err);
+  }
+
   socket.on("peer connected", data => {
     var conn = peer.connect(data.peerId);
 
@@ -40,29 +53,14 @@ $(document).ready(function() {
       conn.send("hi!");
     });
 
-    const myVideoElement = document.createElement("video");
-    const remoteVideoElement = document.createElement("video");
+    // Call peer with my media stream
+    let call = peer.call(data.peerId, myStream);
 
-    navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true
+    // Receive call from peer
+    call.on("stream", function(remoteStream) {
+      // Attach remoteStream to vid
+      addVideoStream(remoteVideoElement, remoteStream);
     })
-    .then(myStream => {
-      // Add own video to page
-      addVideoStream(myVideoElement, myStream);
-
-      // Call peer with my media stream
-      let call = peer.call(data.peerId, myStream);
-
-      // Receive call from peer
-      call.on("stream", function(remoteStream) {
-        // Attach remoteStream to vid
-        addVideoStream(remoteVideoElement, remoteStream)
-      });
-    })
-    .catch(function(err) {
-      console.log("Failed to get local stream", err);
-    });
   });
   
   function addVideoStream(video, stream) {
