@@ -66,7 +66,12 @@ $(document).ready(async function() {
 
     // Call peer with my media stream
     let call = peer.call(data.peerId, myStream);
-
+    
+    // Receive stream from peer
+    call.on("stream", function(remoteStream) {
+      // Attach remoteStream to vid
+      addVideoStream(remoteVideoElement, remoteStream);
+    })
   });
   
   function addVideoStream(video, stream) {
