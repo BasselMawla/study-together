@@ -33,6 +33,7 @@ $(document).ready(async function() {
   });
 
   const myVideoElement = document.createElement("video");
+  myVideoElement.muted = true
   const remoteVideoElement = document.createElement("video");
   let myStream;
   try {
