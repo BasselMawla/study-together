@@ -66,7 +66,7 @@ $(document).ready(async function() {
 
     // Call peer with my media stream
     let call = peer.call(data.peerId, myStream);
-    
+
     // Receive stream from peer
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
@@ -86,30 +86,3 @@ $(document).ready(async function() {
     $("#video").append(video);
   }
 });
-
-
-
-
-
-    /*peer.call(data.peerId);
-    //console.log("Connected to peer ID: " + data.peerId);
-    
-    /*peer.on("call", function(call) {
-      // Answer the call, providing our mediaStream
-      call.answer(mediaStream);
-      $("#video").append.mediaStream;
-    });
-    const myVideo = document.createElement("video")
-    const video = document.createElement("video")
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: false
-    }).then(stream => {
-      addVideoStream(myVideo, stream);
-      peer.on("call", call => {
-        call.answer(stream);
-        call.on("stream", userVideoStream => {
-          addVideoStream(video, userVideoStream);
-        });
-      });
-    }); */
