@@ -45,6 +45,17 @@ $(document).ready(async function() {
     console.log("Failed to get local stream", err);
   }
 
+  // Receive call from peer
+  peer.on('call', function(call) {
+    call.answer(myStream);
+
+    // Receive stream from peer
+    call.on("stream", function(remoteStream) {
+      // Attach remoteStream to vid
+      addVideoStream(remoteVideoElement, remoteStream);
+    })
+  });
+
   socket.on("peer connected", data => {
     var conn = peer.connect(data.peerId);
 
@@ -56,11 +67,6 @@ $(document).ready(async function() {
     // Call peer with my media stream
     let call = peer.call(data.peerId, myStream);
 
-    // Receive call from peer
-    call.on("stream", function(remoteStream) {
-      // Attach remoteStream to vid
-      addVideoStream(remoteVideoElement, remoteStream);
-    })
   });
   
   function addVideoStream(video, stream) {
