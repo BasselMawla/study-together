@@ -37,7 +37,7 @@ $(document).ready(async function() {
   let myStream;
   try {
     myStream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
+      audio: true,
       video: true
     });
     addVideoStream(myVideoElement, myStream);
