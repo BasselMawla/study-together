@@ -42,7 +42,7 @@ app.use("/auth", require("./routes/authRoutes"));
 io.on("connection", socket => {
   socket.on("join room", data => {
     socket.join(data.roomId);
-    io.to(data.roomId).emit("user joined", data.firstName);
+    socket.to(data.roomId).emit("user joined", data.firstName);
   });
   socket.on("chat message", data => {
     socket.to(data.roomId).emit("chat message", data);
