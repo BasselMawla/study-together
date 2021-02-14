@@ -9,7 +9,7 @@ socket.on("user joined", firstName => {
   console.log(firstName + " has joined.");
 });
 
-$(document).ready(function() {
+$(document).ready(async function() {
   // Peer connect to server
   let peer = new Peer();
 
