@@ -50,13 +50,13 @@ $(document).ready(async function() {
   peer.on("call", function(call) {
     // Answer call with my stream
     call.answer(myStream);
+    
+    const videoId = peerCount;
+    peerCount++;
 
     // Receive stream from call
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
-      const videoId = peerCount;
-      peerCount++;
-
       const remoteVideoElement = document.createElement("video");
       remoteVideoElement.id = "video" + videoId;
       addVideoStream(remoteVideoElement, remoteStream);
