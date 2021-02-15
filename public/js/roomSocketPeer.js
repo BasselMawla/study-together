@@ -10,6 +10,7 @@ socket.on("user joined", firstName => {
 });
 
 $(document).ready(async function() {
+  let peerCount = 0;
   // Peer connect to server
   let peer = new Peer();
 
@@ -34,11 +35,10 @@ $(document).ready(async function() {
 
   const myVideoElement = document.createElement("video");
   myVideoElement.muted = true
-  const remoteVideoElement = document.createElement("video");
   let myStream;
   try {
     myStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: false,
       video: true
     });
     addVideoStream(myVideoElement, myStream);
@@ -47,32 +47,41 @@ $(document).ready(async function() {
   }
 
   // Receive call from peer
-  peer.on('call', function(call) {
+  peer.on("call", function(call) {
     call.answer(myStream);
 
     // Receive stream from peer
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
+      const remoteVideoElement = document.createElement("video");
+      remoteVideoElement.id = "video" + peerCount;
       addVideoStream(remoteVideoElement, remoteStream);
     })
   });
 
   socket.on("peer connected", data => {
     var conn = peer.connect(data.peerId);
-
+    peerCount++;
     // When the connection is established
     conn.on("open", function() {
       conn.send("hi!");
+    });
+    
+    conn.on("close", function() {
+      peer.destroy();
+      $("#video" + videoId).remove();
     });
 
     // Call peer with my media stream
     let call = peer.call(data.peerId, myStream);
 
-    // Receive stream from peer
+    /*// Receive stream from peer
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
+      const remoteVideoElement = document.createElement("video");
+      remoteVideoElement.id = "video" + videoId;
       addVideoStream(remoteVideoElement, remoteStream);
-    })
+    })*/
   });
   
   function addVideoStream(video, stream) {
