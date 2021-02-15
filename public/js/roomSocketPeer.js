@@ -79,8 +79,8 @@ $(document).ready(async function() {
     console.log ("Connecting to peerId: " + data.peerId);
     //peerCount++;
     // When the connection is established
-    await conn.on("open", function() {
-      conn.send(peerId);
+    conn.on("open", function() {
+      await conn.send(peerId);
     });
     
     conn.on("close", function() {
