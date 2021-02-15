@@ -54,7 +54,7 @@ $(document).ready(async function() {
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
       const remoteVideoElement = document.createElement("video");
-      removteVideoElement.id = ""
+      remoteVideoElement.id = ""
       addVideoStream(remoteVideoElement, remoteStream);
     })*/
   });
@@ -80,7 +80,7 @@ $(document).ready(async function() {
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
       const remoteVideoElement = document.createElement("video");
-      removteVideoElement.id = "video" + videoId;
+      remoteVideoElement.id = "video" + videoId;
       addVideoStream(remoteVideoElement, remoteStream);
     })
   });
