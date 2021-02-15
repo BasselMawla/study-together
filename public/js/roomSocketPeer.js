@@ -70,9 +70,10 @@ $(document).ready(async function() {
   });
 
   // Already in room, new peer joined, call them
-  socket.on("peer connected", data => {
-    var conn = peer.connect(data.peerId);
+  socket.on("peer connected", async (data) => {
+    var conn = await peer.connect(data.peerId);
     const videoId = data.peerId;
+    console.log ("Connecting to peerId: " + data.peerId);
     //peerCount++;
     // When the connection is established
     conn.on("open", function() {
