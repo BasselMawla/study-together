@@ -3,8 +3,8 @@ const app = express();
 const path = require("path");
 const session = require("express-session");
 
-const { PeerServer } = require("peer");
-const peerServer = PeerServer({ port: 9000, path: '/peer' });
+//const { PeerServer } = require("peer");
+//const peerServer = PeerServer({ port: 9000, path: "/peer" });
 
 const dotEnv = require("dotenv");
 dotEnv.config({ path: "config.env" });
@@ -42,7 +42,7 @@ app.use("/auth", require("./routes/authRoutes"));
 io.on("connection", socket => {
   socket.on("join room", data => {
     socket.join(data.roomId);
-    io.to(data.roomId).emit("user joined", data.firstName);
+    socket.to(data.roomId).emit("user joined", data.firstName);
   });
   socket.on("chat message", data => {
     socket.to(data.roomId).emit("chat message", data);
@@ -53,6 +53,6 @@ io.on("connection", socket => {
 });
 
 // Server start
-http.listen(process.env.SERVER_PORT || 3000, function () {
+http.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 });
