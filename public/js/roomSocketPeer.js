@@ -9,7 +9,9 @@ socket.on("user joined", firstName => {
   console.log(firstName + " has joined.");
 });
 
+let connectedPeers = [];
 let peerCount = 0;
+
 $(document).ready(async function() {
   // Peer connect to server
   let peer = new Peer();
@@ -27,11 +29,12 @@ $(document).ready(async function() {
   });
   
   // Receive on "open"
-  //peer.on("connection", function(conn) {
-  //  conn.on("data", function(data) {
-  //    console.log(data);
-  //  });
-  //});
+  peer.on("connection", function(conn) {
+    conn.on("data", function(peerId) {
+      connectedPeers[peerCount] = peerId;
+      peerCount++;
+    });
+  });
 
   const myVideoElement = document.createElement("video");
   myVideoElement.muted = true
@@ -51,8 +54,7 @@ $(document).ready(async function() {
     // Answer call with my stream
     call.answer(myStream);
     
-    const videoId = peerCount;
-    peerCount++;
+    const videoId = connectedPeers[peerCount-1];
 
     // Receive stream from call
     call.on("stream", function(remoteStream) {
@@ -62,23 +64,24 @@ $(document).ready(async function() {
       addVideoStream(remoteVideoElement, remoteStream);
     })
 
-    call.on("close", function() {
-      $("#video" + videoId).remove();
+    socket.on("peer disconnected", function(data) {
+      $("#video" + data.peerId).remove();
     });
   });
 
   // Already in room, new peer joined, call them
   socket.on("peer connected", data => {
     var conn = peer.connect(data.peerId);
-    const videoId = peerCount;
-    peerCount++;
+    const videoId = data.peerId;
+    //peerCount++;
     // When the connection is established
     conn.on("open", function() {
-      conn.send("hi!");
+      conn.send(peerId);
     });
     
     conn.on("close", function() {
       $("#video" + videoId).remove();
+      //conn.send("disconnecting");
     });
 
     // Call peer with my media stream
@@ -99,8 +102,8 @@ $(document).ready(async function() {
       video.play();
     })
 
-    video.style.width = "300px";
-    video.style.height = "100%";
+    video.style.width = "250px";
+    video.style.height = "350px";
 
     $("#video").append(video);
   }
