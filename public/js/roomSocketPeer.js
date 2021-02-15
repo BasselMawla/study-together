@@ -9,8 +9,8 @@ socket.on("user joined", firstName => {
   console.log(firstName + " has joined.");
 });
 
+let peerCount = 0;
 $(document).ready(async function() {
-  let peerCount = 0;
   // Peer connect to server
   let peer = new Peer();
 
@@ -27,11 +27,11 @@ $(document).ready(async function() {
   });
   
   // Receive on "open"
-  peer.on("connection", function(conn) {
-    conn.on("data", function(data) {
-      console.log(data);
-    });
-  });
+  //peer.on("connection", function(conn) {
+  //  conn.on("data", function(data) {
+  //    console.log(data);
+  //  });
+  //});
 
   const myVideoElement = document.createElement("video");
   myVideoElement.muted = true
@@ -46,19 +46,28 @@ $(document).ready(async function() {
     console.log("Failed to get local stream", err);
   }
 
-  // Receive call from peer
+  // Just joined room, receiving calls from peers already in room
   peer.on("call", function(call) {
+    // Answer call with my stream
     call.answer(myStream);
 
-    // Receive stream from peer
+    // Receive stream from call
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
+      const videoId = peerCount;
+      peerCount++;
+
       const remoteVideoElement = document.createElement("video");
-      remoteVideoElement.id = "video" + peerCount;
+      remoteVideoElement.id = "video" + videoId;
       addVideoStream(remoteVideoElement, remoteStream);
     })
+
+    call.on("close", function() {
+      $("#video" + videoId).remove();
+    });
   });
 
+  // Already in room, new peer joined, call them
   socket.on("peer connected", data => {
     var conn = peer.connect(data.peerId);
     const videoId = peerCount;
@@ -69,18 +78,17 @@ $(document).ready(async function() {
     });
     
     conn.on("close", function() {
-      peer.destroy();
       $("#video" + videoId).remove();
     });
 
     // Call peer with my media stream
     let call = peer.call(data.peerId, myStream);
 
-    // Receive stream from peer
+    // Receive stream from call
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
       const remoteVideoElement = document.createElement("video");
-      remoteVideoElement.id = "video" + peerCount;
+      remoteVideoElement.id = "video" + videoId;
       addVideoStream(remoteVideoElement, remoteStream);
     })
   });
