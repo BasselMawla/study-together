@@ -61,6 +61,7 @@ $(document).ready(async function() {
 
   socket.on("peer connected", data => {
     var conn = peer.connect(data.peerId);
+    const videoId = peerCount;
     peerCount++;
     // When the connection is established
     conn.on("open", function() {
