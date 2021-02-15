@@ -72,6 +72,7 @@ $(document).ready(async function() {
     // Receive stream from peer
     call.on("stream", function(remoteStream) {
       // Attach remoteStream to vid
+      const remoteVideoElement = document.createElement("video");
       addVideoStream(remoteVideoElement, remoteStream);
     })
   });
