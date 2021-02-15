@@ -23,7 +23,7 @@ $(document).ready(async function() {
   myVideo.muted = true
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
+      audio: true,
       video: true
     });
     // Add own video to grid
@@ -32,7 +32,7 @@ $(document).ready(async function() {
     // Receive calls
     peer.on("call", call => {
       call.answer(myStream);
-      
+
       const remoteVideo = document.createElement("video");
       call.on("stream", remoteStream => {
         addVideoToGrid(remoteVideo, remoteStream);
@@ -45,7 +45,7 @@ $(document).ready(async function() {
   } catch (err) {
     console.log("Failed to get local stream", err);
   }
-  
+
   // Receive on "open"
   // peer.on("connection", function(conn) {
   //   conn.on("data", function(peerId) {
@@ -68,7 +68,7 @@ $(document).ready(async function() {
 
     peers[peerId] = call;
   }
-    
+
   function addVideoToGrid(video, stream) {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
