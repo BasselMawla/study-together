@@ -18,6 +18,7 @@ $(document).ready(async function() {
     }
   });
 
+  const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
   myVideo.muted = true
   try {
@@ -53,27 +54,26 @@ $(document).ready(async function() {
   //     peerCount++;
   //   });
   // });
+
+  function callPeer(peerId, stream) {
+    const call = peer.call(peerId, stream);
+
+    const remoteVideo = document.createElement("video");
+    call.on("stream", remoteStream => {
+      addVideoToGrid(remoteVideo, remoteStream);
+    });
+    call.on("close", () => {
+      remoteVideo.remove();
+    });
+
+    peers[peerId] = call;
+  }
+    
+  function addVideoToGrid(video, stream) {
+    video.srcObject = stream;
+    video.addEventListener("loadedmetadata", () => {
+      video.play();
+    })
+    videoGrid.append(video);
+  }
 });
-
-function callPeer(peerId, stream) {
-  const call = peer.call(peerId, stream);
-
-  const remoteVideo = document.createElement("video");
-  call.on("stream", remoteStream => {
-    addVideoToGrid(remoteVideo, remoteStream);
-  });
-  call.on("close", () => {
-    remoteVideo.remove();
-  });
-
-  peers[peerId] = call;
-}
-  
-function addVideoToGrid(video, stream) {
-  const videoGrid = document.getElementById("video-grid");
-  video.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    video.play();
-  })
-  videoGrid.append(video);
-}
