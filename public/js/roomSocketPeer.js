@@ -55,7 +55,9 @@ $(document).ready(async function() {
     // Answer call with my stream
     call.answer(myStream);
     
+    console.log("peerCount: " + peerCount);
     const videoId = connectedPeers[peerCount-1];
+    console.log("videoId: " + videoId);
 
     // Receive stream from call
     call.on("stream", function(remoteStream) {
