@@ -31,6 +31,7 @@ $(document).ready(async function() {
   // Receive on "open"
   peer.on("connection", function(conn) {
     conn.on("data", function(peerId) {
+      console.log("Received connection from peerId: " + peerId);
       connectedPeers[peerCount] = peerId;
       peerCount++;
     });
@@ -58,7 +59,7 @@ $(document).ready(async function() {
 
     // Receive stream from call
     call.on("stream", function(remoteStream) {
-      // Attach remoteStream to vid
+      // Add remote stream
       const remoteVideoElement = document.createElement("video");
       remoteVideoElement.id = "video" + videoId;
       addVideoStream(remoteVideoElement, remoteStream);
@@ -70,8 +71,8 @@ $(document).ready(async function() {
   });
 
   // Already in room, new peer joined, call them
-  socket.on("peer connected", async (data) => {
-    var conn = await peer.connect(data.peerId);
+  socket.on("peer connected", data => {
+    var conn = peer.connect(data.peerId);
     const videoId = data.peerId;
     console.log ("Connecting to peerId: " + data.peerId);
     //peerCount++;
@@ -82,7 +83,10 @@ $(document).ready(async function() {
     
     conn.on("close", function() {
       $("#video" + videoId).remove();
-      //conn.send("disconnecting");
+      socket.emit("peer disconnecting", {
+        peerId: peerId,
+        roomId: user.roomId
+      });
     });
 
     // Call peer with my media stream
@@ -103,8 +107,8 @@ $(document).ready(async function() {
       video.play();
     })
 
-    video.style.width = "250px";
-    video.style.height = "350px";
+    video.style.width = "300px";
+    video.style.height = "300px";
 
     $("#video").append(video);
   }

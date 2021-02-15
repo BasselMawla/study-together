@@ -49,7 +49,10 @@ io.on("connection", socket => {
   });
   socket.on("peer connected to server", data => {
     socket.to(data.roomId).emit("peer connected", {peerId: data.peerId});
-  })
+  });
+  socket.on("peer disconnecting", data => {
+    socket.to(data.roomId).emit("peer disconnected", {peerId: data.peerId});
+  });
 });
 
 // Server start
