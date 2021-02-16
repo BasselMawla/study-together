@@ -87,7 +87,6 @@ $(document).ready(async function() {
     muteButton.addEventListener("click", () => {
       const vid = muteButton.previousSibling;
       console.log("previousSibling: " + vid);
-      console.log("Added event listener");
       if (vid.muted) {
         vid.muted = false;
         console.log("Unmuted");
@@ -97,6 +96,7 @@ $(document).ready(async function() {
         console.log("Muted");
       }
     });
+    console.log("Added video to grid");
   }
 
   function addMyVideoToGrid(video, stream) {
