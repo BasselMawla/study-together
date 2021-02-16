@@ -31,6 +31,7 @@ $(document).ready(async function() {
 
     // Receive calls
     peer.on("call", call => {
+      console.log("Receiving call");
       call.answer(myStream);
 
       const remoteVideo = document.createElement("video");
@@ -56,6 +57,7 @@ $(document).ready(async function() {
   // });
 
   function callPeer(peerId, stream) {
+    console.log("Calling peer");
     const call = peer.call(peerId, stream);
 
     const remoteVideo = document.createElement("video");
