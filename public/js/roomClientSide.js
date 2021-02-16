@@ -23,7 +23,7 @@ $(document).ready(async function() {
   myVideo.muted = true
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: false,
       video: true
     });
     // Add own video to grid
