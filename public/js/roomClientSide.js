@@ -61,7 +61,6 @@ $(document).ready(async function() {
 
     const remoteVideo = document.createElement("video");
     const muteButton = document.createElement("button");
-    
     call.on("stream", remoteStream => {
       addVideoToGrid(remoteVideo, muteButton, remoteStream);
     });
@@ -74,23 +73,25 @@ $(document).ready(async function() {
   }
 
   function addVideoToGrid(video, muteButton, stream) {
-    video.srcObject = stream;
-    video.addEventListener("loadedmetadata", () => {
-      video.play();
-    })
-    muteButton.addEventListener("click", () => {
-      if (video.muted) {
-        video.muted = false;
-      }
-      else {
-        video.muted = true;
-      }
-    })
-
+    muteButton.style.width = "200px";
     const div = document.createElement("div");
     div.append(video);
     div.append(muteButton);
     videoGrid.append(div);
+
+    video.srcObject = stream;
+    video.addEventListener("loadedmetadata", () => {
+      video.play();
+    });
+    muteButton.addEventListener("click", () => {
+      const vid = muteButton.previousSibling;
+      if (vid.muted) {
+        vid.muted = false;
+      }
+      else {
+        vid.muted = true;
+      }
+    });
   }
 
   function addMyVideoToGrid(video, stream) {
