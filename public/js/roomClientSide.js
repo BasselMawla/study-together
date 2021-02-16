@@ -94,10 +94,10 @@ $(document).ready(async function() {
     });
     
     muteButton.innerHTML = "Toggle Mute";
-    const div = document.createElement("div");
-    div.append(video);
-    div.append(muteButton);
-    videoGrid.append(div);
+    //const div = document.createElement("div");
+    videoGrid.append(video);
+    videoGrid.append(muteButton);
+    //videoGrid.append(div);
 
     console.log("addVideoToGrid() called");
   }
