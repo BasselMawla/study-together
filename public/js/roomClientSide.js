@@ -20,10 +20,10 @@ $(document).ready(async function() {
 
   const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
-  myVideo.muted = true
+  // myVideo.muted = true
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
+      audio: true,
       video: true
     });
     // Add own video to grid
@@ -70,10 +70,21 @@ $(document).ready(async function() {
   }
 
   function addVideoToGrid(video, stream) {
+    const btn = document.createElement('BUTTON');
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
       video.play();
     })
+    btn.addEventListener("click", () => {
+      if(video.muted){
+        video.muted = false;
+      }
+      else{
+        video.muted = true;
+      }
+    })
+
     videoGrid.append(video);
+    videoGrid.append(btn);
   }
 });

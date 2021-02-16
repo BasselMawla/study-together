@@ -56,6 +56,6 @@ io.on("connection", socket => {
 });
 
 // Server start
-http.listen(process.env.PORT || 3000, function () {
+http.listen(process.env.PORT || 3001, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 });
