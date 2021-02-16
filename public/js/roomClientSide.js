@@ -72,6 +72,7 @@ $(document).ready(async function() {
   }
 
   function addVideoToGrid(video, stream) {
+    console.log("addVideoToGrid() called");
     const btn = document.createElement('BUTTON');
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
