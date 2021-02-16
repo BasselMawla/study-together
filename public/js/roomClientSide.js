@@ -20,22 +20,23 @@ $(document).ready(async function() {
 
   const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
-  // myVideo.muted = true
+  myVideo.muted = true
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: true
     });
     // Add own video to grid
-    addVideoToGrid(myVideo, myStream);
+    addMyVideoToGrid(myVideo, myStream);
 
     // Receive calls
     peer.on("call", call => {
       call.answer(myStream);
 
       const remoteVideo = document.createElement("video");
+      const muteButton = document.createElement("button");
       call.on("stream", remoteStream => {
-        addVideoToGrid(remoteVideo, remoteStream);
+        addVideoToGrid(remoteVideo, muteButton, remoteStream);
       });
     });
 
@@ -59,23 +60,25 @@ $(document).ready(async function() {
     const call = peer.call(peerId, stream);
 
     const remoteVideo = document.createElement("video");
+    const muteButton = document.createElement("button");
+    
     call.on("stream", remoteStream => {
-      addVideoToGrid(remoteVideo, remoteStream);
+      addVideoToGrid(remoteVideo, muteButton, remoteStream);
     });
     call.on("close", () => {
       remoteVideo.remove();
+      muteButton.remove();
     });
 
     peers[peerId] = call;
   }
 
-  function addVideoToGrid(video, stream) {
-    const btn = document.createElement('BUTTON');
+  function addVideoToGrid(video, muteButton, stream) {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
       video.play();
     })
-    btn.addEventListener("click", () => {
+    muteButton.addEventListener("click", () => {
       if (video.muted) {
         video.muted = false;
       }
@@ -84,7 +87,20 @@ $(document).ready(async function() {
       }
     })
 
-    videoGrid.append(video);
-    videoGrid.append(btn);
+    const div = document.createElement("div");
+    div.append(video);
+    div.append(muteButton);
+    videoGrid.append(div);
+  }
+
+  function addMyVideoToGrid(video, stream) {
+    video.srcObject = stream;
+    video.addEventListener("loadedmetadata", () => {
+      video.play();
+    })
+
+    const div = document.createElement("div");
+    div.append(video);
+    videoGrid.append(div);
   }
 });
