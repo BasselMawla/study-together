@@ -83,13 +83,17 @@ $(document).ready(async function() {
     video.addEventListener("loadedmetadata", () => {
       video.play();
     });
+
     muteButton.addEventListener("click", () => {
       const vid = muteButton.previousSibling;
+      console.log("Added event listener");
       if (vid.muted) {
         vid.muted = false;
+        console.log("Unmuted");
       }
       else {
         vid.muted = true;
+        console.log("Muted");
       }
     });
   }
