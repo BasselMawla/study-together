@@ -17,7 +17,7 @@ $(document).ready(async function() {
   let peerId;
   peer.on("open", function(id) {
     peerId = id;
-    
+
     socket.emit("peer connected to server", {
       socketId: user.userId,
       peerId: peerId,
@@ -25,7 +25,7 @@ $(document).ready(async function() {
     });
     console.log("My peerID: " + peerId);
   });
-  
+
   // Receive on "open"
   peer.on("connection", function(conn) {
     conn.on("data", function(data) {
@@ -66,7 +66,7 @@ $(document).ready(async function() {
     conn.on("open", function() {
       conn.send("hi!");
     });
-    
+
     conn.on("close", function() {
       peer.destroy();
       $("#video" + videoId).remove();
@@ -83,7 +83,7 @@ $(document).ready(async function() {
       addVideoStream(remoteVideoElement, remoteStream);
     })*/
   });
-  
+
   function addVideoStream(video, stream) {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {

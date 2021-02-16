@@ -15,7 +15,7 @@
     }
     let socket = io();
   </script>
-  <script src="/js/roomSocketPeer.js"></script>
+  <script src="/js/roomClientSide.js"></script>
   <script src="/js/chatSocket.js"></script>
 <% } else {
   console.log("User not logged in!");
@@ -25,7 +25,7 @@
   <%= locals.course_code %>
 <% } %>
 
-<div id="video">
+<div id="video-grid">
 </div>
 
 <div id="chat-contrainer">

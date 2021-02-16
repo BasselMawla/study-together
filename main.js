@@ -40,16 +40,19 @@ app.use("/auth", require("./routes/authRoutes"));
 
 // Socket io code
 io.on("connection", socket => {
-  socket.on("join room", data => {
+  socket.on("join-room", data => {
+    const peerId = data.peerId;
+
     socket.join(data.roomId);
-    socket.to(data.roomId).emit("user joined", data.firstName);
+    socket.to(data.roomId).broadcast.emit("user-joined", peerId);
+
+    socket.on("disconnect", () => {
+      socket.to(data.roomId).broadcast.emit("user-disconnected", peerId);
+    });
   });
   socket.on("chat message", data => {
     socket.to(data.roomId).emit("chat message", data);
   });
-  socket.on("peer connected to server", data => {
-    socket.to(data.roomId).emit("peer connected", {peerId: data.peerId});
-  })
 });
 
 // Server start
