@@ -76,10 +76,10 @@ $(document).ready(async function() {
       video.play();
     })
     btn.addEventListener("click", () => {
-      if(video.muted){
+      if (video.muted) {
         video.muted = false;
       }
-      else{
+      else {
         video.muted = true;
       }
     })
