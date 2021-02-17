@@ -43,6 +43,9 @@ $(document).ready(async function() {
           streamCount++;
         }
       });
+      call.on("close", () => {
+        remoteVideo.parentElement.remove();
+      });
     });
 
     socket.on("user-joined", peerId => {
@@ -91,7 +94,6 @@ $(document).ready(async function() {
 
     muteButton.addEventListener("click", () => {
       const vid = muteButton.previousSibling;
-      console.log("previousSibling: " + vid);
       if (vid.muted) {
         vid.muted = false;
         muteButton.innerHTML = "Mute";
