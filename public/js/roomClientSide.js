@@ -35,9 +35,14 @@ $(document).ready(async function() {
 
       const remoteVideo = document.createElement("video");
       const muteButton = document.createElement("button");
+      
+      // Make sure stream is received only once
+      let streamCount = 0;
       call.on("stream", remoteStream => {
-        addVideoToGrid(remoteVideo, muteButton, remoteStream);
-        console.log("Received call, added video");
+        if(streamCount == 0) {
+          addVideoToGrid(remoteVideo, remoteStream);
+          streamCount++;
+        }
       });
     });
 
@@ -62,9 +67,14 @@ $(document).ready(async function() {
 
     const remoteVideo = document.createElement("video");
     const muteButton = document.createElement("button");
+
+    // Make sure stream is received only once
+    let streamCount = 0;
     call.on("stream", remoteStream => {
-      addVideoToGrid(remoteVideo, muteButton, remoteStream);
-      console.log("Called peer, added video");
+      if(streamCount == 0) {
+        addVideoToGrid(remoteVideo, remoteStream);
+        streamCount++;
+      }
     });
     call.on("close", () => {
       remoteVideo.remove();
