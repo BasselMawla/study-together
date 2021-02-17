@@ -32,13 +32,17 @@ $(document).ready(async function() {
 
     // Receive calls
     peer.on("call", call => {
-
+      console.log("Receiving call");
       call.answer(myStream);
-      console.log('receving the call');
+
+      // Make sure stream is received only once
+      let streamCount = 0;
       const remoteVideo = document.createElement("video");
       call.on("stream", remoteStream => {
-        console.log("Adding video of received call ");
-        addVideoToGrid(remoteVideo, remoteStream);
+        if(streamCount == 0) {
+          addVideoToGrid(remoteVideo, remoteStream);
+          streamCount++;
+        }
       });
     });
 
@@ -59,14 +63,17 @@ $(document).ready(async function() {
   // });
 
   function callPeer(peerId, stream) {
+    console.log("Calling peer");
     const call = peer.call(peerId, stream);
-    console.log('calling peer ' + peerId);
+
+    // Make sure stream is received only once
+    let streamCount = 0;
     const remoteVideo = document.createElement("video");
     call.on("stream", remoteStream => {
-
-      console.log('Adding the video of ' + peerId);
-
-      addVideoToGrid(remoteVideo, remoteStream);
+      if(streamCount == 0) {
+        addVideoToGrid(remoteVideo, remoteStream);
+        streamCount++;
+      }
     });
     call.on("close", () => {
       remoteVideo.remove();
@@ -75,6 +82,7 @@ $(document).ready(async function() {
   }
 
   function addVideoToGrid(video, stream) {
+    console.log("addVideoToGrid() called");
     const btn = document.createElement('BUTTON');
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
