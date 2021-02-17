@@ -21,7 +21,7 @@ $(document).ready(async function() {
 
   const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
-  // myVideo.muted = true
+  myVideo.muted = true
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -76,29 +76,35 @@ $(document).ready(async function() {
       }
     });
     call.on("close", () => {
-      remoteVideo.remove();
+      remoteVideo.parentElement.remove();
     });
     peers[peerId] = call;
   }
 
   function addVideoToGrid(video, stream) {
-    console.log("addVideoToGrid() called");
-    const btn = document.createElement('BUTTON');
+    const div = document.createElement("div");
+    const muteButton = document.createElement("button");
+    muteButton.innerHTML = "Mute";
+
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
       video.play();
     })
-    btn.addEventListener("click", () => {
+    muteButton.addEventListener("click", () => {
       if(video.muted){
         video.muted = false;
         console.log('Call unmuted');
+        muteButton.innerHTML = "Mute";
       }
       else{
         video.muted = true;
         console.log('call muted');
+        muteButton.innerHTML = "Unmute";
       }
     })
-    videoGrid.append(video);
-    videoGrid.append(btn);
+
+    div.append(video);
+    div.append(muteButton);
+    videoGrid.append(div);
   }
 });
