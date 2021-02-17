@@ -34,13 +34,12 @@ $(document).ready(async function() {
       call.answer(myStream);
 
       const remoteVideo = document.createElement("video");
-      const muteButton = document.createElement("button");
       
       // Make sure stream is received only once
       let streamCount = 0;
       call.on("stream", remoteStream => {
         if(streamCount == 0) {
-          addVideoToGrid(remoteVideo, muteButton, remoteStream);
+          addVideoToGrid(remoteVideo, remoteStream);
           streamCount++;
         }
       });
@@ -66,25 +65,25 @@ $(document).ready(async function() {
     const call = peer.call(peerId, stream);
 
     const remoteVideo = document.createElement("video");
-    const muteButton = document.createElement("button");
 
     // Make sure stream is received only once
     let streamCount = 0;
     call.on("stream", remoteStream => {
       if(streamCount == 0) {
-        addVideoToGrid(remoteVideo, muteButton, remoteStream);
+        addVideoToGrid(remoteVideo, remoteStream);
         streamCount++;
       }
     });
     call.on("close", () => {
-      remoteVideo.remove();
-      muteButton.remove();
+      remoteVideo.parentElement.remove();
     });
 
     peers[peerId] = call;
   }
 
-  function addVideoToGrid(video, muteButton, stream) {
+  function addVideoToGrid(video, stream) {
+    const muteButton = document.createElement("button");
+
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
       video.play();
@@ -95,15 +94,15 @@ $(document).ready(async function() {
       console.log("previousSibling: " + vid);
       if (vid.muted) {
         vid.muted = false;
-        console.log("Unmuted");
+        muteButton.innerHTML = "Mute";
       }
       else {
         vid.muted = true;
-        console.log("Muted");
+        muteButton.innerHTML = "Unmute";
       }
     });
     
-    muteButton.innerHTML = "Toggle Mute";
+    muteButton.innerHTML = "Mute";
     const div = document.createElement("div");
     div.append(video);
     div.append(muteButton);
