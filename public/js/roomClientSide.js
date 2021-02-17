@@ -40,7 +40,7 @@ $(document).ready(async function() {
       let streamCount = 0;
       call.on("stream", remoteStream => {
         if(streamCount == 0) {
-          addVideoToGrid(remoteVideo, remoteStream);
+          addVideoToGrid(remoteVideo, muteButton, remoteStream);
           streamCount++;
         }
       });
@@ -72,7 +72,7 @@ $(document).ready(async function() {
     let streamCount = 0;
     call.on("stream", remoteStream => {
       if(streamCount == 0) {
-        addVideoToGrid(remoteVideo, remoteStream);
+        addVideoToGrid(remoteVideo, muteButton, remoteStream);
         streamCount++;
       }
     });
@@ -104,10 +104,10 @@ $(document).ready(async function() {
     });
     
     muteButton.innerHTML = "Toggle Mute";
-    //const div = document.createElement("div");
-    videoGrid.append(video);
-    videoGrid.append(muteButton);
-    //videoGrid.append(div);
+    const div = document.createElement("div");
+    div.append(video);
+    div.append(muteButton);
+    videoGrid.append(div);
 
     console.log("addVideoToGrid() called");
   }
