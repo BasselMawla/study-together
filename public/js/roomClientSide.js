@@ -35,14 +35,9 @@ $(document).ready(async function() {
       console.log("Receiving call");
       call.answer(myStream);
 
-      // Make sure stream is received only once
-      let streamCount = 0;
       const remoteVideo = document.createElement("video");
       call.on("stream", remoteStream => {
-        if(streamCount == 0) {
-          addVideoToGrid(remoteVideo, remoteStream);
-          streamCount++;
-        }
+        addVideoToGrid(remoteVideo, remoteStream);
       });
       call.on("close", () => {
         remoteVideo.parentElement.remove();
