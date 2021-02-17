@@ -44,9 +44,6 @@ $(document).ready(async function() {
           streamCount++;
         }
       });
-      call.on("close", () => {
-        remoteVideo.parentElement.remove();
-      });
     });
 
     socket.on("user-joined", peerId => {
