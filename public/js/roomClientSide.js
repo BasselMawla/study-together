@@ -5,6 +5,7 @@ $(document).ready(async function() {
 
   // On connect to peer server
   peer.on("open", function(peerId) {
+    console.log("my peerID is "+ peerId);
     socket.emit("join-room", {
       peerId: peerId,
       firstName: user.firstName,
@@ -31,10 +32,12 @@ $(document).ready(async function() {
 
     // Receive calls
     peer.on("call", call => {
-      call.answer(myStream);
 
+      call.answer(myStream);
+      console.log('receving the call');
       const remoteVideo = document.createElement("video");
       call.on("stream", remoteStream => {
+        console.log("Adding video of received call ");
         addVideoToGrid(remoteVideo, remoteStream);
       });
     });
@@ -57,15 +60,17 @@ $(document).ready(async function() {
 
   function callPeer(peerId, stream) {
     const call = peer.call(peerId, stream);
-
+    console.log('calling peer ' + peerId);
     const remoteVideo = document.createElement("video");
     call.on("stream", remoteStream => {
+
+      console.log('Adding the video of ' + peerId);
+
       addVideoToGrid(remoteVideo, remoteStream);
     });
     call.on("close", () => {
       remoteVideo.remove();
     });
-
     peers[peerId] = call;
   }
 
@@ -78,12 +83,13 @@ $(document).ready(async function() {
     btn.addEventListener("click", () => {
       if(video.muted){
         video.muted = false;
+        console.log('Call unmuted');
       }
       else{
         video.muted = true;
+        console.log('call muted');
       }
     })
-
     videoGrid.append(video);
     videoGrid.append(btn);
   }
