@@ -21,18 +21,50 @@
   console.log("User not logged in!");
 } %>
 
-<% if (locals.user) { %>
-  <%= locals.course_code %>
-<% } %>
 
-<div id="video-grid">
+<div class="container mx-4">
+  <div class="row">
+
+    <div class="card video-card col-12">
+      <div class="card-body">
+        <div id="video-grid">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+
+    </div>
+    <div class="col-xs-12 col-sm-4">
+
+
+      <div class="card">
+        <div class="card-header">
+          Chat messages
+        </div>
+        <div class="card-body message-container">
+          <ul id="messages" class="vertical-scrollable"></ul>
+
+        </div>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
+      </div>
+
+
+    </div>
+    <div class="col-xs-12 col-sm-4">
+
+    </div>
+
+  </div>
+
 </div>
 
-<div id="chat-contrainer">
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input id="input" autocomplete="off" /><button>Send</button>
-  </form>
-</div>
+
+
 
 <%- include("footer"); %>

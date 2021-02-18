@@ -2,7 +2,7 @@ $(document).ready(async function() {
   // Connect to Peer server
   let peer = new Peer();
     // config: {
-    //   'iceServers': 
+    //   'iceServers':
     //     [{ 'urls': 'stun:stun.l.google.com:19302' }],
     //     'sdpSemantics': 'unified-plan'
     // }
@@ -29,7 +29,7 @@ $(document).ready(async function() {
   myVideo.muted = true
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: false,
       video: true
     });
     // Add own video to grid
