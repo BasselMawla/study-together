@@ -29,10 +29,11 @@ $(document).ready(async function() {
     });
     // Add own video to grid
     addVideoToGrid(myVideo, myStream);
+    console.log("Added own video to grid");
 
     // Receive calls
     peer.on("call", call => {
-      console.log("Receiving call");
+      console.log("Receiving call from " + call.peer);
       call.answer(myStream);
 
       // Make sure stream is received only once
@@ -41,6 +42,7 @@ $(document).ready(async function() {
       call.on("stream", remoteStream => {
         if(streamCount == 0) {
           addVideoToGrid(remoteVideo, remoteStream);
+          console.log("Added video after receiving call from " + call.peer);
           streamCount++;
         }
       });
@@ -63,7 +65,7 @@ $(document).ready(async function() {
   // });
 
   function callPeer(peerId, stream) {
-    console.log("Calling peer");
+    console.log("Calling peer with ID: " + peerId);
     const call = peer.call(peerId, stream);
 
     // Make sure stream is received only once
@@ -72,11 +74,13 @@ $(document).ready(async function() {
     call.on("stream", remoteStream => {
       if(streamCount == 0) {
         addVideoToGrid(remoteVideo, remoteStream);
+        console.log("Added video after calling peer " + peerId);
         streamCount++;
       }
     });
     call.on("close", () => {
       remoteVideo.parentElement.remove();
+      console.log("Removed video of " + peerId);
     });
     peers[peerId] = call;
   }
@@ -93,12 +97,12 @@ $(document).ready(async function() {
     muteButton.addEventListener("click", () => {
       if(video.muted){
         video.muted = false;
-        console.log('Call unmuted');
+        console.log("Muted");
         muteButton.innerHTML = "Mute";
       }
       else{
         video.muted = true;
-        console.log('call muted');
+        console.log("Unmuted");
         muteButton.innerHTML = "Unmute";
       }
     })
