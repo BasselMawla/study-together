@@ -2,7 +2,7 @@ $(document).ready(async function() {
   // Connect to Peer server
   let peer = new Peer({
     config: {
-      "iceServers": [{ url: "stun:[stun.l.google.com]:[19302]" }]
+      url: "stun:[stun.l.google.com]:[19302]"
     }
   });
   const peers = {};
