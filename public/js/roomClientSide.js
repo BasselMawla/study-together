@@ -2,7 +2,9 @@ $(document).ready(async function() {
   // Connect to Peer server
   let peer = new Peer({
     config: {
-      url: "stun:[stun.l.google.com]:[19302]"
+      'iceServers': 
+        [{ 'urls': 'stun:stun.l.google.com:19302' }],
+        'sdpSemantics': 'unified-plan'
     }
   });
   const peers = {};
