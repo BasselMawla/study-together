@@ -1,6 +1,10 @@
 $(document).ready(async function() {
   // Connect to Peer server
-  let peer = new Peer();
+  let peer = new Peer({
+    config: {
+      "iceServers": [{ url: "stun:[stun.l.google.com]:[19302]" }]
+    }
+  });
   const peers = {};
 
   // On connect to peer server
