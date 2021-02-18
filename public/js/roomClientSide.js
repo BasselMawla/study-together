@@ -1,12 +1,11 @@
 $(document).ready(async function() {
   // Connect to Peer server
-  let peer = new Peer({
-    config: {
-      'iceServers': 
-        [{ 'urls': 'stun:stun.l.google.com:19302' }],
-        'sdpSemantics': 'unified-plan'
-    }
-  });
+  let peer = new Peer();
+    // config: {
+    //   'iceServers': 
+    //     [{ 'urls': 'stun:stun.l.google.com:19302' }],
+    //     'sdpSemantics': 'unified-plan'
+    // }
   const peers = {};
 
   // On connect to peer server
