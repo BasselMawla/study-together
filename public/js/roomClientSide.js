@@ -42,14 +42,14 @@ $(document).ready(async function() {
       call.answer(myStream);
 
       // Make sure stream is received only once
-      let streamCount = 0;
+      //let streamCount = 0;
       const remoteVideo = document.createElement("video");
       call.on("stream", remoteStream => {
-        if(streamCount == 0) {
+        //if(streamCount == 0) {
           addVideoToGrid(remoteVideo, remoteStream);
           console.log("Added video after receiving call from " + call.peer);
-          streamCount++;
-        }
+          //streamCount++;
+        //}
       });
       call.on("close", () => {
         remoteVideo.parentElement.remove();
@@ -77,14 +77,14 @@ $(document).ready(async function() {
     const call = peer.call(peerId, stream);
 
     // Make sure stream is received only once
-    let streamCount = 0;
+    //let streamCount = 0;
     const remoteVideo = document.createElement("video");
     call.on("stream", remoteStream => {
-      if(streamCount == 0) {
+      //if(streamCount == 0) {
         addVideoToGrid(remoteVideo, remoteStream);
         console.log("Added video after calling peer " + peerId);
-        streamCount++;
-      }
+        //streamCount++;
+      //}
     });
     call.on("close", () => {
       remoteVideo.parentElement.remove();
