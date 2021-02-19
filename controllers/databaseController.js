@@ -59,12 +59,9 @@ exports.deleteRegisteredCourse = async (req, res) => {
   }
 }
 
-exports.insertChatMessage = async (roomId, userId, message) => {
+exports.insertChatMessage = async (roomId, userId, message, datetime) => {
   // TODO: Sanitize input
-  console.log("roomId: " + roomId);
-  console.log("userId: " + userId);
-  console.log("message: " + message);
-  if (roomId && userId && message) {
+  if (roomId && userId && message && datetime) {
     // Get codes by splitting roomID (eg. aub_cmps200)
     const institution_code = roomId.split("_")[0];
     const course_code = roomId.split("_")[1];
@@ -78,10 +75,8 @@ exports.insertChatMessage = async (roomId, userId, message) => {
           "FROM institution as inst, course " +
           "WHERE institution_code = ? AND course_code = ? " +
             "AND course.institution_id = inst.institution_id))",
-        [userId, message, new Date(), institution_code, course_code]
+        [userId, message, datetime, institution_code, course_code]
       );
-
-      console.log("Message inserted!");
     } catch (err) {
       throw err;
     }

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const session = require("express-session");
+const moment = require("moment");
 const databaseController = require("../controllers/databaseController");
 const institutionController = require("../controllers/institutionController");
 const departmentController = require("../controllers/departmentController");
@@ -126,8 +127,11 @@ router.get(
       user: req.session.user,
       institution_code: req.params.institution_code,
       department_code: res.locals.department_code,
-      course_code: req.params.course_code
+      course_code: req.params.course_code,
+      messagesList: res.locals.messagesList,
+      moment: moment
     });
+    // TODO: Fix naming (course_code => courseCode)
 })
 
 //router.get("/profile/:id", )

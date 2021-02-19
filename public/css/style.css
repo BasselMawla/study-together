@@ -126,3 +126,10 @@ video {
   border-top: none;
   margin-top: -1em;
 }
+
+.timestamp {
+  font-size: 0.7em;
+  color: blue;
+  margin: 0;
+  padding:0;
+}

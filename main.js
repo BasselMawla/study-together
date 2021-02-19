@@ -51,13 +51,12 @@ io.on("connection", socket => {
     });
   });
   socket.on("chat message", data => {
-    socket.to(data.roomId).emit("chat message", {
+    socket.to(data.roomId).broadcast.emit("chat message", {
       firstName: data.firstName,
       message: data.message,
     });
-     // TODO: Add timestamp to data
     require("./controllers/databaseController").insertChatMessage(
-      data.roomId, data.userId, data.message
+      data.roomId, data.userId, data.message, data.datetime
     );
   });
 });

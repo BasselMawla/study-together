@@ -17,6 +17,7 @@
   </script>
   <script src="/js/roomClientSide.js"></script>
   <script src="/js/chatSocket.js"></script>
+  <script src="/js/moment.min.js"></script>
 <% } else {
   console.log("User not logged in!");
 } %>
@@ -46,8 +47,27 @@
           Chat messages
         </div>
         <div class="card-body message-container">
-          <ul id="messages" class="vertical-scrollable"></ul>
-
+          <ul id="messages" class="vertical-scrollable">
+            <% if (locals.user && locals.messagesList) {
+              let list = locals.messagesList
+              let styleClass;
+              console.log(list);
+              list.forEach(row => {
+                if (row.user_id === locals.user.id) {
+                  styleClass = "my-message";
+                }
+                else {
+                  styleClass = "remote-message";
+                  
+                } %>
+                <li <%= styleClass %>>
+                  <span><%= row.first_name + ": " + row.text %></span><br>
+                  <% let time = moment.unix(row.time_sent).format("ddd DD/MM hh:mmA"); %>
+                  <span class="timestamp"><%= time %></span>
+                </li>
+              <% });
+            } %>
+          </ul>
         </div>
         <form id="form" action="">
           <input id="input" autocomplete="off" /><button>Send</button>

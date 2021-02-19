@@ -8,13 +8,9 @@ exports.getRoom = async (req, res, next) => {
 
   if (!req.session.user) {
     res.redirect("/login");
-  } else {
+  }
+  try {
     const userId = req.session.user.id;
-    /* Check that:
-    * The course exists in the institution
-    * The user registered in the course
-    */
-
     let result = await database.queryPromise(
       "SELECT RC.*" +
       "FROM registered_course as RC, course, institution as inst " +
@@ -28,7 +24,27 @@ exports.getRoom = async (req, res, next) => {
       res.redirect("/");
     }
     else {
+      // Get chat messages
+      res.locals.messagesList = await retrieveChat(result[0].course_id);
       next();
     }
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function retrieveChat(courseId) {
+  try {
+    let result = await database.queryPromise(
+      "SELECT user.first_name, CM.user_id, CM.text, CM.file_name, CM.time_sent " +
+      "FROM user, chat_message as CM " +
+      "WHERE user.user_id = CM.user_id AND CM.course_id = ? " +
+      "ORDER BY time_sent ASC",
+      [courseId]
+    );
+      console.log("courseRoomController time_sent: " + result[0].time_sent);
+    return result;
+  } catch (err) {
+    console.log(err);
   }
 }
