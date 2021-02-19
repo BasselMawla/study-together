@@ -53,8 +53,40 @@ exports.deleteRegisteredCourse = async (req, res) => {
         await exports.addCoursesToSession(req, userID);
         res.status(200).redirect("/delete-course");
       }
-    } catch (e) {
-      throw e;
+    } catch (err) {
+      throw err;
     }
+  }
+}
+
+exports.insertChatMessage = async (roomId, userId, message) => {
+  // TODO: Sanitize input
+  console.log("roomId: " + roomId);
+  console.log("userId: " + userId);
+  console.log("message: " + message);
+  if (roomId && userId && message) {
+    // Get codes by splitting roomID (eg. aub_cmps200)
+    const institution_code = roomId.split("_")[0];
+    const course_code = roomId.split("_")[1];
+    try {
+      // TODO: Use prepared statement for chat since it is used a lot
+      let result = await database.queryPromise(
+        "INSERT INTO chat_message" +
+        "(user_id, text, time_sent, course_id) " +
+        "VALUES (?, ?, ?, " +
+          "(SELECT course_id " + 
+          "FROM institution as inst, course " +
+          "WHERE institution_code = ? AND course_code = ? " +
+            "AND course.institution_id = inst.institution_id))",
+        [userId, message, new Date(), institution_code, course_code]
+      );
+
+      console.log("Message inserted!");
+    } catch (err) {
+      throw err;
+    }
+  }
+  else {
+    console.log("Missing data in insertChatMessage in databaseController");
   }
 }

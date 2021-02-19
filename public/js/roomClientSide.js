@@ -44,9 +44,6 @@ $(document).ready(async function() {
       // Make sure stream is received only once
       let streamCount = 0;
       const remoteVideo = document.createElement("video");
-      
-      // Make sure stream is received only once
-      let streamCount = 0;
       call.on("stream", remoteStream => {
         if(streamCount == 0) {
           addVideoToGrid(remoteVideo, remoteStream);
@@ -82,9 +79,6 @@ $(document).ready(async function() {
     // Make sure stream is received only once
     let streamCount = 0;
     const remoteVideo = document.createElement("video");
-
-    // Make sure stream is received only once
-    let streamCount = 0;
     call.on("stream", remoteStream => {
       if(streamCount == 0) {
         addVideoToGrid(remoteVideo, remoteStream);
@@ -100,7 +94,6 @@ $(document).ready(async function() {
   }
 
   function addVideoToGrid(video, stream) {
-    const div = document.createElement("div");
     const muteButton = document.createElement("button");
     muteButton.innerHTML = "Mute";
 

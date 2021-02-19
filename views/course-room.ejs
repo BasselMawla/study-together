@@ -11,7 +11,7 @@
     let user = {
       userId: "<%= locals.user.id %>",
       firstName: "<%= locals.user.first_name %>",
-      roomId: "<%= locals.institution_code + locals.course_code %>"
+      roomId: "<%= locals.institution_code + '_' + locals.course_code %>"
     }
     let socket = io();
   </script>
