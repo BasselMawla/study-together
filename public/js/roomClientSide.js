@@ -27,11 +27,13 @@ $(document).ready(async function() {
   const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
   myVideo.muted = true
-  try {
-    let myStream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true
-    });
+  //try {
+    //let myStream = await navigator.mediaDevices.getUserMedia({
+      //audio: false,
+      //video: true
+     // });
+    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    getUserMedia({video: true, audio: true}, function(myStream) {
     // Add own video to grid
     addVideoToGrid(myVideo, myStream);
     console.log("Added own video to grid");
@@ -42,14 +44,14 @@ $(document).ready(async function() {
       call.answer(myStream);
 
       // Make sure stream is received only once
-      //let streamCount = 0;
+      let streamCount = 0;
       const remoteVideo = document.createElement("video");
       call.on("stream", remoteStream => {
-        //if(streamCount == 0) {
+        if(streamCount == 0) {
           addVideoToGrid(remoteVideo, remoteStream);
           console.log("Added video after receiving call from " + call.peer);
-          //streamCount++;
-        //}
+          streamCount++;
+        }
       });
       call.on("close", () => {
         remoteVideo.parentElement.remove();
@@ -59,9 +61,9 @@ $(document).ready(async function() {
     socket.on("user-joined", peerId => {
       callPeer(peerId, myStream);
     });
-  } catch (err) {
+  }, function(err) {//catch (err) {
     console.log("Failed to get local stream", err);
-  }
+  });
 
   // Receive on "open"
   // peer.on("connection", function(conn) {
@@ -77,14 +79,14 @@ $(document).ready(async function() {
     const call = peer.call(peerId, stream);
 
     // Make sure stream is received only once
-    //let streamCount = 0;
+    let streamCount = 0;
     const remoteVideo = document.createElement("video");
     call.on("stream", remoteStream => {
-      //if(streamCount == 0) {
+      if(streamCount == 0) {
         addVideoToGrid(remoteVideo, remoteStream);
         console.log("Added video after calling peer " + peerId);
-        //streamCount++;
-      //}
+        streamCount++;
+      }
     });
     call.on("close", () => {
       remoteVideo.parentElement.remove();
