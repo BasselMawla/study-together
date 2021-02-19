@@ -92,7 +92,6 @@ Video Chat
 
 #video-grid {
   height: 600px;
-  overflow-y: scroll;
 
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
