@@ -122,3 +122,8 @@ video {
 .btn-question {
   display: none;
 }
+
+.modal-footer {
+  border-top: none;
+  margin-top: -1em;
+}

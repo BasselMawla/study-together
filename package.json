@@ -1,34 +1,32 @@
 {
-  "name": "FYP",
+  "name": "studytogether",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon main.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BasselAlMawla/StudyTogether.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BasselAlMawla/StudyTogether/issues"
+  },
+  "homepage": "https://github.com/BasselAlMawla/StudyTogether#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "busboy": "^0.3.1",
-    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
-    "express-fileupload": "^1.2.0",
-    "express-handlebars": "^5.2.0",
-    "handlebars": "^4.7.6",
-    "hbs": "^4.1.1",
+    "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.1",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.6",
-    "peerjs": "^1.3.1",
-    "socket.io": "^3.0.4"
-  },
-  "devDependencies": {
-    "@types/socket.io": "^2.1.12"
+    "nodemon": "^2.0.7",
+    "peer": "^0.6.1",
+    "socket.io": "^3.1.1"
   }
 }

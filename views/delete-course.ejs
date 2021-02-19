@@ -1,0 +1,46 @@
+<%- include("header"); %>
+
+<div class="container mt-4">
+  <div class="row">
+
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">My Courses</h2>
+
+          <% if(locals.user){ %>
+            <ul>
+            <% locals.user.courses.forEach(course => { %>
+
+                <li>
+                  <form action="auth/delete-course" method="POST">
+                    <div class="form-group">
+                      <h3>
+                        <label class="col-form-label" id="course-name-label">
+                          <%= course.course_code %>
+                        </label>
+                        <input type="hidden" name="courseToDelete" value="<%= course.course_code %>"></input>
+                        <button type="submit" class="btn btn-primary alert alert-danger">Delete</button>
+                      </h3>
+                    </div>
+                  </form>
+                </li>
+            <% }); %>
+            </ul>
+          <% } %>
+
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+</div>
+
+
+<%- include("footer"); %>
