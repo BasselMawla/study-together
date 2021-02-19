@@ -27,13 +27,11 @@ $(document).ready(async function() {
   const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
   myVideo.muted = true
-  //try {
-    //let myStream = await navigator.mediaDevices.getUserMedia({
-      //audio: false,
-      //video: true
-     // });
-    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    getUserMedia({video: true, audio: true}, function(myStream) {
+  try {
+    let myStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true
+      });
     // Add own video to grid
     addVideoToGrid(myVideo, myStream);
     console.log("Added own video to grid");
@@ -61,9 +59,9 @@ $(document).ready(async function() {
     socket.on("user-joined", peerId => {
       callPeer(peerId, myStream);
     });
-  }, function(err) {//catch (err) {
+  } catch (err) {
     console.log("Failed to get local stream", err);
-  });
+  }
 
   // Receive on "open"
   // peer.on("connection", function(conn) {
