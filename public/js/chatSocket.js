@@ -3,6 +3,16 @@ $(document).ready(function() {
   let form = $("#form");
   let input = $("#input");
 
+  // Load chat messages on entry
+  if (messagesList) {
+    messagesList.forEach(row => {
+      const isSelf = row.user_id === user.userId;
+      const datetime = moment.unix(row.time_sent).format("ddd DD/MM hh:mmA");
+      appendMessage(row.first_name, row.text, datetime, isSelf);
+    });
+  }
+
+  // Submitted chat message
   form.submit(event => {
     event.preventDefault();
     // Make sure message is not empty
@@ -25,6 +35,7 @@ $(document).ready(function() {
     }
   });
 
+  // Received chat messsage
   socket.on("chat message", data => {
     // Receive message to the server
     appendMessage(data.firstName, data.message. data.datetime, false);
@@ -39,7 +50,7 @@ $(document).ready(function() {
       styleClass = "remote-message";
     }
     
-    let li = $("<li></li>");//.text(firstName + ": " + message);
+    let li = $("<li></li>");
     li.addClass(styleClass);
 
     let text = $("<span></span>").text(firstName + ": " + message);

@@ -1,4 +1,3 @@
-const { render } = require("ejs");
 const express = require("express");
 const database = require("../js/modules/database");
 
@@ -26,6 +25,7 @@ exports.getRoom = async (req, res, next) => {
     else {
       // Get chat messages
       res.locals.messagesList = await retrieveChat(result[0].course_id);
+      console.log(res.locals.messagesList);
       next();
     }
   } catch (err) {
@@ -42,7 +42,6 @@ async function retrieveChat(courseId) {
       "ORDER BY time_sent ASC",
       [courseId]
     );
-      console.log("courseRoomController time_sent: " + result[0].time_sent);
     return result;
   } catch (err) {
     console.log(err);
