@@ -56,8 +56,9 @@ $(document).ready(async function() {
       });
     });
 
-    socket.on("user-joined", peerId => {
+    socket.on("user-joined", (peerId, firstName) => {
       callPeer(peerId, myStream);
+      $("clients").append("<li></li>").text(firstName);
     });
   } catch (err) {
     console.log("Failed to get local stream", err);

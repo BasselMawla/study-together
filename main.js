@@ -42,9 +42,13 @@ app.use("/auth", require("./routes/authRoutes"));
 io.on("connection", socket => {
   socket.on("join-room", data => {
     const peerId = data.peerId;
+    const firstName = data.firstName;
+    socket.nickname = firstName;
 
     socket.join(data.roomId);
-    socket.to(data.roomId).broadcast.emit("user-joined", peerId);
+    socket.to(data.roomId).broadcast.emit("user-joined", peerId, firstName);
+    console.log(io.in(data.roomId).clients);
+    //socket.emit("client-list", socket.clients(data.roomId));
 
     socket.on("disconnect", () => {
       socket.to(data.roomId).broadcast.emit("user-disconnected", peerId);

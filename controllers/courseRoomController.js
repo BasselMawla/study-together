@@ -25,7 +25,6 @@ exports.getRoom = async (req, res, next) => {
     else {
       // Get chat messages
       res.locals.messagesList = await retrieveChat(result[0].course_id);
-      console.log(res.locals.messagesList);
       next();
     }
   } catch (err) {
