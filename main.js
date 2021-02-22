@@ -47,7 +47,9 @@ io.on("connection", socket => {
 
     socket.join(data.roomId);
     socket.to(data.roomId).broadcast.emit("user-joined", peerId, firstName);
-    console.log(io.in(data.roomId).clients);
+    var clients = io.sockets.adapter.rooms[data.roomId]
+    console.log("clients:");
+    console.log(clients);
     //socket.emit("client-list", socket.clients(data.roomId));
 
     socket.on("disconnect", () => {
