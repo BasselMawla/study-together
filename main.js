@@ -46,11 +46,7 @@ io.on("connection", socket => {
     socket.nickname = firstName;
 
     socket.join(data.roomId);
-    socket.to(data.roomId).broadcast.emit("user-joined", peerId, firstName);
-    var clients = io.sockets.adapter.rooms[data.roomId]
-    console.log("clients:");
-    console.log(clients);
-    //socket.emit("client-list", socket.clients(data.roomId));
+    socket.to(data.roomId).broadcast.emit("user-joined", peerId);
 
     socket.on("disconnect", () => {
       socket.to(data.roomId).broadcast.emit("user-disconnected", peerId);
