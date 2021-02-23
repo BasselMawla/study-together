@@ -8,21 +8,21 @@ let dbPool = mysql.createPool({
   database: process.env.DATABASE
 });
 
-dbPool.on('acquire', function (connection) {
+dbPool.on("acquire", function (connection) {
   //console.log('Connection %d acquired', connection.threadId);
 });
 
-dbPool.on('release', function (connection) {
+dbPool.on("release", function (connection) {
   //console.log('Connection %d released\n', connection.threadId);
 });
 
-exports.queryPromise = (queryString, queryParams) => { 
+exports.queryPromise = (queryString, queryParams) => {
   return new Promise((resolve, reject) => {
     dbPool.query(queryString, queryParams, (err, result) => {
       if (err) {
         reject(err);
-      } 
+      }
       resolve(result);
-    })
-  })
-}
+    });
+  });
+};

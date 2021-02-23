@@ -8,14 +8,14 @@ exports.getCourses = async (req, res, next) => {
   try {
     let result = await database.queryPromise(
       "SELECT course.course_name, course.course_code, dept.department_name " +
-      "FROM (institution as inst INNER JOIN department as dept " +
-      "ON inst.institution_id = dept.institution_id) " +
-      "INNER JOIN course ON dept.department_id = course.department_id " +
-      "WHERE inst.institution_code = ? AND dept.department_code = ?",
+        "FROM (institution as inst INNER JOIN department as dept " +
+        "ON inst.institution_id = dept.institution_id) " +
+        "INNER JOIN course ON dept.department_id = course.department_id " +
+        "WHERE inst.institution_code = ? AND dept.department_code = ?",
       [institution_code, department_code]
     );
 
-    if(!result[0]) {
+    if (!result[0]) {
       res.redirect("/" + institution_code);
     } else {
       // Save department info
@@ -37,4 +37,4 @@ exports.getCourses = async (req, res, next) => {
   } catch (err) {
     throw err;
   }
-}
+};

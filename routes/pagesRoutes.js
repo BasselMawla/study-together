@@ -13,30 +13,34 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/register", databaseController.getInstitutions, async (req, res) => {
-  if(req.session.user) {
-    res.redirect("/");
-  } else if(res.locals.institutions) {
-    if(!req.session.isRefreshed) {
-      req.session.isRefreshed = true;
-      res.render("register", {
-        institutions: res.locals.institutions,
-        messageFail: req.session.messageFail
-      });
+router.get(
+  "/register",
+  databaseController.getInstitutions,
+  async (req, res) => {
+    if (req.session.user) {
+      res.redirect("/");
+    } else if (res.locals.institutions) {
+      if (!req.session.isRefreshed) {
+        req.session.isRefreshed = true;
+        res.render("register", {
+          institutions: res.locals.institutions,
+          messageFail: req.session.messageFail
+        });
+      } else {
+        res.render("register", {
+          institutions: res.locals.institutions
+        });
+      }
     } else {
-      res.render("register", {
-        institutions: res.locals.institutions
-      });
+      res.status(500).redirect("/");
     }
-  } else {
-    res.status(500).redirect("/");
   }
-})
+);
 
-router.get("/login", async(req, res) => {
-  if(req.session.user) {
+router.get("/login", async (req, res) => {
+  if (req.session.user) {
     res.redirect("/");
-  } else if(!req.session.isRefreshed) {
+  } else if (!req.session.isRefreshed) {
     req.session.isRefreshed = true;
     res.render("login", {
       messageFail: req.session.messageFail
@@ -54,40 +58,43 @@ router.get("/logout", (req, res) => {
   });
 
   res.status(200).redirect("/");
-})
+});
 
 router.get("/profile", (req, res) => {
-  if(!req.session.user) {
+  if (!req.session.user) {
     res.redirect("/login");
-  }  else {
+  } else {
     res.render("profile", {
       user: req.session.user
     });
   }
-})
+});
 
-router.get("/add-course", institutionController.getDepartmentsAndCourses, (req, res) => {
-  if(!req.session.isRefreshed) {
-    req.session.isRefreshed = true;
-    res.render("add-course", {
-      user: req.session.user,
-      departmentsAndCourses: res.locals.departmentsAndCourses,
-      redirectMessage: req.session.redirectMessage,
-      redirectMessageType: req.session.redirectMessageType
-    });
-  } else {
-    res.render("add-course", {
-      user: req.session.user,
-      departmentsAndCourses: res.locals.departmentsAndCourses
-    });
+router.get(
+  "/add-course",
+  institutionController.getDepartmentsAndCourses,
+  (req, res) => {
+    if (!req.session.isRefreshed) {
+      req.session.isRefreshed = true;
+      res.render("add-course", {
+        user: req.session.user,
+        departmentsAndCourses: res.locals.departmentsAndCourses,
+        redirectMessage: req.session.redirectMessage,
+        redirectMessageType: req.session.redirectMessageType
+      });
+    } else {
+      res.render("add-course", {
+        user: req.session.user,
+        departmentsAndCourses: res.locals.departmentsAndCourses
+      });
+    }
   }
-})
+);
 
 router.get("/delete-course", (req, res) => {
-  if(!req.session.user){
+  if (!req.session.user) {
     res.redirect("/login");
-  }
-  else if(!req.session.isRefreshed) {
+  } else if (!req.session.isRefreshed) {
     req.session.isRefreshed = true;
     res.render("delete-course", {
       user: req.session.user,
@@ -99,30 +106,39 @@ router.get("/delete-course", (req, res) => {
       user: req.session.user
     });
   }
-})
+});
 
-router.get("/:institution_code", institutionController.getDepartments, (req, res) => {
+router.get(
+  "/:institution_code",
+  institutionController.getDepartments,
+  (req, res) => {
     res.render("institution", {
       user: req.session.user,
       institution_name: res.locals.institution_name,
       instition_code: res.locals.institution_code,
       departments: res.locals.departments
     });
-})
+  }
+);
 
-router.get("/:institution_code/:department_code", departmentController.getCourses, (req, res) => {
-  res.render("department", {
-    user: req.session.user,
-    institution_code: req.params.institution_code,
-    department_name: res.locals.department_name,
-    department_code: res.locals.department_code,
-    courses: res.locals.courses
-  });
-})
+router.get(
+  "/:institution_code/:department_code",
+  departmentController.getCourses,
+  (req, res) => {
+    res.render("department", {
+      user: req.session.user,
+      institution_code: req.params.institution_code,
+      department_name: res.locals.department_name,
+      department_code: res.locals.department_code,
+      courses: res.locals.courses
+    });
+  }
+);
 
 router.get(
   "/:institution_code/:department_code/:course_code",
-  courseRoomController.getRoom, (req, res) => {
+  courseRoomController.getRoom,
+  (req, res) => {
     res.render("course-room", {
       user: req.session.user,
       institution_code: req.params.institution_code,
@@ -132,7 +148,8 @@ router.get(
       moment: moment
     });
     // TODO: Fix naming (course_code => courseCode)
-})
+  }
+);
 
 //router.get("/profile/:id", )
 

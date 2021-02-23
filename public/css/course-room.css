@@ -1,6 +1,8 @@
-body { margin: 0;
+body {
+  margin: 0;
   padding-bottom: 3rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
 }
 
 #form {
@@ -33,12 +35,12 @@ body { margin: 0;
   outline: none;
   color: #fff;
 }
-.video-card{
-  height:20em;
+.video-card {
+  height: 20em;
 }
-.message-container{
-  height:20em;
-  padding:0;
+.message-container {
+  height: 20em;
+  padding: 0;
   overflow-y: scroll;
 }
 #messages {

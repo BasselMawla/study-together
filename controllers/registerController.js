@@ -1,6 +1,6 @@
 const express = require("express");
 const session = require("express-session");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
 const database = require("../js/modules/database");
 
@@ -16,44 +16,44 @@ exports.register = async (req, res) => {
 
   const textInputsIsValid = isTextInputsValid(
     req,
-    first_name, 
-    last_name, 
-    email, 
-    password, 
-    password_confirmation);
+    first_name,
+    last_name,
+    email,
+    password,
+    password_confirmation
+  );
 
-  if(!textInputsIsValid) {
+  if (!textInputsIsValid) {
     failWithMessage(req, res);
   } else if (!(await isEmailWithinDomain(req, email, institution))) {
     failWithMessage(req, res);
   } else if (!(await isEmailDuplicate(req, email))) {
     failWithMessage(req, res);
-  } else { // Success
-    registerUser(
-      req,
-      res,
-      first_name,
-      last_name,
-      email,
-      password,
-      institution);
+  } else {
+    // Success
+    registerUser(req, res, first_name, last_name, email, password, institution);
   }
-}
+};
 
-function isTextInputsValid(req, first_name, last_name, email, password, password_confirmation) {
+function isTextInputsValid(
+  req,
+  first_name,
+  last_name,
+  email,
+  password,
+  password_confirmation
+) {
   if (!first_name || !last_name) {
     req.session.messageFail = "Please enter a valid name!";
     return false;
-  }
-  else if (!email) { // TODO: Validate email
+  } else if (!email) {
+    // TODO: Validate email
     req.session.messageFail = "Please enter a valid email!";
     return false;
-  }
-  else if (!password) {
+  } else if (!password) {
     req.session.messageFail = "Please enter a password!";
     return false;
-  }
-  else if (password !== password_confirmation) {
+  } else if (password !== password_confirmation) {
     req.session.messageFail = "Passwords do not match!";
     return false;
   }
@@ -64,19 +64,19 @@ async function isEmailWithinDomain(req, email, institution) {
   try {
     let result = await database.queryPromise(
       "SELECT institution_code, email_domain " +
-      "FROM institution, institution_email_domain as domain " +
-      "WHERE institution_code = ? AND institution.institution_id = domain.institution_id",
-      [institution]);
-      
+        "FROM institution, institution_email_domain as domain " +
+        "WHERE institution_code = ? AND institution.institution_id = domain.institution_id",
+      [institution]
+    );
+
     if (!result) {
       req.session.messageFail = "Institution not found!";
       return false;
-    }
-    else if (!isInDomain(email, result)) {
-      req.session.messageFail = "You need an email from your selected institution.";
+    } else if (!isInDomain(email, result)) {
+      req.session.messageFail =
+        "You need an email from your selected institution.";
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   } catch (err) {
@@ -87,14 +87,14 @@ async function isEmailWithinDomain(req, email, institution) {
 async function isEmailDuplicate(req, email) {
   try {
     let result = await database.queryPromise(
-      "SELECT email FROM user WHERE email = ?", 
-      email);
+      "SELECT email FROM user WHERE email = ?",
+      email
+    );
 
     if (result[0]) {
       req.session.messageFail = "Email already exists!";
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   } catch (err) {
@@ -103,9 +103,9 @@ async function isEmailDuplicate(req, email) {
 }
 
 function isInDomain(email, result) {
-  const emailDomain = email.substr(email.indexOf("@")+1); // Everything after @
+  const emailDomain = email.substr(email.indexOf("@") + 1); // Everything after @
 
-  for(var i=0; i<result.length; i++) {
+  for (var i = 0; i < result.length; i++) {
     const institutionDomain = result[i].email_domain;
     const emailDomainSubstring = emailDomain.substr(-institutionDomain.length);
     if (emailDomainSubstring === institutionDomain) {
@@ -115,13 +115,22 @@ function isInDomain(email, result) {
   return false;
 }
 
-async function registerUser(req, res, first_name, last_name, email, password, institution) {
+async function registerUser(
+  req,
+  res,
+  first_name,
+  last_name,
+  email,
+  password,
+  institution
+) {
   let hashedPassword = await bcrypt.hash(password, 8);
 
   try {
     let result = await database.queryPromise(
       "SELECT institution_id FROM institution WHERE institution_code = ?",
-      institution);
+      institution
+    );
 
     if (!result) {
       req.session.messageFail = "Institution not found!";
@@ -131,8 +140,9 @@ async function registerUser(req, res, first_name, last_name, email, password, in
     const institution_id = result[0].institution_id;
     let insertResult = await database.queryPromise(
       "INSERT INTO user (first_name, last_name, email, password, institution_id)" +
-      "VALUES (?, ?, ?, ?, ?)",
-      [first_name, last_name, email, hashedPassword, institution_id]);
+        "VALUES (?, ?, ?, ?, ?)",
+      [first_name, last_name, email, hashedPassword, institution_id]
+    );
 
     if (insertResult) {
       res.redirect("../login");

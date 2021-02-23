@@ -7,14 +7,14 @@ exports.getDepartments = async (req, res, next) => {
   try {
     let result = await database.queryPromise(
       "SELECT inst.institution_name, dept.department_id, " +
-      "dept.department_name, dept.department_code " +
-      "FROM institution as inst INNER JOIN department as dept " +
-      "ON inst.institution_id = dept.institution_id " +
-      "WHERE inst.institution_code = ?",
+        "dept.department_name, dept.department_code " +
+        "FROM institution as inst INNER JOIN department as dept " +
+        "ON inst.institution_id = dept.institution_id " +
+        "WHERE inst.institution_code = ?",
       institution_code
     );
 
-    if(!result[0]) {
+    if (!result[0]) {
       res.redirect("/");
     } else {
       // Save the institution info
@@ -37,10 +37,10 @@ exports.getDepartments = async (req, res, next) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 exports.getDepartmentsAndCourses = async (req, res, next) => {
-  if(!req.session.user) {
+  if (!req.session.user) {
     console.log("User not logged in.");
     res.redirect("/login");
     return;
@@ -50,36 +50,39 @@ exports.getDepartmentsAndCourses = async (req, res, next) => {
   try {
     let result = await database.queryPromise(
       "SELECT dept.department_code, dept.department_name, course.course_code, course.course_name " +
-      "FROM (institution as inst INNER JOIN department as dept " +
-      "ON inst.institution_id = dept.institution_id) " +
-      "INNER JOIN course ON dept.department_id = course.department_id " +
-      "WHERE inst.institution_code = ?",
+        "FROM (institution as inst INNER JOIN department as dept " +
+        "ON inst.institution_id = dept.institution_id) " +
+        "INNER JOIN course ON dept.department_id = course.department_id " +
+        "WHERE inst.institution_code = ?",
       institution_code
     );
 
-    if(!result[0]) {
+    if (!result[0]) {
       console.log("No courses found!");
       res.redirect("/" + institution_code);
     } else {
       let departmentsAndCourses = [];
 
       result.forEach((row, i) => {
-        const foundIndex = departmentsAndCourses.findIndex(dept => dept.department_code === row.department_code);
-        if(foundIndex === -1) {
-          const coursesArray = [{
-            course_code: row.course_code,
-            course_name: row.course_name
-          }]
+        const foundIndex = departmentsAndCourses.findIndex(
+          (dept) => dept.department_code === row.department_code
+        );
+        if (foundIndex === -1) {
+          const coursesArray = [
+            {
+              course_code: row.course_code,
+              course_name: row.course_name
+            }
+          ];
           departmentsAndCourses.push({
             department_code: row.department_code,
             department_name: row.department_name,
             courses: coursesArray
           });
-        }
-        else {
+        } else {
           departmentsAndCourses[foundIndex].courses.push({
-           course_code: row.course_code,
-           course_name: row.course_name
+            course_code: row.course_code,
+            course_name: row.course_name
           });
         }
       });
@@ -90,4 +93,4 @@ exports.getDepartmentsAndCourses = async (req, res, next) => {
   } catch (err) {
     throw err;
   }
-}
+};

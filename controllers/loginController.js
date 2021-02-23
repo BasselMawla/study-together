@@ -8,33 +8,33 @@ const database = require("../js/modules/database");
 const databaseController = require("../controllers/databaseController");
 
 exports.login = async (req, res) => {
-  const {
-    email,
-    password
-  } = req.body;
+  const { email, password } = req.body;
 
-  if(!isTextInputsValid(req, email, password)) {
+  if (!isTextInputsValid(req, email, password)) {
     failWithMessage(req, res);
-  } else if(!(await isValidCredentials(req, email, password))) {
+  } else if (!(await isValidCredentials(req, email, password))) {
     failWithMessage(req, res);
-  } else { // Success
+  } else {
+    // Success
     await databaseController.addCoursesToSession(req, req.session.user.id);
     res.status(200).redirect("/");
   }
-}
+};
 
 async function isValidCredentials(req, email, password) {
   try {
     let result = await database.queryPromise(
       "SELECT user.*, institution_name, institution_code " +
-      "FROM user, institution " +
-      "WHERE user.email = ? AND institution.institution_id = user.institution_id",
-      email);
+        "FROM user, institution " +
+        "WHERE user.email = ? AND institution.institution_id = user.institution_id",
+      email
+    );
 
-    if(!result[0] || !(await bcrypt.compare(password, result[0].password))) {
+    if (!result[0] || !(await bcrypt.compare(password, result[0].password))) {
       req.session.messageFail = "Incorrect email or password";
       return false;
-    } else { // Success
+    } else {
+      // Success
       // Add user info to session
       req.session.user = {
         id: result[0].user_id,
@@ -53,13 +53,12 @@ async function isValidCredentials(req, email, password) {
   }
 }
 
-
 function isTextInputsValid(req, email, password) {
-  if (!email) { // TODO: Validate email
+  if (!email) {
+    // TODO: Validate email
     req.session.messageFail = "Please enter a valid email!";
     return false;
-  }
-  else if (!password) {
+  } else if (!password) {
     req.session.messageFail = "Please enter a password!";
     return false;
   }
