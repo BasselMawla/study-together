@@ -43,7 +43,7 @@ async function isValidCredentials(req, email, password) {
         email: result[0].email,
         institution: result[0].institution_name,
         institution_code: result[0].institution_code,
-        profile_picture: result[0].profile_picture,
+        profile_picture: result[0].profile_picture
       };
 
       return true;

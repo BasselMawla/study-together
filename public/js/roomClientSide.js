@@ -14,7 +14,7 @@ $(document).ready(async function () {
     socket.emit("join-room", {
       peerId: peerId,
       firstName: user.firstName,
-      roomId: user.roomId,
+      roomId: user.roomId
     });
   });
 
@@ -30,7 +30,7 @@ $(document).ready(async function () {
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
-      video: true,
+      video: true
     });
     // Add own video to grid
     addVideoToGrid(myVideo, myStream);

@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
     last_name,
     email,
     password,
-    password_confirmation,
+    password_confirmation
   } = req.body;
 
   const textInputsIsValid = isTextInputsValid(

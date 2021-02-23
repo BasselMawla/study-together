@@ -19,7 +19,7 @@ const io = require("socket.io")(http);
 // Parse URL-encoded bodies (req.body) (as sent by HTML forms)
 app.use(
   express.urlencoded({
-    extended: false,
+    extended: false
   })
 );
 
@@ -32,8 +32,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000,
-    },
+      maxAge: Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000
+    }
   })
 );
 
@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
   socket.on("chat message", (data) => {
     socket.to(data.roomId).broadcast.emit("chat message", {
       firstName: data.firstName,
-      message: data.message,
+      message: data.message
     });
     require("./controllers/databaseController").insertChatMessage(
       data.roomId,

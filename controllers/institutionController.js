@@ -27,7 +27,7 @@ exports.getDepartments = async (req, res, next) => {
         let dept = {
           department_id: resultDept.department_id,
           department_name: resultDept.department_name,
-          department_code: resultDept.department_code,
+          department_code: resultDept.department_code
         };
         departments[i] = dept;
       });
@@ -71,18 +71,18 @@ exports.getDepartmentsAndCourses = async (req, res, next) => {
           const coursesArray = [
             {
               course_code: row.course_code,
-              course_name: row.course_name,
-            },
+              course_name: row.course_name
+            }
           ];
           departmentsAndCourses.push({
             department_code: row.department_code,
             department_name: row.department_name,
-            courses: coursesArray,
+            courses: coursesArray
           });
         } else {
           departmentsAndCourses[foundIndex].courses.push({
             course_code: row.course_code,
-            course_name: row.course_name,
+            course_name: row.course_name
           });
         }
       });

@@ -18,7 +18,7 @@ const publicDirectory = path.join(__dirname, "./public");
 app.use(express.static(publicDirectory));
 
 dotenv.config({
-  path: "config.env",
+  path: "config.env"
 });
 database.connectToDatabase();
 
@@ -27,7 +27,7 @@ database.connectToDatabase();
 // Parse URL-encoded bodies (req.body) (as sent by HTML forms)
 app.use(
   express.urlencoded({
-    extended: false,
+    extended: false
   })
 );
 //Parse JSON bodies (as send from forms) -> comes with json formats

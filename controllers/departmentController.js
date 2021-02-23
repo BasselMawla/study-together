@@ -27,7 +27,7 @@ exports.getCourses = async (req, res, next) => {
       result.forEach((resultCourse, i) => {
         let course = {
           course_name: resultCourse.course_name,
-          course_code: resultCourse.course_code,
+          course_code: resultCourse.course_code
         };
         courses[i] = course;
       });

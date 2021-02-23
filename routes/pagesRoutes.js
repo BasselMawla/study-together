@@ -9,7 +9,7 @@ const courseRoomController = require("../controllers/courseRoomController");
 
 router.get("/", async (req, res) => {
   res.render("index", {
-    user: req.session.user,
+    user: req.session.user
   });
 });
 
@@ -24,11 +24,11 @@ router.get(
         req.session.isRefreshed = true;
         res.render("register", {
           institutions: res.locals.institutions,
-          messageFail: req.session.messageFail,
+          messageFail: req.session.messageFail
         });
       } else {
         res.render("register", {
-          institutions: res.locals.institutions,
+          institutions: res.locals.institutions
         });
       }
     } else {
@@ -43,7 +43,7 @@ router.get("/login", async (req, res) => {
   } else if (!req.session.isRefreshed) {
     req.session.isRefreshed = true;
     res.render("login", {
-      messageFail: req.session.messageFail,
+      messageFail: req.session.messageFail
     });
   } else {
     res.render("login");
@@ -65,7 +65,7 @@ router.get("/profile", (req, res) => {
     res.redirect("/login");
   } else {
     res.render("profile", {
-      user: req.session.user,
+      user: req.session.user
     });
   }
 });
@@ -80,12 +80,12 @@ router.get(
         user: req.session.user,
         departmentsAndCourses: res.locals.departmentsAndCourses,
         redirectMessage: req.session.redirectMessage,
-        redirectMessageType: req.session.redirectMessageType,
+        redirectMessageType: req.session.redirectMessageType
       });
     } else {
       res.render("add-course", {
         user: req.session.user,
-        departmentsAndCourses: res.locals.departmentsAndCourses,
+        departmentsAndCourses: res.locals.departmentsAndCourses
       });
     }
   }
@@ -99,11 +99,11 @@ router.get("/delete-course", (req, res) => {
     res.render("delete-course", {
       user: req.session.user,
       redirectMessage: req.session.redirectMessage,
-      redirectMessageType: req.session.redirectMessageType,
+      redirectMessageType: req.session.redirectMessageType
     });
   } else {
     res.render("delete-course", {
-      user: req.session.user,
+      user: req.session.user
     });
   }
 });
@@ -116,7 +116,7 @@ router.get(
       user: req.session.user,
       institution_name: res.locals.institution_name,
       instition_code: res.locals.institution_code,
-      departments: res.locals.departments,
+      departments: res.locals.departments
     });
   }
 );
@@ -130,7 +130,7 @@ router.get(
       institution_code: req.params.institution_code,
       department_name: res.locals.department_name,
       department_code: res.locals.department_code,
-      courses: res.locals.courses,
+      courses: res.locals.courses
     });
   }
 );
@@ -145,7 +145,7 @@ router.get(
       department_code: res.locals.department_code,
       course_code: req.params.course_code,
       messagesList: res.locals.messagesList,
-      moment: moment,
+      moment: moment
     });
     // TODO: Fix naming (course_code => courseCode)
   }

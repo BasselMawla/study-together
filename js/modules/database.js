@@ -5,7 +5,7 @@ let dbPool = mysql.createPool({
   port: process.env.DATABASE_PORT,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE,
+  database: process.env.DATABASE
 });
 
 dbPool.on("acquire", function (connection) {

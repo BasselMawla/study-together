@@ -29,7 +29,7 @@ $(document).ready(function () {
         firstName: user.firstName,
         message: input.val(),
         roomId: user.roomId,
-        datetime: now,
+        datetime: now
       });
       input.val("");
     }
