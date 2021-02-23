@@ -1,24 +1,24 @@
-$(document).ready(async function() {
+$(document).ready(async function () {
   // Connect to Peer server
   let peer = new Peer();
-    // config: {
-    //   'iceServers':
-    //     [{ 'urls': 'stun:stun.l.google.com:19302' }],
-    //     'sdpSemantics': 'unified-plan'
-    // }
+  // config: {
+  //   'iceServers':
+  //     [{ 'urls': 'stun:stun.l.google.com:19302' }],
+  //     'sdpSemantics': 'unified-plan'
+  // }
   const peers = {};
 
   // On connect to peer server
-  peer.on("open", function(peerId) {
-    console.log("my peerID is "+ peerId);
+  peer.on("open", function (peerId) {
+    console.log("my peerID is " + peerId);
     socket.emit("join-room", {
       peerId: peerId,
       firstName: user.firstName,
-      roomId: user.roomId
+      roomId: user.roomId,
     });
   });
 
-  socket.on("user-disconnected", peerId => {
+  socket.on("user-disconnected", (peerId) => {
     if (peers[peerId]) {
       peers[peerId].close();
     }
@@ -26,26 +26,26 @@ $(document).ready(async function() {
 
   const videoGrid = document.getElementById("video-grid");
   const myVideo = document.createElement("video");
-  myVideo.muted = true
+  myVideo.muted = true;
   try {
     let myStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
-      video: true
-      });
+      video: true,
+    });
     // Add own video to grid
     addVideoToGrid(myVideo, myStream);
     console.log("Added own video to grid");
 
     // Receive calls
-    peer.on("call", call => {
+    peer.on("call", (call) => {
       console.log("Receiving call from " + call.peer);
       call.answer(myStream);
 
       // Make sure stream is received only once
       let streamCount = 0;
       const remoteVideo = document.createElement("video");
-      call.on("stream", remoteStream => {
-        if(streamCount == 0) {
+      call.on("stream", (remoteStream) => {
+        if (streamCount == 0) {
           addVideoToGrid(remoteVideo, remoteStream);
           console.log("Added video after receiving call from " + call.peer);
           streamCount++;
@@ -80,8 +80,8 @@ $(document).ready(async function() {
     // Make sure stream is received only once
     let streamCount = 0;
     const remoteVideo = document.createElement("video");
-    call.on("stream", remoteStream => {
-      if(streamCount == 0) {
+    call.on("stream", (remoteStream) => {
+      if (streamCount == 0) {
         addVideoToGrid(remoteVideo, remoteStream);
         console.log("Added video after calling peer " + peerId);
         streamCount++;
@@ -101,20 +101,19 @@ $(document).ready(async function() {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
       video.play();
-    })
+    });
     muteButton.addEventListener("click", () => {
-      if(video.muted){
+      if (video.muted) {
         video.muted = false;
         console.log("Muted");
         muteButton.innerHTML = "Mute";
-      }
-      else{
+      } else {
         video.muted = true;
         console.log("Unmuted");
         muteButton.innerHTML = "Unmute";
       }
     });
-    
+
     muteButton.innerHTML = "Mute";
     const div = document.createElement("div");
     div.append(video);
@@ -128,7 +127,7 @@ $(document).ready(async function() {
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
       video.play();
-    })
+    });
 
     div.append(video);
     div.append(muteButton);

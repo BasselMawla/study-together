@@ -19,19 +19,23 @@ const io = require("socket.io")(http);
 // Parse URL-encoded bodies (req.body) (as sent by HTML forms)
 app.use(
   express.urlencoded({
-    extended: false
+    extended: false,
   })
 );
 
 //Parse JSON bodies (as send from forms) -> comes with json formats
 app.use(express.json());
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000 }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000,
+    },
+  })
+);
 
 app.set("view engine", "ejs");
 
@@ -39,8 +43,8 @@ app.use("/", require("./routes/pagesRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 
 // Socket io code
-io.on("connection", socket => {
-  socket.on("join-room", data => {
+io.on("connection", (socket) => {
+  socket.on("join-room", (data) => {
     const peerId = data.peerId;
     const firstName = data.firstName;
     socket.nickname = firstName;
@@ -53,13 +57,16 @@ io.on("connection", socket => {
       socket.to(data.roomId).broadcast.emit("user-disconnected", peerId);
     });
   });
-  socket.on("chat message", data => {
+  socket.on("chat message", (data) => {
     socket.to(data.roomId).broadcast.emit("chat message", {
       firstName: data.firstName,
       message: data.message,
     });
     require("./controllers/databaseController").insertChatMessage(
-      data.roomId, data.userId, data.message, data.datetime
+      data.roomId,
+      data.userId,
+      data.message,
+      data.datetime
     );
   });
 });
