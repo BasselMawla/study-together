@@ -1,4 +1,6 @@
 $(document).ready(async function () {
+  const clientsUl = document.getElementById("clients");
+
   // Connect to Peer server
   let peer = new Peer();
   // config: {
@@ -17,6 +19,12 @@ $(document).ready(async function () {
       roomId: user.roomId
     });
     console.log("roomId: " + user.roomId);
+  });
+
+  // Add users to DOM
+  socket.on("room-users", (roomUsers) => {
+    console.log("in room-users");
+    displayUserList(roomUsers);
   });
 
   socket.on("user-disconnected", (peerId) => {
@@ -132,5 +140,15 @@ $(document).ready(async function () {
     div.append(video);
     div.append(muteButton);
     videoGrid.append(div);
+  }
+
+  function displayUserList(roomUsers) {
+    console.log("in");
+    clientsUl.innerHTML = "";
+    roomUsers.forEach((user) => {
+      const li = document.createElement("li");
+      li.innerText = user.firstName;
+      clientsUl.appendChild(li);
+    });
   }
 });

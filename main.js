@@ -59,6 +59,12 @@ io.on("connection", (socket) => {
     roomsUtil.joinRoom(user, roomId);
     socket.join(roomId);
     socket.to(roomId).broadcast.emit("user-joined", user.peerId);
+
+    const roomUsers = roomsUtil.getRoomUsers(roomId);
+    if (roomUsers) {
+      console.log("in here");
+      io.to(roomId).emit("room-users", roomUsers);
+    }
   });
   socket.on("chat message", (data) => {
     socket.to(data.roomId).broadcast.emit("chat message", {

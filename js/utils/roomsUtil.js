@@ -34,7 +34,6 @@ exports.joinRoom = (newUser, roomId) => {
     if (!room.users.find((user) => user.peerId === newUser.peerId)) {
       room.users.push(newUser);
     }
-    console.log("joinRoom", rooms);
   }
 };
 
@@ -44,9 +43,16 @@ exports.leaveRoom = (roomId, socketId) => {
   if (room) {
     const index = room.users.findIndex((user) => user.socketId === socketId);
     if (index !== -1) {
-      return room.users.splice(index, 1)[0].peerId;
+      const disconnectedUser = room.users.splice(index, 1)[0];
+      return disconnectedUser.peerId;
     }
   }
+};
+
+// Get room users
+exports.getRoomUsers = (roomId) => {
+  const room = rooms.find((room) => (room.roomId = roomId));
+  return room.users;
 };
 
 function getRoom(roomId) {
