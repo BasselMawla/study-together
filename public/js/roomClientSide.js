@@ -23,7 +23,6 @@ $(document).ready(async function () {
 
   // Add users to DOM
   socket.on("room-users", (roomUsers) => {
-    console.log("in room-users");
     displayUserList(roomUsers);
   });
 

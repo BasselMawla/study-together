@@ -60,9 +60,9 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     socket.to(roomId).broadcast.emit("user-joined", user.peerId);
 
+    // Send new list of users
     const roomUsers = roomsUtil.getRoomUsers(roomId);
     if (roomUsers) {
-      console.log("in here");
       io.to(roomId).emit("room-users", roomUsers);
     }
   });
@@ -87,6 +87,12 @@ io.on("connection", (socket) => {
       if (index !== 0) {
         const peerId = roomsUtil.leaveRoom(roomId, socket.id);
         socket.to(roomId).broadcast.emit("user-disconnected", peerId);
+
+        // Send new list of users
+        const roomUsers = roomsUtil.getRoomUsers(roomId);
+        if (roomUsers) {
+          io.to(roomId).emit("room-users", roomUsers);
+        }
       }
       index++;
     });
