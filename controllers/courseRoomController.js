@@ -1,5 +1,5 @@
 const express = require("express");
-const database = require("../js/modules/database");
+const database = require("../js/utils/database");
 
 exports.getRoom = async (req, res, next) => {
   const institutionCode = req.params.institution_code;

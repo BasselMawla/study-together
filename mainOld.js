@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").Server(app);
 const path = require("path");
 const dotenv = require("dotenv");
-const database = require("./js/modules/database");
+const database = require("./js/utils/database");
 const ejs = require("ejs");
 const io = require("socket.io")(server);
 

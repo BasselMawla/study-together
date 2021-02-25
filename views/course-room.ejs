@@ -2,17 +2,18 @@
 
 <link rel="stylesheet" href="/css/course-room.css">
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/librariespeerjs.min.js"></script>
+<script src="/js/libraries/peerjs.min.js"></script>
 
 <% if (locals.user) { %>
   <script>
     // Declarations for following scripts
     // Get user info from locals
     let user = {
-      userId: <%- locals.user.id %>,
+      userId: <%- locals.user.id %>, // TODO: Check if this line is needed
       firstName: "<%- locals.user.first_name %>",
-      roomId: "<%- locals.institution_code + '_' + locals.course_code %>"
+      roomId: "<%- locals.institution_code.toLowerCase() + '_' + locals.course_code.toLowerCase() %>"
     }
+    console.log("ejs roomId: " + user.roomId);
     let socket = io();
   </script>
   <% if (locals.messagesList) { %>

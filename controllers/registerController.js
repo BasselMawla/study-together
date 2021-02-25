@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
-const database = require("../js/modules/database");
+const database = require("../js/utils/database");
 
 exports.register = async (req, res) => {
   const {

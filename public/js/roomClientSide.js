@@ -12,10 +12,11 @@ $(document).ready(async function () {
   peer.on("open", function (peerId) {
     console.log("my peerID is " + peerId);
     socket.emit("join-room", {
-      peerId: peerId,
+      peerId,
       firstName: user.firstName,
       roomId: user.roomId
     });
+    console.log("roomId: " + user.roomId);
   });
 
   socket.on("user-disconnected", (peerId) => {
@@ -56,7 +57,7 @@ $(document).ready(async function () {
       });
     });
 
-    socket.on("user-joined", peerId => {
+    socket.on("user-joined", (peerId) => {
       callPeer(peerId, myStream);
     });
   } catch (err) {

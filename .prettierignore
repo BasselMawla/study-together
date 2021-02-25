@@ -8,4 +8,4 @@ coverage
 
 # Ignore libraries
 public/js/libraries/
-public/css/bootstrap
+public/css/bootstrap/

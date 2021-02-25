@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
 const { localsName } = require("ejs");
 
-const database = require("../js/modules/database");
+const database = require("../js/utils/database");
 const databaseController = require("../controllers/databaseController");
 
 exports.login = async (req, res) => {

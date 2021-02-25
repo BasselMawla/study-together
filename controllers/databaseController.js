@@ -1,5 +1,5 @@
 const express = require("express");
-const database = require("../js/modules/database");
+const database = require("../js/utils/database");
 
 exports.getInstitutions = async (req, res, next) => {
   try {

@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const session = require("express-session");
+const database = require("./js/utils/database");
+const roomsUtil = require("./js/utils/roomsUtil");
 
 //const { PeerServer } = require("peer");
 //const peerServer = PeerServer({ port: 9000, path: "/peer" });
@@ -42,19 +44,21 @@ app.set("view engine", "ejs");
 app.use("/", require("./routes/pagesRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 
+// Initializations
+database.initializeDB();
+roomsUtil.createRoomsFromDB();
+
 // Socket io code
 io.on("connection", (socket) => {
-  socket.on("join-room", (data) => {
-    const peerId = data.peerId;
-    const firstName = data.firstName;
-    socket.nickname = firstName;
-
-    socket.join(data.roomId);
-    socket.to(data.roomId).broadcast.emit("user-joined", peerId);
-
-    socket.on("disconnect", () => {
-      socket.to(data.roomId).broadcast.emit("user-disconnected", peerId);
-    });
+  socket.on("join-room", ({ peerId, firstName, roomId }) => {
+    const user = {
+      socketId: socket.id,
+      peerId,
+      firstName
+    };
+    roomsUtil.joinRoom(user, roomId);
+    socket.join(roomId);
+    socket.to(roomId).broadcast.emit("user-joined", user.peerId);
   });
   socket.on("chat message", (data) => {
     socket.to(data.roomId).broadcast.emit("chat message", {
@@ -68,6 +72,20 @@ io.on("connection", (socket) => {
       data.datetime
     );
   });
+  socket.on("disconnecting", function () {
+    let joinedRooms = socket.rooms;
+
+    // Remove the user from all rooms they are in except the self-room
+    let index = 0;
+    joinedRooms.forEach((roomId) => {
+      if (index !== 0) {
+        const peerId = roomsUtil.leaveRoom(roomId, socket.id);
+        socket.to(roomId).broadcast.emit("user-disconnected", peerId);
+      }
+      index++;
+    });
+  });
+  socket.on("disconnect", () => {});
 });
 
 // Server start
