@@ -1,0 +1,17 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "r6ze0q02l4me77k3.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "StudyTogether JawsDB",
+      "username": "dgr38rf6pxlmw35u",
+      "password": "ywc28fsnsp85kw0x",
+      "database": "ylp51ud8rqnsg8d0"
+    }
+  ]
+}
