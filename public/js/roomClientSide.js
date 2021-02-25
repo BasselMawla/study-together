@@ -142,7 +142,6 @@ $(document).ready(async function () {
   }
 
   function displayUserList(roomUsers) {
-    console.log("in");
     clientsUl.innerHTML = "";
     roomUsers.forEach((user) => {
       const li = document.createElement("li");
