@@ -61,13 +61,9 @@ io.on("connection", (socket) => {
     socket.to(roomId).broadcast.emit("user-joined", user.peerId);
 
     // Send new list of users
-    const roomUsers = roomsUtil.getRoomUsers(roomId);
-    if (roomUsers) {
-      // console.log("Joining");
-      // console.log(roomId);
-      // console.log(roomUsers);
-      // console.log("Done joining");
-      io.to(roomId).emit("room-users", roomUsers);
+    const roomFirstNames = roomsUtil.getRoomFirstNames(roomId);
+    if (roomFirstNames) {
+      io.to(roomId).emit("room-users", roomFirstNames);
     }
   });
   socket.on("chat message", (data) => {
@@ -93,13 +89,9 @@ io.on("connection", (socket) => {
         socket.to(roomId).broadcast.emit("user-disconnected", peerId);
 
         // Send new list of users
-        const roomUsers = roomsUtil.getRoomUsers(roomId);
-        if (roomUsers) {
-          // console.log("Leaving");
-          // console.log(roomId);
-          // console.log(roomUsers);
-          // console.log("Done leaving");
-          io.to(roomId).emit("room-users", roomUsers);
+        const roomFirstNames = roomsUtil.getRoomFirstNames(roomId);
+        if (roomFirstNames) {
+          io.to(roomId).emit("room-users", roomFirstNames);
         }
       }
       index++;

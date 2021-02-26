@@ -141,11 +141,12 @@ $(document).ready(async function () {
     videoGrid.append(div);
   }
 
-  function displayUserList(roomUsers) {
+  function displayUserList(roomFirstNames) {
     clientsUl.innerHTML = "";
-    roomUsers.forEach((user) => {
+    roomFirstNames.sort();
+    roomFirstNames.forEach((firstName) => {
       const li = document.createElement("li");
-      li.innerText = user.firstName;
+      li.innerText = firstName;
       clientsUl.appendChild(li);
     });
   }

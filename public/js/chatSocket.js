@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  let messagesContainer = document.getElementById("messages-container");
   let messages = $("#messages");
   let form = $("#form");
   let input = $("#input");
@@ -61,6 +62,6 @@ $(document).ready(function () {
     li.append(time);
 
     messages.append(li);
-    window.scrollTo(0, document.body.scrollHeight);
+    messagesContainer.scrollTo(0, messagesContainer.scrollHeight);
   }
 });
