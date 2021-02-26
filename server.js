@@ -63,6 +63,10 @@ io.on("connection", (socket) => {
     // Send new list of users
     const roomUsers = roomsUtil.getRoomUsers(roomId);
     if (roomUsers) {
+      // console.log("Joining");
+      // console.log(roomId);
+      // console.log(roomUsers);
+      // console.log("Done joining");
       io.to(roomId).emit("room-users", roomUsers);
     }
   });
@@ -91,6 +95,10 @@ io.on("connection", (socket) => {
         // Send new list of users
         const roomUsers = roomsUtil.getRoomUsers(roomId);
         if (roomUsers) {
+          // console.log("Leaving");
+          // console.log(roomId);
+          // console.log(roomUsers);
+          // console.log("Done leaving");
           io.to(roomId).emit("room-users", roomUsers);
         }
       }

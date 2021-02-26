@@ -33,6 +33,12 @@ exports.joinRoom = (newUser, roomId) => {
     // Check if user is already in the room
     if (!room.users.find((user) => user.peerId === newUser.peerId)) {
       room.users.push(newUser);
+      console.log("JOINING " + roomId);
+      console.log("aub_cmps200");
+      console.log(getRoom("aub_cmps200"));
+      console.log("aub_cmps212");
+      console.log(getRoom("aub_cmps212"));
+      console.log("\n");
     }
   }
 };
@@ -44,6 +50,13 @@ exports.leaveRoom = (roomId, socketId) => {
     const index = room.users.findIndex((user) => user.socketId === socketId);
     if (index !== -1) {
       const disconnectedUser = room.users.splice(index, 1)[0];
+
+      console.log("LEAVING " + roomId);
+      console.log("aub_cmps200");
+      console.log(getRoom("aub_cmps200"));
+      console.log("aub_cmps212");
+      console.log(getRoom("aub_cmps212"));
+      console.log("\n");
       return disconnectedUser.peerId;
     }
   }
@@ -51,7 +64,9 @@ exports.leaveRoom = (roomId, socketId) => {
 
 // Get room users
 exports.getRoomUsers = (roomId) => {
-  const room = rooms.find((room) => (room.roomId = roomId));
+  const room = getRoom(roomId);
+  console.log("RETURNING LIST: ", room.users);
+  console.log("\n");
   return room.users;
 };
 
