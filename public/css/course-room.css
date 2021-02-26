@@ -54,3 +54,24 @@ body {
 #messages > li:nth-child(odd) {
   background: #efefef;
 }
+
+/* participant dev*/
+.participant-card {
+  padding: 0;
+}
+.participant-card .card-body {
+  padding: 0;
+}
+#clients {
+  padding: 0;
+  text-align: center;
+  list-style-type: none;
+}
+#clients li {
+  background: #4287f5;
+  color: #fff;
+}
+#clients li:nth-child(even) {
+  color: #fff;
+  background: #69b6f5;
+}
