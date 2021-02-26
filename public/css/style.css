@@ -2,16 +2,19 @@ nav {
   background-color: #563d7c;
   color: #fff;
   padding: 30px 60px;
-  display: flex;
-  justify-content: space-between;
 }
-
 nav ul {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  display: inline;
+  align-items: left;
 }
-
+.navbar-brand {
+  font-size: 30px;
+}
+ul.navbar-nav {
+  text-align: right;
+  margin-right: 0%;
+  margin-left: 40%;
+}
 nav li {
   list-style: none;
 }
@@ -32,7 +35,10 @@ nav li a:hover {
   background-color: orange;
   text-align: center;
 }
-
+.avatar-ctn img {
+  width: 100%;
+  height: auto;
+}
 .avatar {
   width: 65%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
@@ -109,7 +115,6 @@ video {
   -moz-transform: rotateY(180deg);
   /* Firefox */
 }
-
 .vidBtn {
   float: right;
 }
