@@ -94,11 +94,11 @@ Video Chat
 */
 
 #video-grid {
-  height: 600px;
-
+  height: 300px;
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
   grid-auto-rows: 300px;
+  overflow-y: scroll;
 }
 
 video {
