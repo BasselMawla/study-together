@@ -4,30 +4,27 @@ nav {
   padding: 30px 60px;
 }
 nav ul {
-  display: inline;
-  align-items: left;
 }
 .navbar-brand {
   font-size: 30px;
 }
 ul.navbar-nav {
   text-align: right;
-  margin-right: 0%;
-  margin-left: 40%;
 }
 nav li {
   list-style: none;
+  display: inline;
 }
 
 nav li a {
-  color: #222;
+  color: #999;
   text-decoration: none;
   font-weight: bold;
   padding: 5px 8px;
 }
 
 nav li a:hover {
-  color: blue;
+  color: #666;
   text-decoration: none;
 }
 
