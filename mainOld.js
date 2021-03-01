@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const database = require("./js/utils/database");
 const ejs = require("ejs");
 const io = require("socket.io")(server);
-
+//Comment
 server.listen(process.env.SERVER_PORT || 3000, function () {
   console.log("Server started on port " + process.env.SERVER_PORT);
 });
