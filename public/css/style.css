@@ -1,7 +1,13 @@
 nav {
-  background-color: red;
+  background-color: #563d7c;
   color: #fff;
   padding: 30px 60px;
+}
+nav .navbar-brand {
+  font-size: 30px;
+}
+nav ul.navbar-nav {
+  text-align: right;
 }
 nav li {
   list-style: none;
@@ -16,14 +22,6 @@ nav li a {
 nav li a:hover {
   color: #666;
   text-decoration: none;
-}
-
-.navbar-brand {
-  font-size: 30px;
-}
-
-ul.navbar-nav {
-  text-align: right;
 }
 
 .avatar-ctn {
