@@ -1,10 +1,33 @@
+nav h1:hover, nav a {
+  color: #e2f1ff;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #f9f871;
+  text-decoration: none;
+}
+
+a {
+  color: #373f51;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #008dd5;
+  text-decoration: none;
+}
+
 nav {
-  background-color: #563d7c;
-  color: #fff;
+  background-color: #373f51;
   padding: 30px 60px;
+}
+nav a.dropdown-item:active {
+  background-color: #373f51;
 }
 nav .navbar-brand {
   font-size: 30px;
+  color: #f9f871;
 }
 nav ul.navbar-nav {
   text-align: right;
@@ -14,14 +37,8 @@ nav li {
   display: inline;
 }
 nav li a {
-  color: #999;
-  text-decoration: none;
   font-weight: bold;
   padding: 5px 8px;
-}
-nav li a:hover {
-  color: #666;
-  text-decoration: none;
 }
 
 .avatar-ctn {
@@ -40,9 +57,9 @@ nav li a:hover {
 }
 
 .registration-list {
-  color: #fff;
+  color: #e2f1ff;
   font-weight: bold;
-  background-color: #563d7c;
+  background-color: #373f51;
   padding: 10px;
 }
 
@@ -65,7 +82,7 @@ nav li a:hover {
 }
 
 .editSstatus .col-8 label {
-  color: #fff;
+  color: #e2f1ff;
 }
 
 /*
@@ -124,9 +141,13 @@ video {
 
 .timestamp {
   font-size: 0.7em;
-  color: blue;
+  color: #008dd5;
   margin: 0;
   padding: 0;
+}
+
+.list-group-item.active {
+  background-color: #373f51;
 }
 
 /*# sourceMappingURL=style.css.map */
