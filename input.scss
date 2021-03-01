@@ -1,32 +1,73 @@
+// Colors
+$primary-color: #373f51;
+$secondary-color: #f9f871;
+$tertiary-color: #008dd5;
+$background-color: #7e6696;
+
+// Fonts
 $font-stack: Helvetica, sans-serif;
-$primary-color: #563d7c;
-$secondary-color: #666;
-$background-color: #fff;
+$font-color-light: #e2f1ff;
+$font-color-dark: $primary-color;
+
+// a elements
+%link-light {
+  color: $font-color-light;
+  text-decoration: none;
+}
+%link-light-hover {
+  color: $secondary-color;
+  text-decoration: none;
+}
+%link-dark {
+  color: $font-color-dark;
+  text-decoration: none;
+}
+%link-dark-hover {
+  color: $tertiary-color;
+  text-decoration: none;
+}
+
+a {
+  @extend %link-dark;
+}
+a:hover {
+  @extend %link-dark-hover;
+}
 
 nav {
   background-color: $primary-color;
-  color: #fff;
   padding: 30px 60px;
+
+  a {
+    @extend %link-light;
+  }
+  a:hover {
+    @extend %link-light-hover;
+  }
+  h1:hover {
+    @extend %link-light;
+  }
+  a.dropdown-item:active {
+    background-color: $primary-color;
+  }
   .navbar-brand {
     font-size: 30px;
+    color: $secondary-color;
   }
+
   ul.navbar-nav {
     text-align: right;
   }
+
   li {
     list-style: none;
     display: inline;
   }
+
   li {
     a {
-      color: #999;
-      text-decoration: none;
       font-weight: bold;
       padding: 5px 8px;
-    }
-    a:hover {
-      color: #666;
-      text-decoration: none;
     }
   }
 }
@@ -45,7 +86,7 @@ nav {
 }
 
 .registration-list {
-  color: #fff;
+  color: $font-color-light;
   font-weight: bold;
   background-color: $primary-color;
   padding: 10px;
@@ -71,7 +112,7 @@ nav {
 }
 
 .editSstatus .col-8 label {
-  color: #fff;
+  color: $font-color-light;
 }
 
 /*
@@ -134,7 +175,11 @@ video {
 
 .timestamp {
   font-size: 0.7em;
-  color: blue;
+  color: $tertiary-color;
   margin: 0;
   padding: 0;
+}
+
+.list-group-item.active {
+  background-color: $primary-color;
 }
