@@ -1,27 +1,32 @@
+$font-stack: Helvetica, sans-serif;
+$primary-color: red;
+$secondary-color: #666;
+$background-color: #fff;
+
 nav {
-  background-color: red;
+  background-color: $primary-color;
   color: #fff;
   padding: 30px 60px;
+  li {
+    list-style: none;
+    display: inline;
+  }
+  li {
+    a {
+      color: #999;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 5px 8px;
+    }
+    a:hover {
+      color: #666;
+      text-decoration: none;
+    }
+  }
 }
-nav li {
-  list-style: none;
-  display: inline;
-}
-nav li a {
-  color: #999;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 5px 8px;
-}
-nav li a:hover {
-  color: #666;
-  text-decoration: none;
-}
-
 .navbar-brand {
   font-size: 30px;
 }
-
 ul.navbar-nav {
   text-align: right;
 }
@@ -30,12 +35,10 @@ ul.navbar-nav {
   background-color: orange;
   text-align: center;
 }
-
 .avatar-ctn img {
   width: 100%;
   height: auto;
 }
-
 .avatar {
   width: 65%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
@@ -62,6 +65,7 @@ ul.navbar-nav {
   SHOW MY STUDENTS page
 */
 /*.editSstatus {}*/
+
 .editSstatus .col-8 {
   font-size: 20px;
 }
@@ -73,9 +77,11 @@ ul.navbar-nav {
 /*
   SHOW MY STUDENTS page
 */
+
 /*
 Profile and visitProfile
 */
+
 #courses-div {
   height: 250px;
   max-height: 250px;
@@ -85,9 +91,11 @@ Profile and visitProfile
 /*
 Profile and visitProfile
 */
+
 /*
 Video Chat
 */
+
 #video-grid {
   height: 300px;
   display: grid;
@@ -100,13 +108,13 @@ video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   /* Safari and Chrome */
   -moz-transform: rotateY(180deg);
   /* Firefox */
 }
-
 .vidBtn {
   float: right;
 }
@@ -130,5 +138,3 @@ video {
   margin: 0;
   padding: 0;
 }
-
-/*# sourceMappingURL=style.css.map */
