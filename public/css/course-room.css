@@ -43,15 +43,18 @@ body {
   padding: 0;
   overflow-y: scroll;
 }
-#messages {
+#messages,
+#questions {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-#messages > li {
+#messages > li,
+#questions > li {
   padding: 0.5rem 1rem;
 }
-#messages > li:nth-child(odd) {
+#messages > li:nth-child(odd),
+#questions > li:nth-child(odd) {
   background: #efefef;
 }
 

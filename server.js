@@ -4,6 +4,7 @@ const path = require("path");
 const session = require("express-session");
 const database = require("./js/utils/database");
 const roomsUtil = require("./js/utils/roomsUtil");
+const databaseController = require("./controllers/databaseController");
 
 //const { PeerServer } = require("peer");
 //const peerServer = PeerServer({ port: 9000, path: "/peer" });
@@ -69,13 +70,29 @@ io.on("connection", (socket) => {
   socket.on("chat message", (data) => {
     socket.to(data.roomId).broadcast.emit("chat message", {
       firstName: data.firstName,
-      message: data.message
+      message: data.message,
+      timeSent: data.timeSent
     });
-    require("./controllers/databaseController").insertChatMessage(
+    databaseController.insertChatMessage(
       data.roomId,
       data.userId,
       data.message,
-      data.datetime
+      data.timeSent
+    );
+  });
+  socket.on("submit-question", (data) => {
+    socket.to(data.roomId).broadcast.emit("question-submitted", {
+      firstName: data.firstName,
+      questionTitle: data.questionTitle,
+      questionDescription: data.questionDescription,
+      timeSent: data.timeSent
+    });
+    databaseController.insertQuestion(
+      data.roomId,
+      data.userId,
+      data.questionTitle,
+      data.questionDescription,
+      data.timeSent
     );
   });
   socket.on("disconnecting", function () {

@@ -63,6 +63,7 @@ exports.deleteRegisteredCourse = async (req, res) => {
 };
 
 exports.insertChatMessage = async (roomId, userId, message, datetime) => {
+  //TODO: Change datetime to timeSent
   // TODO: Sanitize input
   if (roomId && userId && message && datetime) {
     // Get codes by splitting roomID (eg. aub_cmps200)
@@ -85,5 +86,43 @@ exports.insertChatMessage = async (roomId, userId, message, datetime) => {
     }
   } else {
     console.log("Missing data in insertChatMessage in databaseController");
+  }
+};
+
+exports.insertQuestion = async (
+  roomId,
+  userId,
+  questionTitle,
+  questionDescription,
+  timeSent
+) => {
+  // TODO: Sanitize input
+  if (roomId && userId && questionTitle && timeSent) {
+    // Get codes by splitting roomID (eg. aub_cmps200)
+    const institution_code = roomId.split("_")[0];
+    const course_code = roomId.split("_")[1];
+    try {
+      let result = await database.queryPromise(
+        "INSERT INTO question" +
+          "(user_id, question_title, question_description, time_sent, course_id) " +
+          "VALUES (?, ?, ?, ?, " +
+          "(SELECT course_id " +
+          "FROM institution as inst, course " +
+          "WHERE institution_code = ? AND course_code = ? " +
+          "AND course.institution_id = inst.institution_id))",
+        [
+          userId,
+          questionTitle,
+          questionDescription,
+          timeSent,
+          institution_code,
+          course_code
+        ]
+      );
+    } catch (err) {
+      throw err;
+    }
+  } else {
+    console.log("Missing data in insertQuestion in databaseController");
   }
 };
