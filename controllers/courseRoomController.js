@@ -24,6 +24,7 @@ exports.getRoom = async (req, res, next) => {
     } else {
       // Get chat messages
       res.locals.messagesList = await retrieveChat(result[0].course_id);
+      res.locals.questionsList = await retrieveQuestions(result[0].course_id);
       next();
     }
   } catch (err) {
@@ -37,6 +38,21 @@ async function retrieveChat(courseId) {
       "SELECT user.first_name, CM.user_id, CM.text, CM.file_name, CM.time_sent " +
         "FROM user, chat_message as CM " +
         "WHERE user.user_id = CM.user_id AND CM.course_id = ? " +
+        "ORDER BY time_sent ASC",
+      [courseId]
+    );
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function retrieveQuestions(courseId) {
+  try {
+    let result = await database.queryPromise(
+      "SELECT user.first_name, q.user_id, q.question_title, q.question_description, q.time_sent " +
+        "FROM user, question as q " +
+        "WHERE user.user_id = q.user_id AND q.course_id = ? " +
         "ORDER BY time_sent ASC",
       [courseId]
     );

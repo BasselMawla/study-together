@@ -145,6 +145,7 @@ router.get(
       department_code: res.locals.department_code,
       course_code: req.params.course_code,
       messagesList: res.locals.messagesList,
+      questionsList: res.locals.questionsList,
       moment: moment
     });
     // TODO: Fix naming (course_code => courseCode)
