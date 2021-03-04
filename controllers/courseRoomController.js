@@ -50,7 +50,7 @@ async function retrieveChat(courseId) {
 async function retrieveQuestions(courseId) {
   try {
     let result = await database.queryPromise(
-      "SELECT user.first_name, q.user_id, q.question_title, q.question_description, q.time_sent " +
+      "SELECT user.first_name, q.user_id, q.question_id, q.question_title, q.question_description, q.time_sent " +
         "FROM user, question as q " +
         "WHERE user.user_id = q.user_id AND q.course_id = ? " +
         "ORDER BY time_sent ASC",

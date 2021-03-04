@@ -119,6 +119,8 @@ exports.insertQuestion = async (
           course_code
         ]
       );
+
+      return result.insertId;
     } catch (err) {
       throw err;
     }

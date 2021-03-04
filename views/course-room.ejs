@@ -110,13 +110,13 @@
       <div class="modal-body">
         <form id="submit-question-form"> 
           <div class="form-group">
-            <label class="col-form-label" for="question-title">Question</label><br>
-            <input type="text" id="question-title" name="questionTitle"></input>
+            <label class="col-form-label" for="submit-question-title">Question</label><br>
+            <input type="text" id="submit-question-title"></input>
           </div>          
           
           <div class="form-group">
-            <label class="col-form-label" for="question-description">More Info</label><br>
-            <textarea rows="6" id="question-description" name="questionDescription"></textarea>
+            <label class="col-form-label" for="submit-question-description">More Info</label><br>
+            <textarea rows="6" id="submit-question-description"></textarea>
           </div>
 
           <div class="modal-footer">
@@ -125,6 +125,41 @@
           </div>
         </form>
       <!-- TODO: Empty text and textarea on cancel or x, and ask for confirmation before closing modal -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View question modal -->
+<div class="modal fade" id="view-question-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="submit-question-form"> 
+          <div class="form-group">
+            <label class="col-form-label" for="view-question-title">Question</label><br>
+            <input type="text" id="view-question-title"></input>
+          </div>          
+          
+          <div class="form-group">
+            <label class="col-form-label" for="view-question-description">More Info</label><br>
+            <textarea rows="6" id="view-question-description"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-primary">Submit</button>
+            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      <!-- TODO: Empty text and textarea on cancel or x, and ask for confirmation before closing modal -->
+      </div>
     </div>
   </div>
 </div>

@@ -81,19 +81,22 @@ io.on("connection", (socket) => {
     );
   });
   socket.on("submit-question", (data) => {
-    socket.to(data.roomId).broadcast.emit("question-submitted", {
-      firstName: data.firstName,
-      questionTitle: data.questionTitle,
-      questionDescription: data.questionDescription,
-      timeSent: data.timeSent
-    });
-    databaseController.insertQuestion(
+    const questionId = databaseController.insertQuestion(
       data.roomId,
       data.userId,
       data.questionTitle,
       data.questionDescription,
       data.timeSent
     );
+    if (questionId) {
+      io.to(data.roomId).emit("question-submitted", {
+        firstName: data.firstName,
+        questionId,
+        questionTitle: data.questionTitle,
+        questionDescription: data.questionDescription,
+        timeSent: data.timeSent
+      });
+    }
   });
   socket.on("disconnecting", function () {
     let joinedRooms = socket.rooms;
