@@ -5,14 +5,16 @@ $(document).ready(function () {
   let titleInput = $("#submit-question-title");
   let descriptionInput = $("#submit-question-description");
 
-  // Set the modal properties to show a question
+  // Set up the modal properties to show a question
   $("#view-question-modal").on("show.bs.modal", function (event) {
     var clickedQuestion = $(event.relatedTarget); // Question li that triggered the modal
-    var questionId = clickedQuestion.data("questionId");
+    var questionId = clickedQuestion.data("question-id");
 
     var modal = $(this);
     modal.find("#view-question-title").val("Question ID: " + questionId);
-    //modal.find("#course-name-input").val(courseCode);
+
+    // Retrieve question info and comments from server
+    socket.emit("get-question", { roomId: user.roomId, questionId });
   });
 
   // Load questions on entry
@@ -70,6 +72,7 @@ $(document).ready(function () {
     timeSent,
     isSelf
   ) {
+    // TODO: Make sure question and chat are received by others, show error otherwise (red exclamation mark)
     let styleClass;
     if (isSelf) {
       styleClass = "my-message";

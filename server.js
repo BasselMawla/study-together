@@ -80,8 +80,8 @@ io.on("connection", (socket) => {
       data.timeSent
     );
   });
-  socket.on("submit-question", (data) => {
-    const questionId = databaseController.insertQuestion(
+  socket.on("submit-question", async (data) => {
+    const questionId = await databaseController.insertQuestion(
       data.roomId,
       data.userId,
       data.questionTitle,
@@ -96,6 +96,13 @@ io.on("connection", (socket) => {
         questionDescription: data.questionDescription,
         timeSent: data.timeSent
       });
+    }
+  });
+  socket.on("get-question", ({ roomId, questionId }) => {
+    if (!roomsUtil.isUserInRoom(socket.id, roomId)) {
+      console.log("Access denied.");
+    } else {
+      //databaseController.retrieveQuestionInfo
     }
   });
   socket.on("disconnecting", function () {
