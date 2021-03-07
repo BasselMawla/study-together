@@ -103,6 +103,10 @@ io.on("connection", (socket) => {
       console.log("Access denied.");
     } else {
       //databaseController.retrieveQuestionInfo
+      /*SELECT user.first_name, comment.comment_text, comment.time_sent
+      FROM user, comment
+      WHERE user.user_id = comment.user_id
+      AND comment.question_id = 1*/
     }
   });
   socket.on("disconnecting", function () {
