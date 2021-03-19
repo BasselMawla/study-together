@@ -18,22 +18,6 @@ exports.getInstitutions = async (req, res, next) => {
   }
 };
 
-exports.addCoursesToSession = async (req, userID) => {
-  try {
-    let result = await database.queryPromise(
-      "SELECT course.course_code, department.department_code " +
-        "FROM course INNER JOIN department, registered_course as RC " +
-        "WHERE RC.user_id = ? " +
-        "AND course.course_id = RC.course_id " +
-        "AND department.department_id = course.department_id",
-      userID
-    );
-    req.session.user.courses = result;
-  } catch (err) {
-    throw err;
-  }
-};
-
 exports.deleteRegisteredCourse = async (req, res) => {
   const courseCode = req.body.courseToDelete;
   if (!req.session.user || !courseCode) {
@@ -59,6 +43,22 @@ exports.deleteRegisteredCourse = async (req, res) => {
     } catch (err) {
       throw err;
     }
+  }
+};
+
+exports.addCoursesToSession = async (req, userID) => {
+  try {
+    let result = await database.queryPromise(
+      "SELECT course.course_code, department.department_code " +
+        "FROM course INNER JOIN department, registered_course as RC " +
+        "WHERE RC.user_id = ? " +
+        "AND course.course_id = RC.course_id " +
+        "AND department.department_id = course.department_id",
+      userID
+    );
+    req.session.user.courses = result;
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -128,3 +128,58 @@ exports.insertQuestion = async (
     console.log("Missing data in insertQuestion in databaseController");
   }
 };
+
+// Retrieves the question info and comments
+exports.retrieveQuestion = async (roomId, questionId) => {
+  if (roomId && questionId) {
+    let questionInfo = {
+      info: await retrieveQuestionInfo(roomId, questionId),
+      comments: await retrieveComments(questionId)
+    };
+
+    return questionInfo;
+  } else {
+    console.log("Missing data in retrieveQuestion in databaseController");
+  }
+};
+
+// Helper
+async function retrieveQuestionInfo(roomId, questionId) {
+  // Get codes by splitting roomID (eg. aub_cmps200)
+  const institutionCode = roomId.split("_")[0];
+  const courseCode = roomId.split("_")[1];
+  try {
+    // Retreive question info and check it is in the room
+    let result = await database.queryPromise(
+      "SELECT question.question_description " +
+        "FROM institution as inst, course, question " +
+        "WHERE inst.institution_code = ? " +
+        "AND course.course_code = ? " +
+        "AND question.question_id = ? " +
+        "AND question.course_id = course.course_id",
+      [institutionCode, courseCode, questionId]
+    );
+
+    return result[0];
+  } catch (err) {
+    throw err;
+  }
+}
+
+// Helper
+async function retrieveComments(questionId) {
+  try {
+    // Retreive question info and check it is in the room
+    let result = await database.queryPromise(
+      "SELECT user.first_name, comment.comment_text, comment.time_sent " +
+        "FROM user, comment " +
+        "WHERE user.user_id = comment.user_id " +
+        "AND comment.question_id = ?",
+      questionId
+    );
+
+    return result[0];
+  } catch (err) {
+    throw err;
+  }
+}

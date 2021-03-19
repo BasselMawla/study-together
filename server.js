@@ -81,6 +81,9 @@ io.on("connection", (socket) => {
     );
   });
   socket.on("submit-question", async (data) => {
+    if (!roomsUtil.isUserInRoom(socket.id, data.roomId)) {
+      console.log("Access denied. Not in correct room.");
+    }
     const questionId = await databaseController.insertQuestion(
       data.roomId,
       data.userId,
@@ -98,15 +101,15 @@ io.on("connection", (socket) => {
       });
     }
   });
-  socket.on("get-question", ({ roomId, questionId }) => {
+  socket.on("get-question", async ({ roomId, questionId }) => {
     if (!roomsUtil.isUserInRoom(socket.id, roomId)) {
-      console.log("Access denied.");
+      console.log("Access denied. Not in correct room.");
     } else {
-      //databaseController.retrieveQuestionInfo
-      /*SELECT user.first_name, comment.comment_text, comment.time_sent
-      FROM user, comment
-      WHERE user.user_id = comment.user_id
-      AND comment.question_id = 1*/
+      const question = await databaseController.retrieveQuestion(
+        roomId,
+        questionId
+      );
+      console.log(question);
     }
   });
   socket.on("disconnecting", function () {
