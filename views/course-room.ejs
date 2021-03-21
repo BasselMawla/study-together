@@ -144,18 +144,18 @@
       <div class="modal-body">
         <form id="submit-question-form"> 
           <div class="form-group">
-            <label class="col-form-label" for="view-question-title">Question</label><br>
-            <input type="text" id="view-question-title"></input>
+            <label class="col-form-label" id="view-question-title">Question</label><br>
+            <label class="col-form-label" id="view-question-description"></label>
           </div>          
           
           <div class="form-group">
-            <label class="col-form-label" for="view-question-description">More Info</label><br>
-            <textarea rows="6" id="view-question-description"></textarea>
+            <ul id="view-question-comments" style="list-style-type: none;">
+              
+            </ul>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-primary">Submit</button>
-            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary">Close</button>
           </div>
         </form>
       <!-- TODO: Empty text and textarea on cancel or x, and ask for confirmation before closing modal -->

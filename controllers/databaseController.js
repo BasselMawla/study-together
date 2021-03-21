@@ -178,7 +178,7 @@ async function retrieveComments(questionId) {
       questionId
     );
 
-    return result[0];
+    return result;
   } catch (err) {
     throw err;
   }

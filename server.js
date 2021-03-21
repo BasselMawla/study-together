@@ -109,7 +109,7 @@ io.on("connection", (socket) => {
         roomId,
         questionId
       );
-      console.log(question);
+      socket.emit("question-info", question);
     }
   });
   socket.on("disconnecting", function () {

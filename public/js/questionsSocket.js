@@ -1,9 +1,17 @@
 $(document).ready(function () {
   let questionsContainer = document.getElementById("questions-container");
   let questions = document.getElementById("questions");
+
+  // Submit a question
+  // TODO: Change to submitTitleInput etc
   let form = $("#submit-question-form");
   let titleInput = $("#submit-question-title");
   let descriptionInput = $("#submit-question-description");
+
+  // View a question
+  let viewQuestionTitle = $("#view-question-title");
+  let viewQuestionDescription = $("#view-question-description");
+  let viewQuestionComments = $("#view-question-comments");
 
   // Set up the modal properties to show a question
   $("#view-question-modal").on("show.bs.modal", function (event) {
@@ -11,10 +19,51 @@ $(document).ready(function () {
     var questionId = clickedQuestion.data("question-id");
 
     var modal = $(this);
-    modal.find("#view-question-title").val("Question ID: " + questionId);
 
     // Retrieve question info and comments from server
     socket.emit("get-question", { roomId: user.roomId, questionId });
+
+    let questionTitleSpan = clickedQuestion.children("span")[1].textContent;
+    viewQuestionTitle.text(questionTitleSpan);
+
+    // Receive clicked question info from server
+    socket.on("question-info", (question) => {
+      if (question.info.question_description) {
+        viewQuestionDescription.text(question.info.question_description);
+      }
+
+      if (questions.comments) {
+        viewQuestionComments.append(
+          '<label class="col-form-label">Comments</label><br></br>'
+        );
+      }
+      question.comments.forEach((comment) => {
+        let li = $("<li></li>");
+
+        let nameSpan = $("<span></span>");
+        nameSpan.text(comment.first_name);
+
+        let timeSpan = $("<span></span>");
+        timeSpan.addClass("timestamp");
+        timeSpan.text(formatTime(comment.time_sent));
+
+        let textSpan = $("<span></span>");
+        textSpan.text(comment.comment_text);
+
+        li.append(nameSpan);
+        li.append("<br>");
+        li.append(timeSpan);
+        li.append("<br>");
+        li.append(textSpan);
+        li.append("<br><br>");
+
+        viewQuestionComments.append(li);
+      });
+    });
+  });
+
+  $("#view-question-modal").on("hidden.bs.modal", function () {
+    viewQuestionDescription.innerHTML = "";
   });
 
   // Load questions on entry
@@ -87,13 +136,17 @@ $(document).ready(function () {
     li.setAttribute("data-target", "#view-question-modal");
     li.setAttribute("data-toggle", "modal");
 
+    let nameSpan = document.createElement("span");
+    nameSpan.textContent = firstName + ": ";
+
     let questionSpan = document.createElement("span");
-    questionSpan.textContent = firstName + ": " + questionTitle;
+    questionSpan.textContent = questionTitle;
 
     let timeSpan = document.createElement("span");
     timeSpan.textContent = timeSent;
     timeSpan.classList.add("timestamp");
 
+    li.appendChild(nameSpan);
     li.appendChild(questionSpan);
     li.appendChild(document.createElement("br"));
     li.appendChild(timeSpan);
