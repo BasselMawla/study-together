@@ -157,10 +157,3 @@ function failWithMessage(req, res) {
   res.status(401).redirect("/register");
   return;
 }
-
-/* 
-c
-//Remeber we need to start the cookie thru the cookie parser in main.js
-
-res.status(200).redirect("/");
-} */
