@@ -65,6 +65,17 @@ function getRoomUsers(roomId) {
   return room.users;
 }
 
+// Returns true if user with socketId is in room with roomId
+function isUserInRoom(socketId, roomId) {
+  const room = getRoom(roomId);
+  if (!room) {
+    return false;
+  } else if (room.users.some((user) => user.socketId === socketId)) {
+    return true;
+  }
+  return false;
+}
+
 function getRoom(roomId) {
   return rooms.find((room) => room.roomId === roomId);
 }
@@ -74,5 +85,6 @@ module.exports = {
   joinRoom,
   leaveRoom,
   getRoomFirstNames,
-  getRoomUsers
+  getRoomUsers,
+  isUserInRoom
 };

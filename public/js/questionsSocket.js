@@ -1,16 +1,34 @@
 $(document).ready(function () {
   let questionsContainer = document.getElementById("questions-container");
-  let questions = $("#questions");
+  let questions = document.getElementById("questions");
   let form = $("#submit-question-form");
-  let titleInput = $("#question-title");
-  let descriptionInput = $("#question-description");
+  let titleInput = $("#submit-question-title");
+  let descriptionInput = $("#submit-question-description");
+
+  // Set up the modal properties to show a question
+  $("#view-question-modal").on("show.bs.modal", function (event) {
+    var clickedQuestion = $(event.relatedTarget); // Question li that triggered the modal
+    var questionId = clickedQuestion.data("question-id");
+
+    var modal = $(this);
+    modal.find("#view-question-title").val("Question ID: " + questionId);
+
+    // Retrieve question info and comments from server
+    socket.emit("get-question", { roomId: user.roomId, questionId });
+  });
 
   // Load questions on entry
   if (questionsList) {
     questionsList.forEach((row) => {
       const isSelf = row.user_id === user.userId;
       const timeSent = formatTime(row.time_sent);
-      appendQuestion(row.first_name, row.question_title, timeSent, isSelf);
+      appendQuestion(
+        row.first_name,
+        row.question_id,
+        row.question_title,
+        timeSent,
+        isSelf
+      );
     });
   }
 
@@ -21,10 +39,6 @@ $(document).ready(function () {
     // Make sure question title is not empty
     if (titleInput.val()) {
       const now = moment().unix();
-      const timeSent = formatTime(now);
-
-      // Append question locally
-      appendQuestion(user.firstName, titleInput.val(), timeSent, true);
 
       // Send question to server
       socket.emit("submit-question", {
@@ -44,13 +58,21 @@ $(document).ready(function () {
     // Receive question from the server
     appendQuestion(
       data.firstName,
+      data.questionId,
       data.questionTitle,
       formatTime(data.timeSent),
       false
     );
   });
 
-  function appendQuestion(firstName, questionTitle, timeSent, isSelf) {
+  function appendQuestion(
+    firstName,
+    questionId,
+    questionTitle,
+    timeSent,
+    isSelf
+  ) {
+    // TODO: Make sure question and chat are received by others, show error otherwise (red exclamation mark)
     let styleClass;
     if (isSelf) {
       styleClass = "my-message";
@@ -58,18 +80,25 @@ $(document).ready(function () {
       styleClass = "remote-message";
     }
 
-    let li = $("<li></li>");
-    li.addClass(styleClass);
+    let li = document.createElement("li");
+    li.classList.add(styleClass);
 
-    let text = $("<span></span>").text(firstName + ": " + questionTitle);
-    let time = $("<span></span>").text(timeSent);
-    time.addClass("timestamp");
+    li.setAttribute("data-question-id", questionId);
+    li.setAttribute("data-target", "#view-question-modal");
+    li.setAttribute("data-toggle", "modal");
 
-    li.append(text);
-    li.append($("<br>"));
-    li.append(time);
+    let questionSpan = document.createElement("span");
+    questionSpan.textContent = firstName + ": " + questionTitle;
 
-    questions.append(li);
+    let timeSpan = document.createElement("span");
+    timeSpan.textContent = timeSent;
+    timeSpan.classList.add("timestamp");
+
+    li.appendChild(questionSpan);
+    li.appendChild(document.createElement("br"));
+    li.appendChild(timeSpan);
+
+    questions.appendChild(li);
     questionsContainer.scrollTo(0, questionsContainer.scrollHeight);
   }
 

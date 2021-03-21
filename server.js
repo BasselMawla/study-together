@@ -80,20 +80,34 @@ io.on("connection", (socket) => {
       data.timeSent
     );
   });
-  socket.on("submit-question", (data) => {
-    socket.to(data.roomId).broadcast.emit("question-submitted", {
-      firstName: data.firstName,
-      questionTitle: data.questionTitle,
-      questionDescription: data.questionDescription,
-      timeSent: data.timeSent
-    });
-    databaseController.insertQuestion(
+  socket.on("submit-question", async (data) => {
+    const questionId = await databaseController.insertQuestion(
       data.roomId,
       data.userId,
       data.questionTitle,
       data.questionDescription,
       data.timeSent
     );
+    if (questionId) {
+      io.to(data.roomId).emit("question-submitted", {
+        firstName: data.firstName,
+        questionId,
+        questionTitle: data.questionTitle,
+        questionDescription: data.questionDescription,
+        timeSent: data.timeSent
+      });
+    }
+  });
+  socket.on("get-question", ({ roomId, questionId }) => {
+    if (!roomsUtil.isUserInRoom(socket.id, roomId)) {
+      console.log("Access denied.");
+    } else {
+      //databaseController.retrieveQuestionInfo
+      /*SELECT user.first_name, comment.comment_text, comment.time_sent
+      FROM user, comment
+      WHERE user.user_id = comment.user_id
+      AND comment.question_id = 1*/
+    }
   });
   socket.on("disconnecting", function () {
     let joinedRooms = socket.rooms;
