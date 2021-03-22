@@ -34,7 +34,6 @@ $(document).ready(function () {
 
   // Receive clicked question info from server
   socket.on("question-info", (question) => {
-    console.log(question);
     if (question.info.question_description) {
       viewQuestionDescription.text(question.info.question_description);
     }
