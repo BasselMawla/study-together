@@ -25,45 +25,47 @@ $(document).ready(function () {
 
     let questionTitleSpan = clickedQuestion.children("span")[1].textContent;
     viewQuestionTitle.text(questionTitleSpan);
-
-    // Receive clicked question info from server
-    socket.on("question-info", (question) => {
-      if (question.info.question_description) {
-        viewQuestionDescription.text(question.info.question_description);
-      }
-
-      if (questions.comments) {
-        viewQuestionComments.append(
-          '<label class="col-form-label">Comments</label><br></br>'
-        );
-      }
-      question.comments.forEach((comment) => {
-        let li = $("<li></li>");
-
-        let nameSpan = $("<span></span>");
-        nameSpan.text(comment.first_name);
-
-        let timeSpan = $("<span></span>");
-        timeSpan.addClass("timestamp");
-        timeSpan.text(formatTime(comment.time_sent));
-
-        let textSpan = $("<span></span>");
-        textSpan.text(comment.comment_text);
-
-        li.append(nameSpan);
-        li.append("<br>");
-        li.append(timeSpan);
-        li.append("<br>");
-        li.append(textSpan);
-        li.append("<br><br>");
-
-        viewQuestionComments.append(li);
-      });
-    });
   });
 
   $("#view-question-modal").on("hidden.bs.modal", function () {
-    viewQuestionDescription.innerHTML = "";
+    viewQuestionDescription.html("");
+    viewQuestionComments.html("");
+  });
+
+  // Receive clicked question info from server
+  socket.on("question-info", (question) => {
+    console.log(question);
+    if (question.info.question_description) {
+      viewQuestionDescription.text(question.info.question_description);
+    }
+
+    if (question.comments) {
+      viewQuestionComments.append(
+        '<label class="col-form-label">Comments</label><br></br>'
+      );
+    }
+    question.comments.forEach((comment) => {
+      let li = $("<li></li>");
+
+      let nameSpan = $("<span></span>");
+      nameSpan.text(comment.first_name);
+
+      let timeSpan = $("<span></span>");
+      timeSpan.addClass("timestamp");
+      timeSpan.text(formatTime(comment.time_sent));
+
+      let textSpan = $("<span></span>");
+      textSpan.text(comment.comment_text);
+
+      li.append(nameSpan);
+      li.append("<br>");
+      li.append(timeSpan);
+      li.append("<br>");
+      li.append(textSpan);
+      li.append("<br><br>");
+
+      viewQuestionComments.append(li);
+    });
   });
 
   // Load questions on entry
