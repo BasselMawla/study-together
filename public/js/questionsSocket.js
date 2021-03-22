@@ -2,6 +2,10 @@ $(document).ready(function () {
   let questionsContainer = document.getElementById("questions-container");
   let questions = document.getElementById("questions");
 
+  //New Change - Amr
+  let commentForm = $("#comment-form");
+  let commentInput = $("#comment-input");
+
   // Submit a question
   // TODO: Change to submitTitleInput etc
   let form = $("#submit-question-form");
@@ -25,6 +29,28 @@ $(document).ready(function () {
 
     let questionTitleSpan = clickedQuestion.children("span")[1].textContent;
     viewQuestionTitle.text(questionTitleSpan);
+
+    // Submitted comment
+    commentForm.submit((event) => {
+      event.preventDefault();
+      // Make sure comment is not empty
+      if (commentInput.val()) {
+        const now = moment().unix();
+
+        // Append comment locally
+        appendComment(user.firstName, commentInput.val(), now);
+
+        // Send comment to server
+        socket.emit("submit-comment", {
+          roomId: user.roomId,
+          questionId,
+          userId: user.userId,
+          commentText: commentInput.val(),
+          timeSent: now // Sent as unix timestamp to server
+        });
+        commentInput.val("");
+      }
+    });
   });
 
   $("#view-question-modal").on("hidden.bs.modal", function () {
@@ -44,26 +70,11 @@ $(document).ready(function () {
       );
     }
     question.comments.forEach((comment) => {
-      let li = $("<li></li>");
-
-      let nameSpan = $("<span></span>");
-      nameSpan.text(comment.first_name);
-
-      let timeSpan = $("<span></span>");
-      timeSpan.addClass("timestamp");
-      timeSpan.text(formatTime(comment.time_sent));
-
-      let textSpan = $("<span></span>");
-      textSpan.text(comment.comment_text);
-
-      li.append(nameSpan);
-      li.append("<br>");
-      li.append(timeSpan);
-      li.append("<br>");
-      li.append(textSpan);
-      li.append("<br><br>");
-
-      viewQuestionComments.append(li);
+      appendComment(
+        comment.first_name,
+        comment.comment_text,
+        comment.time_sent
+      );
     });
   });
 
@@ -71,12 +82,11 @@ $(document).ready(function () {
   if (questionsList) {
     questionsList.forEach((row) => {
       const isSelf = row.user_id === user.userId;
-      const timeSent = formatTime(row.time_sent);
       appendQuestion(
         row.first_name,
         row.question_id,
         row.question_title,
-        timeSent,
+        row.time_sent,
         isSelf
       );
     });
@@ -110,7 +120,7 @@ $(document).ready(function () {
       data.firstName,
       data.questionId,
       data.questionTitle,
-      formatTime(data.timeSent),
+      data.timeSent,
       false
     );
   });
@@ -144,7 +154,7 @@ $(document).ready(function () {
     questionSpan.textContent = questionTitle;
 
     let timeSpan = document.createElement("span");
-    timeSpan.textContent = timeSent;
+    timeSpan.textContent = formatTime(timeSent);
     timeSpan.classList.add("timestamp");
 
     li.appendChild(nameSpan);
@@ -154,6 +164,29 @@ $(document).ready(function () {
 
     questions.appendChild(li);
     questionsContainer.scrollTo(0, questionsContainer.scrollHeight);
+  }
+
+  function appendComment(firstName, commentText, timeSent) {
+    let li = $("<li></li>");
+
+    let nameSpan = $("<span></span>");
+    nameSpan.text(firstName);
+
+    let timeSpan = $("<span></span>");
+    timeSpan.addClass("timestamp");
+    timeSpan.text(formatTime(timeSent));
+
+    let textSpan = $("<span></span>");
+    textSpan.text(commentText);
+
+    li.append(nameSpan);
+    li.append("<br>");
+    li.append(timeSpan);
+    li.append("<br>");
+    li.append(textSpan);
+    li.append("<br><br>");
+
+    viewQuestionComments.append(li);
   }
 
   function formatTime(timeSent) {

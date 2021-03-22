@@ -112,6 +112,20 @@ io.on("connection", (socket) => {
       socket.emit("question-info", question);
     }
   });
+  socket.on(
+    "submit-comment",
+    async ({ roomId, questionId, userId, commentText, timeSent }) => {
+      if (!roomsUtil.isUserInRoom(socket.id, roomId)) {
+        console.log("Access denied. Not in correct room.");
+      }
+      databaseController.insertComment(
+        questionId,
+        userId,
+        commentText,
+        timeSent
+      );
+    }
+  );
   socket.on("disconnecting", function () {
     let joinedRooms = socket.rooms;
 

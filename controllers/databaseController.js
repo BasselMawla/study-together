@@ -143,6 +143,24 @@ exports.retrieveQuestion = async (roomId, questionId) => {
   }
 };
 
+exports.insertComment = async (questionId, userId, commentText, timeSent) => {
+  // TODO: Sanitize input
+  if (questionId && userId && commentText && timeSent) {
+    try {
+      let result = await database.queryPromise(
+        "INSERT INTO comment" +
+          "(question_id, user_id, comment_text, time_sent) " +
+          "VALUES (?, ?, ?, ?)",
+        [questionId, userId, commentText, timeSent]
+      );
+    } catch (err) {
+      throw err;
+    }
+  } else {
+    console.log("Missing data in insertComment in databaseController");
+  }
+};
+
 // Helper
 async function retrieveQuestionInfo(roomId, questionId) {
   // Get codes by splitting roomID (eg. aub_cmps200)
@@ -174,7 +192,8 @@ async function retrieveComments(questionId) {
       "SELECT user.first_name, comment.comment_text, comment.time_sent " +
         "FROM user, comment " +
         "WHERE user.user_id = comment.user_id " +
-        "AND comment.question_id = ?",
+        "AND comment.question_id = ? " +
+        "ORDER BY time_sent ASC",
       questionId
     );
 
