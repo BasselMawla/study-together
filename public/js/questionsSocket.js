@@ -63,12 +63,6 @@ $(document).ready(function () {
     if (question.info.question_description) {
       viewQuestionDescription.text(question.info.question_description);
     }
-
-    if (question.comments) {
-      viewQuestionComments.append(
-        '<label class="col-form-label">Comments</label><br></br>'
-      );
-    }
     question.comments.forEach((comment) => {
       appendComment(
         comment.first_name,

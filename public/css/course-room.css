@@ -44,17 +44,20 @@ body {
   overflow-y: scroll;
 }
 #messages,
-#questions {
+#questions,
+#view-question-comments {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 #messages > li,
-#questions > li {
+#questions > li,
+#view-question-comments > li {
   padding: 0.5rem 1rem;
 }
 #messages > li:nth-child(odd),
-#questions > li:nth-child(odd) {
+#questions > li:nth-child(odd),
+#view-question-comments > li:nth-child(odd) {
   background: #efefef;
 }
 
