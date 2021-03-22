@@ -110,6 +110,8 @@ io.on("connection", (socket) => {
         questionId
       );
       socket.emit("question-info", question);
+      console.log("Emitted question:");
+      console.log(question);
     }
   });
   socket.on("disconnecting", function () {
