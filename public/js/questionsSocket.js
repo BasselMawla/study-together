@@ -29,6 +29,28 @@ $(document).ready(function () {
 
     let questionTitleSpan = clickedQuestion.children("span")[1].textContent;
     viewQuestionTitle.text(questionTitleSpan);
+
+    // Submitted comment
+    commentForm.submit((event) => {
+      event.preventDefault();
+      // Make sure comment is not empty
+      if (commentInput.val()) {
+        const now = moment().unix();
+
+        // Append comment locally
+        appendComment(user.firstName, commentInput.val(), now);
+
+        // Send comment to server
+        socket.emit("submit-comment", {
+          roomId: user.roomId,
+          questionId,
+          userId: user.userId,
+          commentText: commentInput.val(),
+          timeSent: now // Sent as unix timestamp to server
+        });
+        commentInput.val("");
+      }
+    });
   });
 
   $("#view-question-modal").on("hidden.bs.modal", function () {
@@ -60,12 +82,11 @@ $(document).ready(function () {
   if (questionsList) {
     questionsList.forEach((row) => {
       const isSelf = row.user_id === user.userId;
-      const timeSent = formatTime(row.time_sent);
       appendQuestion(
         row.first_name,
         row.question_id,
         row.question_title,
-        timeSent,
+        row.time_sent,
         isSelf
       );
     });
@@ -99,32 +120,9 @@ $(document).ready(function () {
       data.firstName,
       data.questionId,
       data.questionTitle,
-      formatTime(data.timeSent),
+      data.timeSent,
       false
     );
-  });
-
-  // Submitted comment
-  commentForm.submit((event) => {
-    event.preventDefault();
-    // Make sure comment is not empty
-    if (commentInput.val()) {
-      const now = moment().unix();
-      const timeSent = formatTime(now);
-
-      // Append comment locally
-      appendComment(user.firstName, commentInput.val(), timeSent);
-
-      // Send comment to server
-      socket.emit("submit-comment", {
-        userId: user.userId,
-        firstName: user.firstName,
-        comment: commentInput.val(),
-        roomId: user.roomId,
-        timeSent: now // Sent as unix timestamp to server
-      });
-      commentInput.val("");
-    }
   });
 
   function appendQuestion(
@@ -156,7 +154,7 @@ $(document).ready(function () {
     questionSpan.textContent = questionTitle;
 
     let timeSpan = document.createElement("span");
-    timeSpan.textContent = timeSent;
+    timeSpan.textContent = formatTime(timeSent);
     timeSpan.classList.add("timestamp");
 
     li.appendChild(nameSpan);

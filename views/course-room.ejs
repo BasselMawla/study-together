@@ -141,29 +141,27 @@
         </button>
       </div>
 
-      <div class="modal-body">
-        <form id="submit-question-form"> 
-          <div class="form-group">
-            <label class="col-form-label" id="view-question-title">Question</label><br>
-            <label class="col-form-label" id="view-question-description"></label>
-          </div>          
-          
-          <div class="form-group">
-            <ul id="view-question-comments" style="list-style-type: none;">
-              
-            </ul>
-          </div>
+      <div class="modal-body"> 
+        <div class="form-group">
+          <label class="col-form-label" id="view-question-title">Question</label><br>
+          <label class="col-form-label" id="view-question-description"></label>
+        </div>          
+        
+        <div class="form-group">
+          <ul id="view-question-comments" style="list-style-type: none;">
+            
+          </ul>
+        </div>
 
-          <div class="modal-footer">
+        <div class="modal-footer"  style="justify-content: flex-start;">
 
-            <form id="comment-form" action="">
-              <input id="comment-input" autocomplete="off" />
-              <button class="btn btn-primary">Send</button>
-            </form>
+          <form id="comment-form">
+            <input type="text" id="comment-input" autocomplete="off"/>
+            <button class="btn btn-primary">Send</button>
+          </form>
 
-            <button data-dismiss="modal" class="btn btn-primary">Close</button>
-          </div>
-        </form>
+          <button data-dismiss="modal" class="btn btn-secondary">Close</button>
+        </div>
       <!-- TODO: Empty text and textarea on cancel or x, and ask for confirmation before closing modal -->
       </div>
     </div>
