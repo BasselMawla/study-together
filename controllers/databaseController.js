@@ -147,7 +147,7 @@ exports.insertComment = async (questionId, userId, commentText, timeSent) => {
   // TODO: Sanitize input
   if (questionId && userId && commentText && timeSent) {
     try {
-      let result = await database.queryPromise(
+      await database.queryPromise(
         "INSERT INTO comment" +
           "(question_id, user_id, comment_text, time_sent) " +
           "VALUES (?, ?, ?, ?)",

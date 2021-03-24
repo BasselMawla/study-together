@@ -51,10 +51,11 @@ roomsUtil.createRoomsFromDB();
 
 // Socket io code
 io.on("connection", (socket) => {
-  socket.on("join-room", ({ peerId, firstName, roomId }) => {
+  socket.on("join-room", ({ userId, peerId, firstName, roomId }) => {
     const user = {
-      socketId: socket.id,
+      userId,
       peerId,
+      socketId: socket.id,
       firstName
     };
     roomsUtil.joinRoom(user, roomId);
@@ -62,9 +63,9 @@ io.on("connection", (socket) => {
     socket.to(roomId).broadcast.emit("user-joined", user.peerId);
 
     // Send new list of users
-    const roomFirstNames = roomsUtil.getRoomFirstNames(roomId);
-    if (roomFirstNames) {
-      io.to(roomId).emit("room-users", roomFirstNames);
+    const roomUserList = roomsUtil.getRoomUserList(roomId);
+    if (roomUserList) {
+      io.to(roomId).emit("room-users", roomUserList);
     }
   });
   socket.on("chat message", (data) => {
@@ -137,9 +138,9 @@ io.on("connection", (socket) => {
         socket.to(roomId).broadcast.emit("user-disconnected", peerId);
 
         // Send new list of users
-        const roomFirstNames = roomsUtil.getRoomFirstNames(roomId);
-        if (roomFirstNames) {
-          io.to(roomId).emit("room-users", roomFirstNames);
+        const roomUserList = roomsUtil.getRoomUserList(roomId);
+        if (roomUserList) {
+          io.to(roomId).emit("room-users", roomUserList);
         }
       }
       index++;

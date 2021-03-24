@@ -47,16 +47,14 @@ function leaveRoom(roomId, socketId) {
       return disconnectedUser.peerId;
     }
   }
-  console.log("getRoomFirstNames:");
-  console.log(getRoomFirstNames(roomId));
 }
 
-function getRoomFirstNames(roomId) {
+function getRoomUserList(roomId) {
   let users = getRoomUsers(roomId);
-  let firstNames = users.map((user) => {
-    return user.firstName;
+  let userList = users.map((user) => {
+    return { userId: user.userId, firstName: user.firstName };
   });
-  return firstNames;
+  return userList;
 }
 
 // Get room users as an array of user objects
@@ -84,7 +82,7 @@ module.exports = {
   createRoomsFromDB,
   joinRoom,
   leaveRoom,
-  getRoomFirstNames,
+  getRoomUserList,
   getRoomUsers,
   isUserInRoom
 };

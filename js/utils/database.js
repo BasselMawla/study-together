@@ -12,11 +12,11 @@ exports.initializeDB = function () {
   });
 
   dbPool.on("acquire", function (connection) {
-    //console.log('Connection %d acquired', connection.threadId);
+    //console.log("Connection %d acquired", connection.threadId);
   });
 
   dbPool.on("release", function (connection) {
-    //console.log('Connection %d released\n', connection.threadId);
+    //console.log("Connection %d released\n", connection.threadId);
   });
 };
 

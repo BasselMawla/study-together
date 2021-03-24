@@ -11,9 +11,11 @@ $(document).ready(async function () {
   const peers = {};
 
   // On connect to peer server
+  // TODO: Check if peerId is needed for video
   peer.on("open", function (peerId) {
     console.log("my peerID is " + peerId);
     socket.emit("join-room", {
+      userId: user.userId,
       peerId,
       firstName: user.firstName,
       roomId: user.roomId
@@ -22,8 +24,9 @@ $(document).ready(async function () {
   });
 
   // Add users to DOM
-  socket.on("room-users", (roomUsers) => {
-    displayUserList(roomUsers);
+  socket.on("room-users", (roomUserList) => {
+    console.log(roomUserList);
+    displayUserList(roomUserList);
   });
 
   socket.on("user-disconnected", (peerId) => {
@@ -141,12 +144,13 @@ $(document).ready(async function () {
     videoGrid.append(div);
   }
 
-  function displayUserList(roomFirstNames) {
+  function displayUserList(roomUserList) {
     clientsUl.innerHTML = "";
-    roomFirstNames.sort();
-    roomFirstNames.forEach((firstName) => {
+    roomUserList.sort();
+    roomUserList.forEach((roomUser) => {
       const li = document.createElement("li");
-      li.innerText = firstName;
+      li.innerText = roomUser.firstName;
+      li.dataset.userId = roomUser.userId;
       clientsUl.appendChild(li);
     });
   }
