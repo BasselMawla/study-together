@@ -3,7 +3,9 @@
     <div class="container mt-4">
       <div class="jumbotron">
           <h1 class="display-4">Study Together</h1>
+          <% if (!locals.user) { %>
           <p class="lead">Please Login or Register</p>
+          <% } %>
       </div>
     </div>
 
